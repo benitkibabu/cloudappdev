@@ -3,7 +3,7 @@
     android:color="#f94f85">
     <item>
         <shape android:shape="oval">
-            <solid android:color="#ff184e"/>
+            <solid android:color="@color/colorAccent"/>
         </shape>
     </item>
 </ripple>

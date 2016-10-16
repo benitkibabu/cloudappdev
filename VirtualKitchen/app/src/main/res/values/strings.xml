@@ -3,4 +3,12 @@
     <string name="my_kitchen">My Kitchen</string>
     <string name="recipes">Recipes</string>
     <string name="favourites">Favourites</string>
+    <string name="my_ingredient">Ingredient</string>
+    <string name="user_image">user image</string>
+    <string name="in_a_mood">My Mood</string>
+    <string name="loading">Signing In..</string>
+
+    <string name="facebook_app_id">1733782833613796</string>
+    <string name="sing_out">Sign Out</string>
+    <string name="profile_pick">Profile Pick</string>
 </resources>
