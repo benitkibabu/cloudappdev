@@ -9,18 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@mipmap/kitchen_1"
+    android:background="@color/green"
     tools:context="com.cloudappdev.ben.virtualkitchen.Login">
-
-    <ImageView
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        app:srcCompat="@mipmap/chef"
-        android:id="@+id/imageView"
-        android:contentDescription="@string/user_image"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="61dp" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
@@ -39,7 +29,34 @@
         android:layout_below="@+id/sign_in_button"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp" />
+
+    <ImageView
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        app:srcCompat="@mipmap/chef"
+        android:id="@+id/imageView"
+        android:contentDescription="@string/user_image"
+        android:layout_above="@+id/sign_in_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="13dp" />
+
+    <TextView
+        android:text="@string/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:id="@+id/textView"
+        android:textStyle="normal|bold"
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="36sp" />
 
 
 </RelativeLayout>

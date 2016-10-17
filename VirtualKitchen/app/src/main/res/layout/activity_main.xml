@@ -15,21 +15,6 @@
 
 
     <Button
-        android:text="@string/in_a_mood"
-        android:id="@+id/mood_btn"
-        android:background="@drawable/round_button"
-        android:elevation="6dp"
-        android:textAlignment="center"
-        android:textStyle="normal|bold"
-        android:textSize="24sp"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:textColor="@android:color/background_light"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
-
-    <Button
         android:text="@string/recipes"
         android:layout_height="wrap_content"
         android:scaleType="centerInside"
@@ -89,18 +74,34 @@
         android:background="@android:color/transparent"
         android:elevation="6dp" />
 
+    <Button
+        android:text="@string/in_a_mood"
+        android:id="@+id/mood_btn"
+        android:background="@drawable/round_button"
+        android:elevation="6dp"
+        android:textAlignment="center"
+        android:textStyle="normal|bold"
+        android:textSize="24sp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="@android:color/background_light"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_img"
-        android:layout_marginTop="7dp"
+        android:background="@color/colorAccent"
+        android:padding="@dimen/activity_horizontal_margin"
         android:id="@+id/name_tv"
-        android:layout_alignParentStart="true"
         android:textAllCaps="true"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textStyle="normal|bold"
-        android:textColor="@color/colorAccent"
-        android:layout_alignEnd="@+id/profile_img" />
+        android:textColor="@color/white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/mood_btn" />
 
 </RelativeLayout>

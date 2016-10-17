@@ -13,7 +13,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -21,7 +26,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -40,8 +44,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
+        setContentView(R.layout.activity_main);
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -56,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         signoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signOut();
+                googleSignOut();
+                facebookSignOut();
             }
         });
 
@@ -121,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return resizedBitmap;
     }
 
-    private void signOut() {
+    private void googleSignOut() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -131,6 +137,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         finish();
                     }
                 });
+    }
+    private void facebookSignOut(){
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return; // already logged out
+        }
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+                .Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                LoginManager.getInstance().logOut();
+            }
+        }).executeAsync();
     }
 
     @Override
