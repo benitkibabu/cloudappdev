@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
     public static String imgurl;
+    boolean fbLogout = false, gLogout = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View view) {
                 googleSignOut();
                 facebookSignOut();
+
             }
         });
 
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
         protected void onPostExecute(Bitmap m_bitmap) {
             if(m_bitmap != null){
-                profileImage.setImageBitmap(getResizedBitmap(m_bitmap, 128, 128));
+                profileImage.setImageBitmap(getResizedBitmap(m_bitmap, 512, 512));
             }
         }
     }
@@ -132,23 +134,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        Intent i = new Intent(MainActivity.this, Login.class);
-                        startActivity(i);
-                        finish();
+                        gLogout = true;
+                        facebookSignOut();
                     }
                 });
     }
     private void facebookSignOut(){
         if (AccessToken.getCurrentAccessToken() == null) {
-            return; // already logged out
+            fbLogout = true;
+        }else{
+            LoginManager.getInstance().logOut();
+            fbLogout = true;
         }
-        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
-                .Callback() {
-            @Override
-            public void onCompleted(GraphResponse graphResponse) {
-                LoginManager.getInstance().logOut();
-            }
-        }).executeAsync();
+
+        if(fbLogout && gLogout){
+            Intent i = new Intent(MainActivity.this, Login.class);
+            startActivity(i);
+            finish();
+        }
+// code for revoking access of facebook
+// new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+//                .Callback() {
+//            @Override
+//            public void onCompleted(GraphResponse graphResponse) {
+//                LoginManager.getInstance().logOut();
+//                fbLogout = true;
+//            }
+//        }).executeAsync();
     }
 
     @Override

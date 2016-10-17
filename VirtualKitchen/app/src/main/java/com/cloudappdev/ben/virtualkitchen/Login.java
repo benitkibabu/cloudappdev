@@ -13,7 +13,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -33,6 +32,8 @@ import com.facebook.FacebookSdk;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     LoginButton fbLoginBtn;
     SignInButton gloginBtn;
@@ -43,16 +44,12 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     private ProgressDialog mProgressDialog;
     CallbackManager callbackManager;
-    AccessToken accessToken;
-
-    String name = "";
-    String email = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-
+        mProgressDialog = new ProgressDialog(this);
         setContentView(R.layout.activity_login);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -74,10 +71,25 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             }
         });
 
-        callbackManager = CallbackManager.Factory.create();
-
         fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
-        handleFacebookSignInResult();
+        fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
+
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                handleFacebookSignInResult(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                LoginManager.getInstance().logOut();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+            }
+        });
     }
 
     public void signIn() {
@@ -93,7 +105,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     @Override
     public void onStart() {
         super.onStart();
-
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if (accessToken == null) {
             Log.d(TAG, ">>>" + "Signed Out");
@@ -114,9 +125,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             }
         } else {
             Log.d(TAG, ">>>" + "Signed In");
-            handleFacebookSignInResult();
+            handleFacebookSignInResult(accessToken);
         }
-
     }
 
     @Override
@@ -129,55 +139,45 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         }
     }
 
-    private void handleFacebookSignInResult(){
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                accessToken = loginResult.getAccessToken();
-                Profile profile = Profile.getCurrentProfile();
+    private void handleFacebookSignInResult(AccessToken accessToken){
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        Log.d("FBLogin Response ", response.toString());
+                        try {
+                            String name = object.getString("name");
+                            String email = object.getString("email");
+                            String id = object.getString("id");
 
-                GraphRequest request = GraphRequest.newMeRequest(
-                        loginResult.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONObject object,
-                                    GraphResponse response) {
-                                Log.v("LoginActivity Response ", response.toString());
-                                try {
-                                    name = object.getString("name");
-                                    email = object.getString("email");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+                            JSONObject picObj = object.getJSONObject("picture");
+                            JSONObject picData = picObj.getJSONObject("data");
+                            String picUrl = picData.getString("url");
 
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,birthday");
-                request.setParameters(parameters);
-                request.executeAsync();
+                            Intent i = new Intent(Login.this, MainActivity.class);
+                            i.putExtra("LoginType", "Facebook");
+                            i.putExtra("Id", id);
+                            i.putExtra("DisplayName", name);
+                            i.putExtra("Email", email);
+                            i.putExtra("ImageUri", picUrl);
 
-                Intent i = new Intent(Login.this, MainActivity.class);
-                i.putExtra("LoginType", "Facebook");
-                i.putExtra("Id", profile.getId());
-                i.putExtra("DisplayName", profile.getName());
-                i.putExtra("Email", email);
-                i.putExtra("ImageUri", profile.getProfilePictureUri(256, 256).toString());
+                            updateUI(i);
 
-                updateUI(i);
-            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
-            @Override
-            public void onCancel() {
-                LoginManager.getInstance().logOut();
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-            }
-        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,gender,picture,link");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
+
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
@@ -207,11 +207,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     private void showProgressDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.show();
         }
-        mProgressDialog.show();
     }
 
     private void hideProgressDialog() {
