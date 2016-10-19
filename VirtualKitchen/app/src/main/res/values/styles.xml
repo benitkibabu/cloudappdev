@@ -8,10 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="KitchenTheme" parent="Theme.AppCompat.Light.NoActionBar" >
+    <style name="KitchenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/darkGreen</item>
         <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="KitchenTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="KitchenTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

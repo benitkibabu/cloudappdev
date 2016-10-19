@@ -157,14 +157,15 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                             JSONObject picData = picObj.getJSONObject("data");
                             String picUrl = picData.getString("url");
 
-                            Intent i = new Intent(Login.this, MainActivity.class);
-                            i.putExtra("LoginType", "Facebook");
-                            i.putExtra("Id", id);
-                            i.putExtra("DisplayName", name);
-                            i.putExtra("Email", email);
-                            i.putExtra("ImageUri", picUrl);
-
-                            updateUI(i);
+                            Intent it = new Intent(Login.this, MainActivity.class);
+                            Bundle i = new Bundle();
+                            i.putString("LoginType", "Facebook");
+                            i.putString("FacebookId", id);
+                            i.putString("DisplayName", name);
+                            i.putString("Email", email);
+                            i.putString("ImageUri", picUrl);
+                            it.putExtra("User", i);
+                            updateUI(it);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -182,14 +183,16 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            Intent i = new Intent(Login.this, MainActivity.class);
-            i.putExtra("LoginType", "Google");
-            i.putExtra("Id", acct.getId());
-            i.putExtra("DisplayName", acct.getGivenName());
-            i.putExtra("Email", acct.getEmail());
-            i.putExtra("ImageUri", acct.getPhotoUrl().toString());
+            Intent it = new Intent(Login.this, MainActivity.class);
+            Bundle i = new Bundle();
+            i.putString("LoginType", "Google");
+            i.putString("GoogleId", acct.getId());
+            i.putString("DisplayName", acct.getGivenName());
+            i.putString("Email", acct.getEmail());
+            i.putString("ImageUri", acct.getPhotoUrl().toString());
+            it.putExtra("User", i);
 
-            updateUI(i);
+            updateUI(it);
 
         } else {
             //updateUI(false);
@@ -202,7 +205,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                     public void onResult(Status status) {
                     }
                 });
-
     }
 
     private void showProgressDialog() {

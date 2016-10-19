@@ -102,6 +102,6 @@
         android:textColor="@color/white"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/profile_img" />
+        android:layout_toEndOf="@+id/recipe_btn" />
 
 </RelativeLayout>

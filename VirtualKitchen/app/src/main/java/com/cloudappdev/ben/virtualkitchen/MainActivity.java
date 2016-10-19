@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,11 +14,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.cloudappdev.ben.virtualkitchen.activities.Recipes;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -37,10 +36,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     ImageButton profileImage;
 
     private static final String TAG = "SignOutActivity";
-    private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
     public static String imgurl;
     boolean fbLogout = false, gLogout = false;
+    Bundle data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +47,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_main);
 
+        profileImage = (ImageButton) findViewById(R.id.profile_img);
+        nameTv = (TextView) findViewById(R.id.name_tv);
+
+        if(getIntent().hasExtra("User")) {
+            if (!getIntent().getExtras().isEmpty()) {
+                data = getIntent().getBundleExtra("User");
+                imgurl = data.getString("ImageUri");
+                nameTv.setText(data.getString("DisplayName"));
+                new FetchFilesTask().execute();
+            }
+        }else{
+            facebookSignOut();
+            googleSignOut();
+        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -72,20 +85,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         recipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, Recipe.class);
+                Intent i = new Intent(MainActivity.this, Recipes.class);
+                i.putExtra("User", data);
                 startActivity(i);
             }
         });
-
-        profileImage = (ImageButton) findViewById(R.id.profile_img);
-        nameTv = (TextView) findViewById(R.id.name_tv);
-
-        if(!getIntent().getExtras().isEmpty()) {
-            Bundle data = getIntent().getExtras();
-            imgurl = data.getString("ImageUri");
-            nameTv.setText(data.getString("DisplayName"));
-            new FetchFilesTask().execute();
-        }
     }
 
     public static Bitmap getBitmapFromURL(String src) {
@@ -95,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            return  BitmapFactory.decodeStream(input);
         } catch (IOException e) {
 
             return null;
@@ -107,8 +110,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         protected void onPreExecute(){
         }
         protected Bitmap doInBackground(String... args) {
-            Bitmap bitmap = getBitmapFromURL(imgurl);
-            return bitmap;
+            return getBitmapFromURL(imgurl);
         }
         protected void onPostExecute(Bitmap m_bitmap) {
             if(m_bitmap != null){
@@ -124,16 +126,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         float scaleHeight = ((float) newHeight) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
+        return Bitmap.createBitmap(bm, 0, 0, width, height,
                 matrix, false);
-        return resizedBitmap;
     }
 
     private void googleSignOut() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
-                    public void onResult(Status status) {
+                    public void onResult(@NonNull Status status) {
                         gLogout = true;
                         facebookSignOut();
                     }
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             fbLogout = true;
         }
 
-        if(fbLogout && gLogout){
+        if(gLogout){
             Intent i = new Intent(MainActivity.this, Login.class);
             startActivity(i);
             finish();
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 }

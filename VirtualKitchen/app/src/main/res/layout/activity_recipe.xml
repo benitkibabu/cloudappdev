@@ -9,6 +9,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@mipmap/kitchen_1"
-    tools:context="com.cloudappdev.ben.virtualkitchen.Recipe">
+    tools:context="com.cloudappdev.ben.virtualkitchen.fragments.Recipe">
 
 </RelativeLayout>
