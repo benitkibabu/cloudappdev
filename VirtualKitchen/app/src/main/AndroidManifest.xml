@@ -40,6 +40,8 @@
         <activity
             android:name=".activities.Recipes"
             android:label="@string/title_activity_recipes"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:screenOrientation="portrait"
             android:theme="@style/KitchenTheme"></activity>
     </application>
 
