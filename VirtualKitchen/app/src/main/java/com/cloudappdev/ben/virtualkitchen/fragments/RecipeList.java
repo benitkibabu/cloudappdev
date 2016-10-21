@@ -1,7 +1,5 @@
 package com.cloudappdev.ben.virtualkitchen.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,7 +12,7 @@ import android.widget.TextView;
 import com.cloudappdev.ben.virtualkitchen.R;
 
 
-public class Recipe extends Fragment {
+public class RecipeList extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -26,11 +24,11 @@ public class Recipe extends Fragment {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    public Recipe() {
+    public RecipeList() {
     }
 
-    public static Recipe newInstance(String param1, String param2) {
-        Recipe fragment = new Recipe();
+    public static RecipeList newInstance(String param1, String param2) {
+        RecipeList fragment = new RecipeList();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

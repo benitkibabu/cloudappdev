@@ -18,7 +18,7 @@ import android.view.View;
 import com.cloudappdev.ben.virtualkitchen.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.adapter.CustomPageAdapter;
-import com.cloudappdev.ben.virtualkitchen.fragments.Recipe;
+import com.cloudappdev.ben.virtualkitchen.fragments.RecipeList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +70,8 @@ public class Recipes extends AppCompatActivity {
     void addFragment(){
         Fragment f;
         titles = new ArrayList<>();
-        titles.add("Recipe");
-        f = Recipe.newInstance("Me", "You");
+        titles.add("RecipeList");
+        f = RecipeList.newInstance("Me", "You");
         fragmentList.add(f);
     }
 

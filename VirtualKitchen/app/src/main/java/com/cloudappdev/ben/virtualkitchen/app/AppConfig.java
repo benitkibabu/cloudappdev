@@ -26,7 +26,7 @@ public class AppConfig {
     public static final String INTERNAL_API = "http://itrackerapp.gear.host/ncigo/";
     public static final String TESCO_API = "http://itrackerapp.gear.host/ncigo/";
     public static final String RECIPE_API = "http://food2fork.com/api/get";
-    public static final String RECIPE_SEARCH = "http://itrackerapp.gear.host/ncigo/";
+    public static final String RECIPE_SEARCH_API = "https://api.edamam.com/search";
 
     static DateFormat dateTimeFormat =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
