@@ -2,4 +2,7 @@
 <resources>
     <color name="accent_material_light">#00e5ff</color>
     <color name="primary_material_light">#009688</color>
+
+    <string name="edamam_api_key">b99c9a4cdf132d9f9e3e52b0f80d4e93</string>
+    <string name="edamam_api_id">9ad8839e</string>
 </resources>

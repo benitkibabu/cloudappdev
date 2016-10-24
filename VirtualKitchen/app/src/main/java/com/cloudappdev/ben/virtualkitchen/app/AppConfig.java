@@ -23,10 +23,9 @@ public class AppConfig {
     public static final String EXTRA_MESSAGE = "message";
     public static final String DISPLAY_MSG_ACTION = "com.cloudappdev.ben.virtualkitchen.notification.DISPLAY_MESSAGE";
 
-    public static final String INTERNAL_API = "http://itrackerapp.gear.host/ncigo/";
+    public static final String INTERNAL_API = "http://virtualkitchen.gear.host/ncigo/";
     public static final String TESCO_API = "http://itrackerapp.gear.host/ncigo/";
-    public static final String RECIPE_API = "http://food2fork.com/api/get";
-    public static final String RECIPE_SEARCH_API = "https://api.edamam.com/search";
+    public static final String RECIPE_API = "https://api.edamam.com/search";
 
     static DateFormat dateTimeFormat =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

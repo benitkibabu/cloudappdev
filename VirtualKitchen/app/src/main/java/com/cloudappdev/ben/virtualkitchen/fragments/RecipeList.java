@@ -14,6 +14,8 @@ import com.cloudappdev.ben.virtualkitchen.R;
 
 public class RecipeList extends Fragment {
 
+    private final String API_ID = getResources().getString(R.string.edamam_api_id);
+    private final String API_KEY = getResources().getString(R.string.edamam_api_key);
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -53,31 +55,14 @@ public class RecipeList extends Fragment {
         return textView;
     }
 
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+    private void getRecipes(){
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
+    }
+
 
     @Override
     public void onDetach() {
         super.onDetach();
-       // mListener = null;
     }
 
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
 }
