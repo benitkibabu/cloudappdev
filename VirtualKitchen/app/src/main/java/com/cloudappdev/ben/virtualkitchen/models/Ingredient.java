@@ -1,17 +1,19 @@
 package com.cloudappdev.ben.virtualkitchen.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Ben on 21/10/2016.
  */
 
-public class Ingredient {
+public class Ingredient implements Serializable{
     String uri;
-    float quantity;
-    Measure measure;
-    float weight;
-    Food food;
+    double quantity;
+    String measure;
+    double weight;
+    String food;
 
-    public Ingredient(String uri, float quantity, Measure measure, float weight, Food food) {
+    public Ingredient(String uri, double quantity, String measure, double weight, String food) {
         this.uri = uri;
         this.quantity = quantity;
         this.measure = measure;
@@ -23,19 +25,19 @@ public class Ingredient {
         return uri;
     }
 
-    public float getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public Measure getMeasure() {
+    public String getMeasure() {
         return measure;
     }
 
-    public float getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public Food getFood() {
+    public String getFood() {
         return food;
     }
 }

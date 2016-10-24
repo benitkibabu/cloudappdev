@@ -3,6 +3,7 @@ package com.cloudappdev.ben.virtualkitchen.activities;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
@@ -18,12 +19,13 @@ import android.view.View;
 import com.cloudappdev.ben.virtualkitchen.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.adapter.CustomPageAdapter;
-import com.cloudappdev.ben.virtualkitchen.fragments.RecipeList;
+import com.cloudappdev.ben.virtualkitchen.fragments.MyFavouriteFragment;
+import com.cloudappdev.ben.virtualkitchen.fragments.RecipeListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipes extends AppCompatActivity {
+public class RecipesActivity extends AppCompatActivity {
 
     private CustomPageAdapter adapter;
 
@@ -57,6 +59,9 @@ public class Recipes extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(adapter);
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +75,13 @@ public class Recipes extends AppCompatActivity {
     void addFragment(){
         Fragment f;
         titles = new ArrayList<>();
-        titles.add("RecipeList");
-        f = RecipeList.newInstance("Me", "You");
+        titles.add("Recipe");
+
+        f = RecipeListFragment.newInstance("Me", data);
+        fragmentList.add(f);
+
+        titles.add("My Favourite");
+        f = MyFavouriteFragment.newInstance("Me", data);
         fragmentList.add(f);
     }
 

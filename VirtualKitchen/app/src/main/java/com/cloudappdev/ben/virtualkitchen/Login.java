@@ -72,7 +72,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         });
 
         fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
-        fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile"));
+        fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile", "user_photos"));
 
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -209,6 +209,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     private void showProgressDialog() {
         if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.show();
         }
@@ -216,7 +217,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
+            mProgressDialog.dismiss();
         }
     }
 

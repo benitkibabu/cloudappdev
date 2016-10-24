@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.cloudappdev.ben.virtualkitchen.activities.Recipes;
+import com.cloudappdev.ben.virtualkitchen.activities.RecipesActivity;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -24,6 +24,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private static final String TAG = "SignOutActivity";
     private GoogleApiClient mGoogleApiClient;
-    public static String imgurl;
+    public String imgurl;
     boolean fbLogout = false, gLogout = false;
     Bundle data;
 
@@ -55,7 +56,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 data = getIntent().getBundleExtra("User");
                 imgurl = data.getString("ImageUri");
                 nameTv.setText(data.getString("DisplayName"));
-                new FetchFilesTask().execute();
+
+                Picasso.with(getApplicationContext())
+                        .load(imgurl)
+                        .resize(256,256).centerCrop()
+                        .into(profileImage);
             }
         }else{
             facebookSignOut();
@@ -85,50 +90,50 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         recipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, Recipes.class);
+                Intent i = new Intent(MainActivity.this, RecipesActivity.class);
                 i.putExtra("User", data);
                 startActivity(i);
             }
         });
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            return  BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
-
-            return null;
-        }
-    }
-
-    private class FetchFilesTask extends AsyncTask<String, Void, Bitmap> {
-        protected void onPreExecute(){
-        }
-        protected Bitmap doInBackground(String... args) {
-            return getBitmapFromURL(imgurl);
-        }
-        protected void onPostExecute(Bitmap m_bitmap) {
-            if(m_bitmap != null){
-                profileImage.setImageBitmap(getResizedBitmap(m_bitmap, 512, 512));
-            }
-        }
-    }
-
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        return Bitmap.createBitmap(bm, 0, 0, width, height,
-                matrix, false);
-    }
+//    public static Bitmap getBitmapFromURL(String src) {
+//        try {
+//            URL url = new URL(src);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setDoInput(true);
+//            connection.connect();
+//            InputStream input = connection.getInputStream();
+//            return  BitmapFactory.decodeStream(input);
+//        } catch (IOException e) {
+//
+//            return null;
+//        }
+//    }
+//
+//    private class FetchFilesTask extends AsyncTask<String, Void, Bitmap> {
+//        protected void onPreExecute(){
+//        }
+//        protected Bitmap doInBackground(String... args) {
+//            return getBitmapFromURL(imgurl);
+//        }
+//        protected void onPostExecute(Bitmap m_bitmap) {
+//            if(m_bitmap != null){
+//                profileImage.setImageBitmap(getResizedBitmap(m_bitmap, 512, 512));
+//            }
+//        }
+//    }
+//
+//    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+//        int width = bm.getWidth();
+//        int height = bm.getHeight();
+//        float scaleWidth = ((float) newWidth) / width;
+//        float scaleHeight = ((float) newHeight) / height;
+//        Matrix matrix = new Matrix();
+//        matrix.postScale(scaleWidth, scaleHeight);
+//        return Bitmap.createBitmap(bm, 0, 0, width, height,
+//                matrix, false);
+//    }
 
     private void googleSignOut() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(

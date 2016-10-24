@@ -1,42 +1,46 @@
 package com.cloudappdev.ben.virtualkitchen.models;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  * Created by Ben on 21/10/2016.
  */
 
-public class Recipe {
+public class Recipe implements Serializable{
     String uri;
     String label;
     String imageUrl;
     String source;
     String url;
+    String shareAs;
     double yield;
-    String level;
-    String summary;
-    float caleries;
-    float totalWeight;
-    Ingredient[] ingredients;
-    NutrientInfo[] totalNutrients;
-    NutrientInfo[] totalDaily;
-    String[] dietLabels;
-    String[] healthLabels;
+    ArrayList<String> dietLabels;
+    ArrayList<String> healthLabels;
+    ArrayList<String> cautions;
+    ArrayList<String> ingredientLines;
+    ArrayList<Ingredient> ingredients;
+    double caleries;
+    double totalWeight;
 
-    public Recipe(String uri, String label, String imageUrl, String source, String url, double yield, String level, String summary, float caleries, float totalWeight, Ingredient[] ingredients, NutrientInfo[] totalNutrients, NutrientInfo[] totalDaily, String[] dietLabels, String[] healthLabels) {
+    public Recipe(String uri, String label, String imageUrl, String source,
+                  String url, String shareAs, double yield, ArrayList<String> dietLabels,
+                  ArrayList<String> healthLabels, ArrayList<String> cautions, ArrayList<String> ingredientLines,
+                  ArrayList<Ingredient> ingredients, double caleries, double totalWeight) {
         this.uri = uri;
         this.label = label;
         this.imageUrl = imageUrl;
         this.source = source;
         this.url = url;
+        this.shareAs = shareAs;
         this.yield = yield;
-        this.level = level;
-        this.summary = summary;
-        this.caleries = caleries;
-        this.totalWeight = totalWeight;
-        this.ingredients = ingredients;
-        this.totalNutrients = totalNutrients;
-        this.totalDaily = totalDaily;
         this.dietLabels = dietLabels;
         this.healthLabels = healthLabels;
+        this.cautions = cautions;
+        this.ingredientLines = ingredientLines;
+        this.ingredients = ingredients;
+        this.caleries = caleries;
+        this.totalWeight = totalWeight;
     }
 
     public String getUri() {
@@ -59,43 +63,39 @@ public class Recipe {
         return url;
     }
 
+    public String getShareAs() {
+        return shareAs;
+    }
+
     public double getYield() {
         return yield;
     }
 
-    public String getLevel() {
-        return level;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public float getCaleries() {
-        return caleries;
-    }
-
-    public float getTotalWeight() {
-        return totalWeight;
-    }
-
-    public Ingredient[] getIngredients() {
-        return ingredients;
-    }
-
-    public NutrientInfo[] getTotalNutrients() {
-        return totalNutrients;
-    }
-
-    public NutrientInfo[] getTotalDaily() {
-        return totalDaily;
-    }
-
-    public String[] getDietLabels() {
+    public ArrayList<String> getDietLabels() {
         return dietLabels;
     }
 
-    public String[] getHealthLabels() {
+    public ArrayList<String> getHealthLabels() {
         return healthLabels;
+    }
+
+    public ArrayList<String> getIngredientLines() {
+        return ingredientLines;
+    }
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public double getCaleries() {
+        return caleries;
+    }
+
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    public ArrayList<String> getCautions() {
+        return cautions;
     }
 }
