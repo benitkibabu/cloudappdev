@@ -21,6 +21,14 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <ImageView
+                android:id="@+id/recipe_img"
+                android:layout_width="match_parent"
+                android:fitsSystemWindows="true"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/chef_with_hat"
+                android:layout_height="256dp" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -41,6 +49,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@mipmap/ic_action_favorite" />
 
 </android.support.design.widget.CoordinatorLayout>

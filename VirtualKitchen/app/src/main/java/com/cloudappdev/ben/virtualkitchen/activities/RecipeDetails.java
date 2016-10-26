@@ -11,9 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.models.Recipe;
+import com.squareup.picasso.Picasso;
 
 public class RecipeDetails extends AppCompatActivity {
 
@@ -40,9 +43,49 @@ public class RecipeDetails extends AppCompatActivity {
             data = getIntent().getBundleExtra("User");
             Recipe r = (Recipe) getIntent().getSerializableExtra("Recipe");
             setTitle(r.getLabel());
-        }else{
 
+            TextView title = (TextView) findViewById(R.id.title);
+            TextView ingredients = (TextView) findViewById(R.id.ingredient);
+            TextView nutrition = (TextView) findViewById(R.id.nutrition);
+            TextView summary = (TextView) findViewById(R.id.summary);
+
+            title.setText(r.getLabel());
+
+            String nut = "";
+            String il = "";
+            String hl = "";
+            String sum = "";
+            int count = 0;
+            for(String n : r.getIngredientLines()){
+                count ++;
+                il += "-> " +n+ "\n";
+            }
+            for(String n : r.getHealthLabels()){
+                hl += n+" ";
+            }
+
+            String i = count+" Ingredients: \n" + il;
+            nut += hl;
+            nut += "\n\nCalories: " + Math.floor(r.getCaleries()) + "/ Serving";
+            sum += r.getSource();
+
+            ingredients.setText(i);
+            nutrition.setText(nut);
+            summary.setText(sum);
+
+            ImageView img = (ImageView) findViewById(R.id.recipe_img);
+            Picasso.with(getApplicationContext())
+                    .load(r.getImageUrl())
+                    .resize(512,512).centerCrop()
+                    .into(img);
+        }else{
+            goBack();
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override
@@ -56,12 +99,13 @@ public class RecipeDetails extends AppCompatActivity {
         Intent upIntent = new Intent(this, RecipesActivity.class);
         upIntent.putExtra("User", data);
         if(NavUtils.shouldUpRecreateTask(this, upIntent)){
-            TaskStackBuilder.from(this)
-                    .addNextIntent(upIntent)
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
                     .startActivities();
             finish();
         }else {
             NavUtils.navigateUpTo(this, upIntent);
+            finish();
         }
     }
 
@@ -73,7 +117,7 @@ public class RecipeDetails extends AppCompatActivity {
             return true;
         }
         else if(id == android.R.id.home){
-            goBack();
+            goBack();//NavUtils.navigateUpFromSameTask(this);
         }
 
         return super.onOptionsItemSelected(item);

@@ -41,16 +41,22 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/title_activity_recipes"
             android:screenOrientation="portrait"
-            android:theme="@style/KitchenTheme" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/KitchenTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudappdev.ben.virtualkitchen.MainActivity" />
+            </activity>
         <activity
             android:name=".activities.RecipeDetails"
-            android:label="@string/title_activity_recipe_deails"
+            android:label="@string/title_activity_recipe_details"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:parentActivityName=".activities.RecipesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/KitchenTheme">
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="com.cloudappdev.ben.virtualkitchen.activities.RecipesActivity" />-->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cloudappdev.ben.virtualkitchen.activities.RecipesActivity" />
         </activity>
     </application>
 

@@ -45,10 +45,10 @@ public class RecipeListFragment extends Fragment {
 
 
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM2 = "User";
 
     private String mParam1;
-    private String mParam2;
+    private Bundle mParam2;
 
    // private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
@@ -77,10 +77,10 @@ public class RecipeListFragment extends Fragment {
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam2 = getArguments().getBundle(ARG_PARAM2);
         }
-        API_ID = getResources().getString(R.string.edamam_api_id);
-        API_KEY = getResources().getString(R.string.edamam_api_key);
+        API_ID = getString(R.string.edamam_api_id);
+        API_KEY = getString(R.string.edamam_api_key);
 
     }
 

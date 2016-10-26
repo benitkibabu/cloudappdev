@@ -43,14 +43,6 @@ public class RecipesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(getIntent().hasExtra("User")) {
-            if (!getIntent().getExtras().isEmpty()) {
-                data = getIntent().getBundleExtra("User");
-            }
-        }else{
-            goBack();
-        }
-
         fragmentList = new ArrayList<>();
         addFragment();
 
@@ -72,16 +64,32 @@ public class RecipesActivity extends AppCompatActivity {
         });
     }
 
+    void loadUser(){
+        if(getIntent().hasExtra("User")) {
+            if (!getIntent().getExtras().isEmpty()) {
+                data = getIntent().getBundleExtra("User");
+            }
+        }else{
+            goBack();
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        loadUser();
+    }
+
     void addFragment(){
         Fragment f;
         titles = new ArrayList<>();
         titles.add("Recipe");
 
-        f = RecipeListFragment.newInstance("Me", data);
+        f = RecipeListFragment.newInstance("User", data);
         fragmentList.add(f);
 
         titles.add("My Favourite");
-        f = MyFavouriteFragment.newInstance("Me", data);
+        f = MyFavouriteFragment.newInstance("User", data);
         fragmentList.add(f);
     }
 
@@ -89,12 +97,13 @@ public class RecipesActivity extends AppCompatActivity {
         Intent upIntent = new Intent(this, MainActivity.class);
         upIntent.putExtra("User", data);
         if(NavUtils.shouldUpRecreateTask(this, upIntent)){
-            TaskStackBuilder.from(this)
-                    .addNextIntent(upIntent)
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
                     .startActivities();
             finish();
         }else {
             NavUtils.navigateUpTo(this, upIntent);
+            finish();
         }
     }
 
@@ -114,6 +123,7 @@ public class RecipesActivity extends AppCompatActivity {
         }
         else if(id == android.R.id.home){
             goBack();
+            //NavUtils.navigateUpFromSameTask(this);
         }
 
         return super.onOptionsItemSelected(item);

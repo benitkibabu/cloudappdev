@@ -34,13 +34,11 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class Login extends AppCompatActivity {
     LoginButton fbLoginBtn;
-    SignInButton gloginBtn;
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
-    private GoogleApiClient mGoogleApiClient;
 
     private ProgressDialog mProgressDialog;
     CallbackManager callbackManager;
@@ -51,25 +49,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         FacebookSdk.sdkInitialize(getApplicationContext());
         mProgressDialog = new ProgressDialog(this);
         setContentView(R.layout.activity_login);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        gloginBtn = (SignInButton) findViewById(R.id.sign_in_button);
-        gloginBtn.setSize(SignInButton.SIZE_STANDARD);
-        gloginBtn.setScopes(gso.getScopeArray());
-        gloginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
 
         fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
         fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile", "user_photos"));
@@ -92,11 +71,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         });
     }
 
-    public void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -106,24 +80,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     public void onStart() {
         super.onStart();
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if (accessToken == null) {
-            Log.d(TAG, ">>>" + "Signed Out");
-            OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-            if (opr.isDone()) {
-                Log.d(TAG, "Got cached sign in");
-                GoogleSignInResult result = opr.get();
-                handleSignInResult(result);
-            } else {
-                showProgressDialog();
-                opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                    @Override
-                    public void onResult(GoogleSignInResult googleSignInResult) {
-                        hideProgressDialog();
-                        handleSignInResult(googleSignInResult);
-                    }
-                });
-            }
-        } else {
+        if (accessToken != null) {
             Log.d(TAG, ">>>" + "Signed In");
             handleFacebookSignInResult(accessToken);
         }
@@ -133,10 +90,6 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
     }
 
     private void handleFacebookSignInResult(AccessToken accessToken){
@@ -179,55 +132,23 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         request.executeAsync();
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            Intent it = new Intent(Login.this, MainActivity.class);
-            Bundle i = new Bundle();
-            i.putString("LoginType", "Google");
-            i.putString("GoogleId", acct.getId());
-            i.putString("DisplayName", acct.getGivenName());
-            i.putString("Email", acct.getEmail());
-            i.putString("ImageUri", acct.getPhotoUrl().toString());
-            it.putExtra("User", i);
-
-            updateUI(it);
-
-        } else {
-            //updateUI(false);
-        }
-    }
-    private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                    }
-                });
-    }
-
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();
         }
     }
 
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+            mProgressDialog.hide();
         }
     }
 
     public void updateUI(Intent i){
         startActivity(i);
         finish();
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 }
