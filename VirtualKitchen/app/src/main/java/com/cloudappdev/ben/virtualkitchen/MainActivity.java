@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.cloudappdev.ben.virtualkitchen.activities.RecipesActivity;
+import com.cloudappdev.ben.virtualkitchen.app.AppController;
+import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "SignOutActivity";
     public String imgurl;
     boolean fbLogout = false, gLogout = false;
-    Bundle data;
+    User data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,17 +71,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     void loadProfile(){
-        if(getIntent().hasExtra("User")) {
-            if (!getIntent().getExtras().isEmpty()) {
-                data = getIntent().getBundleExtra("User");
-                imgurl = data.getString("ImageUri");
-                nameTv.setText(data.getString("DisplayName"));
+        if(AppController.getUser() != null) {
 
-                Picasso.with(getApplicationContext())
-                        .load(imgurl)
-                        .resize(256,256).centerCrop()
-                        .into(profileImage);
-            }
+            data = AppController.getUser();
+            imgurl = data.getImageUrl();
+            nameTv.setText(data.getName());
+
+            Picasso.with(getApplicationContext())
+                    .load(imgurl)
+                    .resize(256,256).centerCrop()
+                    .into(profileImage);
+
         }else{
             facebookSignOut();
             //googleSignOut();
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(fbLogout){
+            AppController.setUser(null);
             Intent i = new Intent(MainActivity.this, Login.class);
             startActivity(i);
             finish();

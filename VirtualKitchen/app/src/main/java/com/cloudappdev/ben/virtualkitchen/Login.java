@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.cloudappdev.ben.virtualkitchen.app.AppController;
+import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -111,13 +113,8 @@ public class Login extends AppCompatActivity {
                             String picUrl = picData.getString("url");
 
                             Intent it = new Intent(Login.this, MainActivity.class);
-                            Bundle i = new Bundle();
-                            i.putString("LoginType", "Facebook");
-                            i.putString("FacebookId", id);
-                            i.putString("DisplayName", name);
-                            i.putString("Email", email);
-                            i.putString("ImageUri", picUrl);
-                            it.putExtra("User", i);
+                            User user = new User("Facebook", id, name, email, picUrl);
+                            AppController.setUser(user);
                             updateUI(it);
 
                         } catch (JSONException e) {
@@ -143,7 +140,7 @@ public class Login extends AppCompatActivity {
 
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
+            mProgressDialog.dismiss();
         }
     }
 

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.cloudappdev.ben.virtualkitchen.models.User;
 
 /**
  * Created by Ben on 17/10/2016.
@@ -15,6 +16,7 @@ public class AppController extends Application {
 
     private RequestQueue mRequestQueue;
     private static AppController mInstance;
+    static User user;
 
     @Override
     public void onCreate() {
@@ -46,5 +48,13 @@ public class AppController extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+
+    public static User getUser() {
+        return user;
+    }
+
+    public static void setUser(User user) {
+        AppController.user = user;
     }
 }
