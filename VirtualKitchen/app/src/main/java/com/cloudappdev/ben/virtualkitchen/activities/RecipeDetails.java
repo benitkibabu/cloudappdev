@@ -15,13 +15,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.Recipe;
+import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.squareup.picasso.Picasso;
 
 public class RecipeDetails extends AppCompatActivity {
 
 
-    Bundle data;
+    User data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +41,8 @@ public class RecipeDetails extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(getIntent().hasExtra("Recipe") && getIntent().hasExtra("User")){
-            data = getIntent().getBundleExtra("User");
+        if(getIntent().hasExtra("Recipe") && AppController.getUser() != null){
+            data = AppController.getUser();
             Recipe r = (Recipe) getIntent().getSerializableExtra("Recipe");
             setTitle(r.getLabel());
 
@@ -55,17 +57,10 @@ public class RecipeDetails extends AppCompatActivity {
             String il = "";
             String hl = "";
             String sum = "";
-            int count = 0;
-            for(String n : r.getIngredientLines()){
-                count ++;
-                il += "-> " +n+ "\n";
-            }
-            for(String n : r.getHealthLabels()){
-                hl += n+" ";
-            }
+            int count = r.getIngredients().size();
 
-            String i = count+" Ingredients: \n" + il;
-            nut += hl;
+            String i = count+" Ingredients: \n" + r.getIngredientLines();
+            nut += r.getHealthLabels();
             nut += "\n\nCalories: " + Math.floor(r.getCaleries()) + "/ Serving";
             sum += r.getSource();
 

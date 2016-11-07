@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 
 public class Recipe implements Serializable{
+    int id;
     String uri;
     String label;
     String imageUrl;
@@ -15,18 +16,18 @@ public class Recipe implements Serializable{
     String url;
     String shareAs;
     double yield;
-    ArrayList<String> dietLabels;
-    ArrayList<String> healthLabels;
-    ArrayList<String> cautions;
-    ArrayList<String> ingredientLines;
+    String dietLabels;
+    String healthLabels;
+    String cautions;
+    String ingredientLines;
     ArrayList<Ingredient> ingredients;
     double caleries;
     double totalWeight;
 
-    public Recipe(String uri, String label, String imageUrl, String source,
-                  String url, String shareAs, double yield, ArrayList<String> dietLabels,
-                  ArrayList<String> healthLabels, ArrayList<String> cautions, ArrayList<String> ingredientLines,
-                  ArrayList<Ingredient> ingredients, double caleries, double totalWeight) {
+    public Recipe(String uri, String label, String imageUrl, String source, String url,
+                  String shareAs, double yield, String dietLabels, String healthLabels,
+                  String cautions, String ingredientLines, ArrayList<Ingredient> ingredients,
+                  double caleries, double totalWeight) {
         this.uri = uri;
         this.label = label;
         this.imageUrl = imageUrl;
@@ -71,15 +72,23 @@ public class Recipe implements Serializable{
         return yield;
     }
 
-    public ArrayList<String> getDietLabels() {
+    public int getId() {
+        return id;
+    }
+
+    public String getDietLabels() {
         return dietLabels;
     }
 
-    public ArrayList<String> getHealthLabels() {
+    public String getHealthLabels() {
         return healthLabels;
     }
 
-    public ArrayList<String> getIngredientLines() {
+    public String getCautions() {
+        return cautions;
+    }
+
+    public String getIngredientLines() {
         return ingredientLines;
     }
 
@@ -93,9 +102,5 @@ public class Recipe implements Serializable{
 
     public double getTotalWeight() {
         return totalWeight;
-    }
-
-    public ArrayList<String> getCautions() {
-        return cautions;
     }
 }

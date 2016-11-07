@@ -32,6 +32,7 @@ import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
 import com.cloudappdev.ben.virtualkitchen.models.Recipe;
+import com.cloudappdev.ben.virtualkitchen.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,11 +45,7 @@ import java.util.List;
 public class RecipeListFragment extends Fragment {
 
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "User";
-
-    private String mParam1;
-    private Bundle mParam2;
+    private User user;
 
    // private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
@@ -62,12 +59,8 @@ public class RecipeListFragment extends Fragment {
     public RecipeListFragment() {
     }
 
-    public static RecipeListFragment newInstance(String param1, Bundle param2) {
+    public static RecipeListFragment newInstance() {
         RecipeListFragment fragment = new RecipeListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putBundle(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -75,9 +68,8 @@ public class RecipeListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getBundle(ARG_PARAM2);
+        if (AppController.getUser() != null) {
+            user = AppController.getUser();
         }
         API_ID = getString(R.string.edamam_api_id);
         API_KEY = getString(R.string.edamam_api_key);
@@ -103,7 +95,6 @@ public class RecipeListFragment extends Fragment {
                 Intent i = new Intent(getActivity().getBaseContext(), RecipeDetails.class);
                 Recipe r = recipeList.get(position);
                 i.putExtra("Recipe", r);
-                i.putExtra("User", mParam2);
                 startActivity(i);
             }
         });
@@ -136,7 +127,7 @@ public class RecipeListFragment extends Fragment {
             @Override
             public void onResponse(String response) {
 
-                Log.d("API REQUEST res", response);
+                Log.d("API RESULT", response);
                 try{
                     JSONObject obj = new JSONObject(response);
                     JSONArray hits = obj.getJSONArray("hits");
@@ -150,26 +141,22 @@ public class RecipeListFragment extends Fragment {
                         JSONArray ing = re.getJSONArray("ingredients");
 
                         ArrayList<Ingredient> ingredientsList = new ArrayList<>();
-                        ArrayList<String> dietLabels = new ArrayList<>();
-                        ArrayList<String> healthLabels = new ArrayList<>();
-                        ArrayList<String> cautions = new ArrayList<>();
-                        ArrayList<String> ingredientLines = new ArrayList<>();
+                        String dietLabels = "";
+                        String healthLabels = "";
+                        String cautions = "";
+                        String ingredientLines = "";
 
                         for(int x = 0; x < dL.length(); x++){
-                            String val = dL.getString(x);
-                            dietLabels.add(val);
+                            dietLabels += dL.getString(x)+", ";
                         }
                         for(int x = 0; x < hL.length(); x++){
-                            String val = hL.getString(x);
-                            healthLabels.add(val);
+                            healthLabels += hL.getString(x)+", ";
                         }
                         for(int x = 0; x < ca.length(); x++){
-                            String val = ca.getString(x);
-                            cautions.add(val);
+                            cautions += ca.getString(x)+", ";
                         }
                         for(int x = 0; x < iL.length(); x++){
-                            String val = iL.getString(x);
-                            ingredientLines.add(val);
+                            ingredientLines += iL.getString(x)+", ";
                         }
                         for(int x = 0; x < ing.length(); x++){
                             JSONObject val = ing.getJSONObject(x);
