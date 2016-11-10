@@ -85,7 +85,7 @@ public class RecipesActivity extends AppCompatActivity {
         titles = new ArrayList<>();
         titles.add("Recipe");
 
-        f = RecipeListFragment.newInstance("User", data);
+        f = RecipeListFragment.newInstance();
         fragmentList.add(f);
 
         titles.add("My Favourite");

@@ -81,17 +81,13 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
     public void onBindViewHolder(ViewHolder holder, int position) {
         String label = recipeList.get(position).getLabel();
         String imageUrl = recipeList.get(position).getImageUrl();
-        List<String> list = recipeList.get(position).getIngredientLines();
-        String summary = "";
-        for(String n : list){
-            summary += n + ", ";
-        }
+        String list = recipeList.get(position).getIngredientLines();
 
         holder.itemHolder.textView.setText(label);
-        if(summary.length() > 256)
-            holder.itemHolder.textView2.setText(summary.substring(0, 256));
+        if(list.length() > 256)
+            holder.itemHolder.textView2.setText(list.substring(0, 256));
         else
-            holder.itemHolder.textView2.setText(summary);
+            holder.itemHolder.textView2.setText(list);
         
         Picasso.with(context).load(imageUrl).resize(128,128).centerCrop().into(holder.itemHolder.imageView);
     }
