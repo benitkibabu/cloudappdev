@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="virtualkitchendbModelStoreContainer" CdmEntityContainer="virtualkitchendbEntities">
+    <EntitySetMapping Name="devices">
+      <EntityTypeMapping TypeName="virtualkitchendbModel.device">
+        <MappingFragment StoreEntitySet="devices">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="deviceid" ColumnName="deviceid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ingredients">
+      <EntityTypeMapping TypeName="virtualkitchendbModel.ingredient">
+        <MappingFragment StoreEntitySet="ingredients">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="measure" ColumnName="measure" />
+          <ScalarProperty Name="weight" ColumnName="weight" />
+          <ScalarProperty Name="food" ColumnName="food" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="recipes">
+      <EntityTypeMapping TypeName="virtualkitchendbModel.recipe">
+        <MappingFragment StoreEntitySet="recipes">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="recipe1" ColumnName="recipe" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="virtualkitchendbModel.user">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="logintype" ColumnName="logintype" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="imageurl" ColumnName="imageurl" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

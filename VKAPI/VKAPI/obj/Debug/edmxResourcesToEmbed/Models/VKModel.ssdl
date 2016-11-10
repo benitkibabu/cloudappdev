@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="virtualkitchendbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="devices">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="int" Nullable="false" />
+    <Property Name="deviceid" Type="varchar" MaxLength="500" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ingredients">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userid" Type="int" Nullable="false" />
+    <Property Name="text" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="quantity" Type="decimal" Precision="10" Scale="0" Nullable="false" />
+    <Property Name="measure" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="weight" Type="decimal" Precision="10" Scale="0" Nullable="false" />
+    <Property Name="food" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="recipes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="recipe" Type="blob" Nullable="false" />
+    <Property Name="userid" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="logintype" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userid" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="imageurl" Type="varchar" MaxLength="500" Nullable="false" />
+  </EntityType>
+  <Association Name="fk_u_d">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="devices" Type="Self.devices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="devices">
+        <PropertyRef Name="userid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_u_i">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="ingredients" Type="Self.ingredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ingredients">
+        <PropertyRef Name="userid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_u_r">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="recipes" Type="Self.recipes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="recipes">
+        <PropertyRef Name="userid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="virtualkitchendbModelStoreContainer">
+    <EntitySet Name="devices" EntityType="Self.devices" Schema="virtualkitchendb" store:Type="Tables" />
+    <EntitySet Name="ingredients" EntityType="Self.ingredients" Schema="virtualkitchendb" store:Type="Tables" />
+    <EntitySet Name="recipes" EntityType="Self.recipes" Schema="virtualkitchendb" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="virtualkitchendb" store:Type="Tables" />
+    <AssociationSet Name="fk_u_d" Association="Self.fk_u_d">
+      <End Role="users" EntitySet="users" />
+      <End Role="devices" EntitySet="devices" />
+    </AssociationSet>
+    <AssociationSet Name="fk_u_i" Association="Self.fk_u_i">
+      <End Role="users" EntitySet="users" />
+      <End Role="ingredients" EntitySet="ingredients" />
+    </AssociationSet>
+    <AssociationSet Name="fk_u_r" Association="Self.fk_u_r">
+      <End Role="users" EntitySet="users" />
+      <End Role="recipes" EntitySet="recipes" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
