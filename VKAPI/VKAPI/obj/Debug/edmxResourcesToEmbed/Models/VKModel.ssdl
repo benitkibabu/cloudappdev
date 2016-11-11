@@ -25,7 +25,19 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="recipe" Type="blob" Nullable="false" />
+    <Property Name="uri" Type="varchar" MaxLength="200" />
+    <Property Name="label" Type="varchar" MaxLength="200" />
+    <Property Name="imageurl" Type="varchar" MaxLength="500" />
+    <Property Name="source" Type="varchar" MaxLength="500" />
+    <Property Name="url" Type="varchar" MaxLength="500" />
+    <Property Name="shareas" Type="varchar" MaxLength="500" />
+    <Property Name="yield" Type="decimal" Precision="10" Scale="0" />
+    <Property Name="dietlabel" Type="varchar" MaxLength="500" />
+    <Property Name="healthlabel" Type="varchar" MaxLength="500" />
+    <Property Name="caution" Type="varchar" MaxLength="500" />
+    <Property Name="ingredientlines" Type="varchar" MaxLength="500" />
+    <Property Name="calories" Type="decimal" Precision="10" Scale="0" />
+    <Property Name="totalweight" Type="decimal" Precision="10" Scale="0" />
     <Property Name="userid" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="users">

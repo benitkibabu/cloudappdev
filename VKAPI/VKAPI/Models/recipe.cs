@@ -15,7 +15,19 @@ namespace VKAPI.Models
     public partial class recipe
     {
         public int id { get; set; }
-        public byte[] recipe1 { get; set; }
+        public string uri { get; set; }
+        public string label { get; set; }
+        public string imageurl { get; set; }
+        public string source { get; set; }
+        public string url { get; set; }
+        public string shareas { get; set; }
+        public Nullable<decimal> yield { get; set; }
+        public string dietlabel { get; set; }
+        public string healthlabel { get; set; }
+        public string caution { get; set; }
+        public string ingredientlines { get; set; }
+        public Nullable<decimal> calories { get; set; }
+        public Nullable<decimal> totalweight { get; set; }
         public int userid { get; set; }
     
         public virtual user user { get; set; }

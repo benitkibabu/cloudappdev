@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="virtualkitchendbModelStoreContainer" CdmEntityContainer="virtualkitchendbEntities">
+    <EntitySetMapping Name="devices">
+      <EntityTypeMapping TypeName="virtualkitchendbModel.device">
+        <MappingFragment StoreEntitySet="devices">
+          <ScalarProperty Name="deviceid" ColumnName="deviceid" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ingredients">
+      <EntityTypeMapping TypeName="virtualkitchendbModel.ingredient">
+        <MappingFragment StoreEntitySet="ingredients">
+          <ScalarProperty Name="food" ColumnName="food" />
+          <ScalarProperty Name="weight" ColumnName="weight" />
+          <ScalarProperty Name="measure" ColumnName="measure" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="recipes">
+      <EntityTypeMapping TypeName="virtualkitchendbModel.recipe">
+        <MappingFragment StoreEntitySet="recipes">
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="totalweight" ColumnName="totalweight" />
+          <ScalarProperty Name="calories" ColumnName="calories" />
+          <ScalarProperty Name="ingredientlines" ColumnName="ingredientlines" />
+          <ScalarProperty Name="caution" ColumnName="caution" />
+          <ScalarProperty Name="healthlabel" ColumnName="healthlabel" />
+          <ScalarProperty Name="dietlabel" ColumnName="dietlabel" />
+          <ScalarProperty Name="yield" ColumnName="yield" />
+          <ScalarProperty Name="shareas" ColumnName="shareas" />
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="source" ColumnName="source" />
+          <ScalarProperty Name="imageurl" ColumnName="imageurl" />
+          <ScalarProperty Name="label" ColumnName="label" />
+          <ScalarProperty Name="uri" ColumnName="uri" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="virtualkitchendbModel.user">
+        <MappingFragment StoreEntitySet="users">
+          <ScalarProperty Name="imageurl" ColumnName="imageurl" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="logintype" ColumnName="logintype" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
