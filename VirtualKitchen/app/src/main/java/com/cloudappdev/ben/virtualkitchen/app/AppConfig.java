@@ -23,7 +23,10 @@ public class AppConfig {
     public static final String EXTRA_MESSAGE = "message";
     public static final String DISPLAY_MSG_ACTION = "com.cloudappdev.ben.virtualkitchen.notification.DISPLAY_MESSAGE";
 
-    public static final String INTERNAL_API = "http://virtualkitchen.gear.host/ncigo/";
+    public static final String INTERNAL_USERS_API = "http://virtualkitchen.gear.host/api/users";
+    public static final String INTERNAL_DEVICES_API = "http://virtualkitchen.gear.host/api/devices";
+    public static final String INTERNAL_RECIPES_API = "http://virtualkitchen.gear.host/api/recipes";
+    public static final String INTERNAL_INGREDIENT_API = "http://virtualkitchen.gear.host/api/ingredients";
     public static final String TESCO_API = "http://itrackerapp.gear.host/ncigo/";
     public static final String RECIPE_API = "https://api.edamam.com/search";
 

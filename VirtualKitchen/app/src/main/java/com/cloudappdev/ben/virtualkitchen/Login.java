@@ -2,11 +2,25 @@ package com.cloudappdev.ben.virtualkitchen;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.facebook.AccessToken;
@@ -35,6 +49,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
     LoginButton fbLoginBtn;
@@ -128,6 +144,100 @@ public class Login extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
     }
+
+    //Post Request
+    void postStudent(User user){
+
+        final String req = "logUser";
+        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.INTERNAL_USERS_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Login Activity", response);
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            boolean error = object.getBoolean("error");
+                            if(!error){
+                                JSONObject st = object.getJSONObject("0");
+                            }else{
+                                //Snackbar.make(view, "Failed:" + object.getString("error_msg"), Snackbar.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                NetworkResponse networkResponse = error.networkResponse;
+                if (networkResponse != null) {
+                    Log.e("Volley", "Error. HTTP Status Code:"+networkResponse.statusCode);
+                }
+
+                if (error instanceof TimeoutError) {
+                    Log.e("Volley", "TimeoutError");
+                }else if(error instanceof NoConnectionError){
+                    Log.e("Volley", "NoConnectionError");
+                } else if (error instanceof AuthFailureError) {
+                    Log.e("Volley", "AuthFailureError");
+                } else if (error instanceof ServerError) {
+                    Log.e("Volley", "ServerError");
+                } else if (error instanceof NetworkError) {
+                    Log.e("Volley", "NetworkError");
+                } else if (error instanceof ParseError) {
+                    Log.e("Volley", "ParseError");
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+                params.put("tag", req);
+
+                return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request, req);
+
+    }
+
+    private void GetUser() {
+        String req = "get_news";
+        Uri url = Uri.parse(AppConfig.INTERNAL_USERS_API)
+                .buildUpon()
+                .appendQueryParameter("tag", "getUpdates")
+                .build();
+        StringRequest request = new StringRequest(Request.Method.GET, url.toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("News response", response);
+
+                        try {
+                            JSONObject obj = new JSONObject(response);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Updates Error", "Error " + error.getMessage());
+            }
+        });
+        AppController.getInstance().addToRequestQueue(request, req);
+    }
+
 
     private void showProgressDialog() {
         if (mProgressDialog == null) {

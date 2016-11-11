@@ -6,12 +6,12 @@ android {
         config {
             keyAlias 'ben'
             keyPassword 'B3nitskibabu'
-            storeFile file('/home/ben/Dropbox/Android/benbuild.jks')
+            storeFile file('H:/cloudappdev/project/VirtualKitchen/benbuild.jks')
             storePassword 'B3nitskibabu'
         }
     }
     compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    buildToolsVersion "24.0.2"
     lintOptions {
         quiet true
         abortOnError false
