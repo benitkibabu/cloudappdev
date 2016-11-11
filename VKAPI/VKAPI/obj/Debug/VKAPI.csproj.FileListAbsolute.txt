@@ -157,3 +157,4 @@ H:\cloudappdev\project\VKAPI\VKAPI\bin\System.Web.WebPages.Deployment.xml
 H:\cloudappdev\project\VKAPI\VKAPI\bin\System.Web.WebPages.Razor.xml
 H:\cloudappdev\project\VKAPI\VKAPI\obj\Debug\VKAPI.dll
 H:\cloudappdev\project\VKAPI\VKAPI\obj\Debug\VKAPI.pdb
+H:\cloudappdev\project\VKAPI\VKAPI\obj\Debug\VKAPI.csprojResolveAssemblyReference.cache
