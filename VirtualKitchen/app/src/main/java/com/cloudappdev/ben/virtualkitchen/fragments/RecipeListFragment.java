@@ -169,7 +169,7 @@ public class RecipeListFragment extends Fragment {
 
                         Recipe rec = new Recipe(re.getString("uri"), re.getString("label"), re.getString("image"),
                                 re.getString("source"), re.getString("url"),re.getString("shareAs"),
-                                re.getDouble("yield"), dietLabels, healthLabels, cautions, ingredientLines, ingredientsList,
+                                re.getDouble("yield"), dietLabels, healthLabels, cautions, ingredientLines,
                                 re.getDouble("calories"), re.getDouble("totalWeight"));
                         recipeList.add(rec);
                     }

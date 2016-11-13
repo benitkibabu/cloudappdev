@@ -20,13 +20,12 @@ public class Recipe implements Serializable{
     String healthLabels;
     String cautions;
     String ingredientLines;
-    ArrayList<Ingredient> ingredients;
     double caleries;
     double totalWeight;
 
     public Recipe(String uri, String label, String imageUrl, String source, String url,
                   String shareAs, double yield, String dietLabels, String healthLabels,
-                  String cautions, String ingredientLines, ArrayList<Ingredient> ingredients,
+                  String cautions, String ingredientLines,
                   double caleries, double totalWeight) {
         this.uri = uri;
         this.label = label;
@@ -39,10 +38,10 @@ public class Recipe implements Serializable{
         this.healthLabels = healthLabels;
         this.cautions = cautions;
         this.ingredientLines = ingredientLines;
-        this.ingredients = ingredients;
         this.caleries = caleries;
         this.totalWeight = totalWeight;
     }
+
 
     public String getUri() {
         return uri;
@@ -90,10 +89,6 @@ public class Recipe implements Serializable{
 
     public String getIngredientLines() {
         return ingredientLines;
-    }
-
-    public ArrayList<Ingredient> getIngredients() {
-        return ingredients;
     }
 
     public double getCaleries() {

@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'ben'
             keyPassword 'B3nitskibabu'
-            storeFile file('H:/cloudappdev/project/VirtualKitchen/benbuild.jks')
+            storeFile file('C:/Users/Ben/AndroidStudioProjects/cloudappdev/benbuild.jks')
             storePassword 'B3nitskibabu'
         }
     }
