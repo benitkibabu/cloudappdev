@@ -141,10 +141,10 @@ public class RecipeListFragment extends Fragment {
                         JSONArray ing = re.getJSONArray("ingredients");
 
                         ArrayList<Ingredient> ingredientsList = new ArrayList<>();
-                        String dietLabels = "";
-                        String healthLabels = "";
-                        String cautions = "";
-                        String ingredientLines = "";
+                        String dietLabels = " ";
+                        String healthLabels = " ";
+                        String cautions = " ";
+                        String ingredientLines = " ";
 
                         for(int x = 0; x < dL.length(); x++){
                             dietLabels += dL.getString(x)+" - ";
@@ -169,8 +169,8 @@ public class RecipeListFragment extends Fragment {
 
                         Recipe rec = new Recipe(re.getString("uri"), re.getString("label"), re.getString("image"),
                                 re.getString("source"), re.getString("url"),re.getString("shareAs"),
-                                re.getDouble("yield"), dietLabels, healthLabels, cautions, ingredientLines,
-                                re.getDouble("calories"), re.getDouble("totalWeight"));
+                                Math.floor(re.getDouble("yield")), dietLabels, healthLabels, cautions, ingredientLines,
+                                Math.floor(re.getDouble("calories")),  Math.floor(re.getDouble("totalWeight")));
                         recipeList.add(rec);
                     }
                     adapter.addAll(recipeList);
