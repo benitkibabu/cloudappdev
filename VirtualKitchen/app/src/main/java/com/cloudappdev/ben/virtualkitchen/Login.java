@@ -128,10 +128,8 @@ public class Login extends AppCompatActivity {
                             JSONObject picData = picObj.getJSONObject("data");
                             String picUrl = picData.getString("url");
 
-                            Intent it = new Intent(Login.this, MainActivity.class);
                             User user = new User("Facebook", id, name, email, picUrl);
-                            AppController.setUser(user);
-                            updateUI(it);
+                            postStudent(user);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -146,22 +144,21 @@ public class Login extends AppCompatActivity {
     }
 
     //Post Request
-    void postStudent(User user){
-
-        final String req = "logUser";
+    void postStudent(final User user){
+        showProgressDialog();
+        final String TAG = "Log User";
         StringRequest request = new StringRequest(Request.Method.POST, AppConfig.INTERNAL_USERS_API,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("Login Activity", response);
+                        Log.d(TAG, response);
+                        hideProgressDialog();
                         try {
                             JSONObject object = new JSONObject(response);
-                            boolean error = object.getBoolean("error");
-                            if(!error){
-                                JSONObject st = object.getJSONObject("0");
-                            }else{
-                                //Snackbar.make(view, "Failed:" + object.getString("error_msg"), Snackbar.LENGTH_LONG).show();
-                            }
+                            Intent it = new Intent(Login.this, MainActivity.class);
+                            AppController.setUser(user);
+                            updateUI(it);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -170,6 +167,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                hideProgressDialog();
                 NetworkResponse networkResponse = error.networkResponse;
                 if (networkResponse != null) {
                     Log.e("Volley", "Error. HTTP Status Code:"+networkResponse.statusCode);
@@ -194,7 +192,11 @@ public class Login extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 Map<String, String> params = new HashMap<>();
-                params.put("tag", req);
+                params.put("logintype", user.getLoginType());
+                params.put("userid", user.getUserid());
+                params.put("name", user.getName());
+                params.put("email", user.getEmail());
+                params.put("imageurl", user.getImageUrl());
 
                 return params;
             }
@@ -205,8 +207,7 @@ public class Login extends AppCompatActivity {
             }
         };
 
-        AppController.getInstance().addToRequestQueue(request, req);
-
+        AppController.getInstance().addToRequestQueue(request, TAG);
     }
 
     private void GetUser() {
@@ -242,6 +243,10 @@ public class Login extends AppCompatActivity {
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.show();
+        }else{
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();

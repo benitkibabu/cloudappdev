@@ -19,8 +19,10 @@ import android.view.View;
 import com.cloudappdev.ben.virtualkitchen.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.adapter.CustomPageAdapter;
+import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.fragments.MyFavouriteFragment;
 import com.cloudappdev.ben.virtualkitchen.fragments.RecipeListFragment;
+import com.cloudappdev.ben.virtualkitchen.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class RecipesActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private List<Fragment> fragmentList;
     private List<String> titles;
-    Bundle data;
+    User data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +67,8 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     void loadUser(){
-        if(getIntent().hasExtra("User")) {
-            if (!getIntent().getExtras().isEmpty()) {
-                data = getIntent().getBundleExtra("User");
-            }
+        if(AppController.getUser() != null) {
+            data = AppController.getUser();
         }else{
             goBack();
         }
@@ -89,7 +89,7 @@ public class RecipesActivity extends AppCompatActivity {
         fragmentList.add(f);
 
         titles.add("My Favourite");
-        f = MyFavouriteFragment.newInstance("User", data);
+        f = MyFavouriteFragment.newInstance();
         fragmentList.add(f);
     }
 

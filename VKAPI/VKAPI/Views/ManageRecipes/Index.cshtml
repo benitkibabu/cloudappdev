@@ -1,0 +1,111 @@
+﻿@model IEnumerable<VKAPI.Models.recipe>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.uri)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.label)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.imageurl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.source)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.url)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.shareas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.yield)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dietlabel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.healthlabel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.caution)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ingredientlines)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.calories)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalweight)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.user.logintype)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.uri)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.label)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.imageurl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.source)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.url)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.shareas)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.yield)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dietlabel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.healthlabel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.caution)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ingredientlines)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.calories)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.totalweight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.user.logintype)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

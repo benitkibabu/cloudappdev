@@ -76,10 +76,17 @@ namespace VKAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.users.Add(user);
-            await db.SaveChangesAsync();
+            if (userExists(user.userid))
+            {
+                return Ok(await db.users.Where(a => a.userid == user.userid).FirstAsync());
+            }else
+            {
+                db.users.Add(user);
+                await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.id }, user);
+                return CreatedAtRoute("DefaultApi", new { id = user.id }, user);
+            }
+           
         }
 
         // DELETE: api/Users/5
@@ -110,6 +117,10 @@ namespace VKAPI.Controllers
         private bool userExists(int id)
         {
             return db.users.Count(e => e.id == id) > 0;
+        }
+        private bool userExists(string userid)
+        {
+            return db.users.Count(e => e.userid == userid) > 0;
         }
     }
 }

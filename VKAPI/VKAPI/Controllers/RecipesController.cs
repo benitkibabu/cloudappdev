@@ -111,5 +111,10 @@ namespace VKAPI.Controllers
         {
             return db.recipes.Count(e => e.id == id) > 0;
         }
+
+        private bool recipeExists(string label)
+        {
+            return db.recipes.Count(e => e.label == label) > 0;
+        }
     }
 }

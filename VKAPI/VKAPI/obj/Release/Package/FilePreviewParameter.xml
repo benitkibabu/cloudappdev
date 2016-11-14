@@ -1,13 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="IIS Web Application Name" description="" value="virtualkitchen" tags="IisApp">
-    <parameterEntry kind="ProviderPath" scope="IisApp" match="^H:\\cloudappdev\\project\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp$" />
-    <parameterEntry kind="ProviderPath" scope="setAcl" match="^H:\\cloudappdev\\project\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Ben\\AndroidStudioProjects\\cloudappdev\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\Ben\\AndroidStudioProjects\\cloudappdev\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp$" />
   </parameter>
   <parameter name="virtualkitchendbEntities-Web.config Connection String" description="" value="metadata=res://*/Models.VKModel.csdl|res://*/Models.VKModel.ssdl|res://*/Models.VKModel.msl;provider=MySql.Data.MySqlClient;provider connection string=&quot;user id=virtualkitchendb;password=Do2kj_DaB!3c;persistsecurityinfo=True;server=mysql2.gear.host;database=virtualkitchendb&quot;" tags="">
-    <parameterEntry kind="XmlFile" scope="H:\\cloudappdev\\project\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='virtualkitchendbEntities']/@connectionString" />
-  </parameter>
-  <parameter name="LocalMySqlServer-Web.config Connection String" description="LocalMySqlServer Connection String used in web.config by the application to access the database." value="" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="H:\\cloudappdev\\project\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='LocalMySqlServer']/@connectionString" />
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Ben\\AndroidStudioProjects\\cloudappdev\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='virtualkitchendbEntities']/@connectionString" />
   </parameter>
 </parameters>

@@ -210,6 +210,8 @@
     <Compile Include="Controllers\DevicesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IngredientsController.cs" />
+    <Compile Include="Controllers\ManageRecipesController.cs" />
+    <Compile Include="Controllers\ManageUserController.cs" />
     <Compile Include="Controllers\RecipesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -303,8 +305,8 @@
     <Content Include="Models\VKModel.edmx.diagram">
       <DependentUpon>VKModel.edmx</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\virtualkitchen - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\virtualkitchen - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\virtualkitchen1 - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\virtualkitchen1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -335,6 +337,16 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <Content Include="Views\ManageUser\Create.cshtml" />
+    <Content Include="Views\ManageUser\Delete.cshtml" />
+    <Content Include="Views\ManageUser\Details.cshtml" />
+    <Content Include="Views\ManageUser\Edit.cshtml" />
+    <Content Include="Views\ManageUser\Index.cshtml" />
+    <Content Include="Views\ManageRecipes\Create.cshtml" />
+    <Content Include="Views\ManageRecipes\Delete.cshtml" />
+    <Content Include="Views\ManageRecipes\Details.cshtml" />
+    <Content Include="Views\ManageRecipes\Edit.cshtml" />
+    <Content Include="Views\ManageRecipes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

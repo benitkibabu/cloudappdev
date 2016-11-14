@@ -147,16 +147,16 @@ public class RecipeListFragment extends Fragment {
                         String ingredientLines = "";
 
                         for(int x = 0; x < dL.length(); x++){
-                            dietLabels += dL.getString(x)+", ";
+                            dietLabels += dL.getString(x)+" - ";
                         }
                         for(int x = 0; x < hL.length(); x++){
-                            healthLabels += hL.getString(x)+", ";
+                            healthLabels += hL.getString(x)+" - ";
                         }
                         for(int x = 0; x < ca.length(); x++){
-                            cautions += ca.getString(x)+", ";
+                            cautions += ca.getString(x)+" - ";
                         }
                         for(int x = 0; x < iL.length(); x++){
-                            ingredientLines += iL.getString(x)+", ";
+                            ingredientLines += iL.getString(x)+" - ";
                         }
                         for(int x = 0; x < ing.length(); x++){
                             JSONObject val = ing.getJSONObject(x);
