@@ -212,6 +212,7 @@
     <Compile Include="Controllers\IngredientsController.cs" />
     <Compile Include="Controllers\ManageRecipesController.cs" />
     <Compile Include="Controllers\ManageUserController.cs" />
+    <Compile Include="Controllers\MyRecipesController.cs" />
     <Compile Include="Controllers\RecipesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -222,6 +223,9 @@
       <DependentUpon>VKModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ingredient.cs">
+      <DependentUpon>VKModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_recipes.cs">
       <DependentUpon>VKModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\recipe.cs">

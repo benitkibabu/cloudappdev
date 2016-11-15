@@ -3,6 +3,7 @@
   <EntityContainer Name="virtualkitchendbEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="devices" EntityType="virtualkitchendbModel.device" />
     <EntitySet Name="ingredients" EntityType="virtualkitchendbModel.ingredient" />
+    <EntitySet Name="my_recipes" EntityType="virtualkitchendbModel.my_recipes" />
     <EntitySet Name="recipes" EntityType="virtualkitchendbModel.recipe" />
     <EntitySet Name="users" EntityType="virtualkitchendbModel.user" />
     <AssociationSet Name="fk_u_d" Association="virtualkitchendbModel.fk_u_d">
@@ -12,6 +13,10 @@
     <AssociationSet Name="fk_u_i" Association="virtualkitchendbModel.fk_u_i">
       <End Role="user" EntitySet="users" />
       <End Role="ingredient" EntitySet="ingredients" />
+    </AssociationSet>
+    <AssociationSet Name="fk_user_myrecipes" Association="virtualkitchendbModel.fk_user_myrecipes">
+      <End Role="user" EntitySet="users" />
+      <End Role="my_recipes" EntitySet="my_recipes" />
     </AssociationSet>
     <AssociationSet Name="fk_u_r" Association="virtualkitchendbModel.fk_u_r">
       <End Role="user" EntitySet="users" />
@@ -40,22 +45,39 @@
     <Property Name="food" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="user" Relationship="virtualkitchendbModel.fk_u_i" FromRole="ingredient" ToRole="user" />
   </EntityType>
+  <EntityType Name="my_recipes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="uri" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="label" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="imageurl" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="source" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="url" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="shareas" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="yield" Type="Decimal" />
+    <Property Name="calories" Type="Decimal" />
+    <Property Name="totalweight" Type="Decimal" />
+    <Property Name="userid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="user" Relationship="virtualkitchendbModel.fk_user_myrecipes" FromRole="my_recipes" ToRole="user" />
+  </EntityType>
   <EntityType Name="recipe">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="uri" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="label" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="imageurl" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="source" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="shareas" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="uri" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="label" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="imageurl" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="source" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="url" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="shareas" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
     <Property Name="yield" Type="Decimal" />
-    <Property Name="dietlabel" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="healthlabel" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="caution" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-    <Property Name="ingredientlines" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="dietlabel" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="healthlabel" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="caution" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="ingredientlines" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
     <Property Name="calories" Type="Decimal" />
     <Property Name="totalweight" Type="Decimal" />
     <Property Name="userid" Type="Int32" Nullable="false" />
@@ -73,6 +95,7 @@
     <Property Name="imageurl" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="devices" Relationship="virtualkitchendbModel.fk_u_d" FromRole="user" ToRole="device" />
     <NavigationProperty Name="ingredients" Relationship="virtualkitchendbModel.fk_u_i" FromRole="user" ToRole="ingredient" />
+    <NavigationProperty Name="my_recipes" Relationship="virtualkitchendbModel.fk_user_myrecipes" FromRole="user" ToRole="my_recipes" />
     <NavigationProperty Name="recipes" Relationship="virtualkitchendbModel.fk_u_r" FromRole="user" ToRole="recipe" />
   </EntityType>
   <Association Name="fk_u_d">
@@ -95,6 +118,18 @@
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="ingredient">
+        <PropertyRef Name="userid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_user_myrecipes">
+    <End Type="virtualkitchendbModel.user" Role="user" Multiplicity="1" />
+    <End Type="virtualkitchendbModel.my_recipes" Role="my_recipes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="my_recipes">
         <PropertyRef Name="userid" />
       </Dependent>
     </ReferentialConstraint>

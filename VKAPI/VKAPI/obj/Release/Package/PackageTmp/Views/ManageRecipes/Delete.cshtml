@@ -1,0 +1,136 @@
+﻿@model VKAPI.Models.recipe
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>recipe</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.uri)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.uri)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.label)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.label)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.imageurl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.imageurl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.source)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.source)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.url)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.shareas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.shareas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.yield)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.yield)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dietlabel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dietlabel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.healthlabel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.healthlabel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.caution)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.caution)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ingredientlines)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ingredientlines)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.calories)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.calories)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.totalweight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.totalweight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.user.logintype)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user.logintype)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

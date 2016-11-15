@@ -5,12 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="7b3f81f4619e4dd8baf6cb475cc18244" Name="Diagram1">
-        <EntityTypeShape EntityType="virtualkitchendbModel.device" Width="1.5" PointX="3" PointY="1.375" />
-        <EntityTypeShape EntityType="virtualkitchendbModel.ingredient" Width="1.5" PointX="3" PointY="3.875" />
-        <EntityTypeShape EntityType="virtualkitchendbModel.recipe" Width="1.5" PointX="3" PointY="7.125" />
-        <EntityTypeShape EntityType="virtualkitchendbModel.user" Width="1.5" PointX="0.75" PointY="4.875" />
+        <EntityTypeShape EntityType="virtualkitchendbModel.device" Width="1.5" PointX="3" PointY="4.875" />
+        <EntityTypeShape EntityType="virtualkitchendbModel.ingredient" Width="1.5" PointX="3" PointY="1.5" />
+        <EntityTypeShape EntityType="virtualkitchendbModel.my_recipes" Width="1.5" PointX="3" PointY="12.25" />
+        <EntityTypeShape EntityType="virtualkitchendbModel.recipe" Width="1.5" PointX="3" PointY="7.375" />
+        <EntityTypeShape EntityType="virtualkitchendbModel.user" Width="1.5" PointX="0.75" PointY="7.125" />
         <AssociationConnector Association="virtualkitchendbModel.fk_u_d" />
         <AssociationConnector Association="virtualkitchendbModel.fk_u_i" />
+        <AssociationConnector Association="virtualkitchendbModel.fk_user_myrecipes" />
         <AssociationConnector Association="virtualkitchendbModel.fk_u_r" />
       </Diagram>
     </edmx:Diagrams>

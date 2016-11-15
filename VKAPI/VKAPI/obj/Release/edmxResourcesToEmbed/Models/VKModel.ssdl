@@ -20,22 +20,38 @@
     <Property Name="weight" Type="decimal" Precision="10" Scale="0" Nullable="false" />
     <Property Name="food" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
+  <EntityType Name="my_recipes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="uri" Type="longtext" />
+    <Property Name="label" Type="longtext" />
+    <Property Name="imageurl" Type="longtext" />
+    <Property Name="source" Type="longtext" />
+    <Property Name="url" Type="longtext" />
+    <Property Name="shareas" Type="longtext" />
+    <Property Name="yield" Type="decimal" Precision="10" Scale="0" />
+    <Property Name="calories" Type="decimal" Precision="10" Scale="0" />
+    <Property Name="totalweight" Type="decimal" Precision="10" Scale="0" />
+    <Property Name="userid" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="recipes">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="uri" Type="varchar" MaxLength="200" />
-    <Property Name="label" Type="varchar" MaxLength="200" />
-    <Property Name="imageurl" Type="varchar" MaxLength="500" />
-    <Property Name="source" Type="varchar" MaxLength="500" />
-    <Property Name="url" Type="varchar" MaxLength="500" />
-    <Property Name="shareas" Type="varchar" MaxLength="500" />
+    <Property Name="uri" Type="longtext" />
+    <Property Name="label" Type="longtext" />
+    <Property Name="imageurl" Type="longtext" />
+    <Property Name="source" Type="longtext" />
+    <Property Name="url" Type="longtext" />
+    <Property Name="shareas" Type="longtext" />
     <Property Name="yield" Type="decimal" Precision="10" Scale="0" />
-    <Property Name="dietlabel" Type="varchar" MaxLength="500" />
-    <Property Name="healthlabel" Type="varchar" MaxLength="500" />
-    <Property Name="caution" Type="varchar" MaxLength="500" />
-    <Property Name="ingredientlines" Type="varchar" MaxLength="500" />
+    <Property Name="dietlabel" Type="longtext" />
+    <Property Name="healthlabel" Type="longtext" />
+    <Property Name="caution" Type="longtext" />
+    <Property Name="ingredientlines" Type="longtext" />
     <Property Name="calories" Type="decimal" Precision="10" Scale="0" />
     <Property Name="totalweight" Type="decimal" Precision="10" Scale="0" />
     <Property Name="userid" Type="int" Nullable="false" />
@@ -87,9 +103,22 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_user_myrecipes">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="my_recipes" Type="Self.my_recipes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="my_recipes">
+        <PropertyRef Name="userid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="virtualkitchendbModelStoreContainer">
     <EntitySet Name="devices" EntityType="Self.devices" Schema="virtualkitchendb" store:Type="Tables" />
     <EntitySet Name="ingredients" EntityType="Self.ingredients" Schema="virtualkitchendb" store:Type="Tables" />
+    <EntitySet Name="my_recipes" EntityType="Self.my_recipes" Schema="virtualkitchendb" store:Type="Tables" />
     <EntitySet Name="recipes" EntityType="Self.recipes" Schema="virtualkitchendb" store:Type="Tables" />
     <EntitySet Name="users" EntityType="Self.users" Schema="virtualkitchendb" store:Type="Tables" />
     <AssociationSet Name="fk_u_d" Association="Self.fk_u_d">
@@ -103,6 +132,10 @@
     <AssociationSet Name="fk_u_r" Association="Self.fk_u_r">
       <End Role="users" EntitySet="users" />
       <End Role="recipes" EntitySet="recipes" />
+    </AssociationSet>
+    <AssociationSet Name="fk_user_myrecipes" Association="Self.fk_user_myrecipes">
+      <End Role="users" EntitySet="users" />
+      <End Role="my_recipes" EntitySet="my_recipes" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

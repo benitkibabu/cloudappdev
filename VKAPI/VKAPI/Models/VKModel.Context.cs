@@ -27,6 +27,7 @@ namespace VKAPI.Models
     
         public virtual DbSet<device> devices { get; set; }
         public virtual DbSet<ingredient> ingredients { get; set; }
+        public virtual DbSet<my_recipes> my_recipes { get; set; }
         public virtual DbSet<recipe> recipes { get; set; }
         public virtual DbSet<user> users { get; set; }
     }

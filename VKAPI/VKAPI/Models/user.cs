@@ -19,6 +19,7 @@ namespace VKAPI.Models
         {
             this.devices = new HashSet<device>();
             this.ingredients = new HashSet<ingredient>();
+            this.my_recipes = new HashSet<my_recipes>();
             this.recipes = new HashSet<recipe>();
         }
     
@@ -33,6 +34,8 @@ namespace VKAPI.Models
         public virtual ICollection<device> devices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ingredient> ingredients { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<my_recipes> my_recipes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<recipe> recipes { get; set; }
     }
