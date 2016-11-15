@@ -37,6 +37,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,20 +149,21 @@ public class RecipeDetails extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("uri", recipe.getUri());
-                params.put("label",recipe.getLabel());
-                params.put("imageurl", recipe.getImageUrl());
-                params.put("source", recipe.getSource());
-                params.put("url", recipe.getUrl());
-                params.put("shareas", recipe.getShareAs());
-                params.put("yield", recipe.getYield()+"");
-                params.put("dietlabel", recipe.getDietLabels());
-                params.put("healthlabel", recipe.getHealthLabels());
-                params.put("caution", recipe.getCautions());
-                params.put("ingredientlines", recipe.getIngredientLines());
-                params.put("calories", recipe.getCalories()+"");
-                params.put("totalweight", recipe.getTotalWeight()+"");
-                params.put("userid", data.getUserid());
+                try {
+                    params.put("uri", recipe.getUri());
+                    params.put("label",URLEncoder.encode(recipe.getLabel(), "UTF-8"));
+                    params.put("imageurl", recipe.getImageUrl());
+                    params.put("source", URLEncoder.encode(recipe.getSource(), "UTF-8"));
+                    params.put("url", recipe.getUrl());
+                    params.put("shareas", recipe.getShareAs());
+                    params.put("yield", recipe.getYield()+"");
+                    params.put("calories", recipe.getCalories()+"");
+                    params.put("totalweight", recipe.getTotalWeight()+"");
+                    params.put("userid", data.getUserid());
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
 
                 Log.i("Param", params.toString());
 
