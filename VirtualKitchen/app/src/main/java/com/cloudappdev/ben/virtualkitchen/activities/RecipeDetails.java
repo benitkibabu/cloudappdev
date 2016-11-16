@@ -2,6 +2,7 @@ package com.cloudappdev.ben.virtualkitchen.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -147,33 +148,37 @@ public class RecipeDetails extends AppCompatActivity {
             }
         }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject jobj = new JSONObject();
                 try {
-                    params.put("uri", recipe.getUri());
-                    params.put("label",URLEncoder.encode(recipe.getLabel(), "UTF-8"));
-                    params.put("imageurl", recipe.getImageUrl());
-                    params.put("source", URLEncoder.encode(recipe.getSource(), "UTF-8"));
-                    params.put("url", recipe.getUrl());
-                    params.put("shareas", recipe.getShareAs());
-                    params.put("yield", recipe.getYield()+"");
-                    params.put("calories", recipe.getCalories()+"");
-                    params.put("totalweight", recipe.getTotalWeight()+"");
-                    params.put("userid", data.getUserid());
-                } catch (UnsupportedEncodingException e) {
+                    jobj.put("uri", recipe.getUri());
+                    jobj.put("label",recipe.getLabel());
+                    jobj.put("imageurl", recipe.getImageUrl());
+                    jobj.put("source", recipe.getSource());
+                    jobj.put("url", recipe.getUrl());
+                    jobj.put("shareas", recipe.getShareAs());
+                    jobj.put("yield", recipe.getYield());
+                    jobj.put("calories", recipe.getCalories());
+                    jobj.put("totalweight", recipe.getTotalWeight());
+                    jobj.put("userid", data.getId());
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
+                Log.i("Param", jobj.toString());
 
-                Log.i("Param", params.toString());
+                return jobj.toString().getBytes();
+            }
 
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                return params;
-            }
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String,String> headers = new HashMap<>();
+//                headers.put("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+//                headers.put("Content-Type", "text/html; charset=utf-8");
+//                headers.put("Content-Type", "application/xml; charset=utf-8");
+//                headers.put("Content-Type", "application/json; charset=utf-8");
+//                return headers;
+//            }
         };
 
         AppController.getInstance().addToRequestQueue(request, TAG);

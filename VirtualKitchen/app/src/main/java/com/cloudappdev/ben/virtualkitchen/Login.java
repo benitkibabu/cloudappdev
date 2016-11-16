@@ -156,7 +156,10 @@ public class Login extends AppCompatActivity {
                         try {
                             JSONObject object = new JSONObject(response);
                             Intent it = new Intent(Login.this, MainActivity.class);
-                            AppController.setUser(user);
+                            User u = new User(object.getInt("id"), object.getString("logintype"),
+                                    object.getString("userid"), object.getString("name"),
+                                    object.getString("email"), object.getString("imageurl"));
+                            AppController.setUser(u);
                             updateUI(it);
 
                         } catch (JSONException e) {

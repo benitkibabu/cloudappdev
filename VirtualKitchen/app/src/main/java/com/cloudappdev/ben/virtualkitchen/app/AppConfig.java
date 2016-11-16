@@ -25,7 +25,7 @@ public class AppConfig {
 
     public static final String INTERNAL_USERS_API = "http://virtualkitchen1.gear.host/api/users";
     public static final String INTERNAL_DEVICES_API = "http://virtualkitchen1.gear.host/api/devices";
-    public static final String INTERNAL_RECIPES_API = "http://virtualkitchen1.gear.host/api/recipes";
+    public static final String INTERNAL_RECIPES_API = "http://virtualkitchen1.gear.host/api/MyRecipes";
     public static final String INTERNAL_INGREDIENT_API = "http://virtualkitchen1.gear.host/api/ingredients";
     public static final String TESCO_API = "http://itrackerapp.gear.host/ncigo/";
     public static final String RECIPE_API = "https://api.edamam.com/search";
