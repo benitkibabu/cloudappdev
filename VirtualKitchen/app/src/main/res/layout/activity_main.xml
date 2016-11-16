@@ -61,7 +61,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignStart="@+id/ingredient_btn" />
 
-    <ImageButton
+    <de.hdodenhof.circleimageview.CircleImageView
         app:srcCompat="@mipmap/chef"
         android:contentDescription="@string/profile_pick"
         android:layout_alignParentTop="true"
@@ -71,7 +71,9 @@
         android:background="@android:color/transparent"
         android:elevation="6dp"
         android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
 
     <Button
         android:text="@string/in_a_mood"

@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 
 public class Ingredient implements Serializable{
+    int id;
     String uri;
     double quantity;
     String measure;
@@ -19,6 +20,19 @@ public class Ingredient implements Serializable{
         this.measure = measure;
         this.weight = weight;
         this.food = food;
+    }
+
+    public Ingredient(int id, String uri, double quantity, String measure, double weight, String food) {
+        this.id = id;
+        this.uri = uri;
+        this.quantity = quantity;
+        this.measure = measure;
+        this.weight = weight;
+        this.food = food;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getUri() {

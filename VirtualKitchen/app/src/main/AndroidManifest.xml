@@ -80,7 +80,14 @@
 
         <activity
             android:name=".activities.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".activities.MyIngredients" />
+        <activity
+            android:name=".activities.WebViewActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/title_activity_web_view"
+            android:theme="@style/KitchenTheme"></activity>
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
@@ -48,6 +50,7 @@ public class RecipeDetails extends AppCompatActivity {
 
     User data;
     Recipe r;
+    Button instructionBtn;
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -70,6 +73,17 @@ public class RecipeDetails extends AppCompatActivity {
             TextView ingredients = (TextView) findViewById(R.id.ingredient);
             TextView nutrition = (TextView) findViewById(R.id.nutrition);
             TextView summary = (TextView) findViewById(R.id.summary);
+
+            instructionBtn = (Button) findViewById(R.id.instruction_btn);
+            instructionBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(RecipeDetails.this, WebViewActivity.class);
+                    i.putExtra("URL", r.getUrl());
+                    i.putExtra("R", r);
+                    startActivity(i);
+                }
+            });
 
             title.setText(r.getLabel());
 
@@ -97,7 +111,11 @@ public class RecipeDetails extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    saveRecipe(r, view);
+                    try {
+                        saveRecipe(r, view);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }else{
@@ -105,83 +123,59 @@ public class RecipeDetails extends AppCompatActivity {
         }
     }
 
-    void saveRecipe(final Recipe recipe, final View view){
+    void saveRecipe(final Recipe recipe, final View view) throws JSONException {
         showProgressDialog();
         final String TAG = "Saving Recipe";
-        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.INTERNAL_RECIPES_API,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, response);
-                        hideProgressDialog();
-                        try {
-                            JSONObject object = new JSONObject(response);
-                            Snackbar.make(view, "Recipe Saved ", Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
 
+        JSONObject jobj = new JSONObject();
+
+        jobj.put("uri", recipe.getUri());
+        jobj.put("label",recipe.getLabel());
+        jobj.put("imageurl", recipe.getImageUrl());
+        jobj.put("source", recipe.getSource());
+        jobj.put("url", recipe.getUrl());
+        jobj.put("shareas", recipe.getShareAs());
+        jobj.put("dietlabel", recipe.getDietLabels());
+        jobj.put("healthlabel", recipe.getHealthLabels());
+        jobj.put("caution", recipe.getCautions());
+        jobj.put("ingredientlines", recipe.getIngredientLines());
+        jobj.put("yield", recipe.getYield());
+        jobj.put("calories", recipe.getCalories());
+        jobj.put("totalweight", recipe.getTotalWeight());
+        jobj.put("userid", data.getId());
+
+        Log.i("Param", jobj.toString());
+
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST,
+                AppConfig.INTERNAL_RECIPES_API,
+                jobj,
+                new Response.Listener<JSONObject>(){
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Snackbar.make(view, "Recipe added to favourite ", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        hideProgressDialog();
+                    }
+                },
+        new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
                 hideProgressDialog();
-                NetworkResponse networkResponse = error.networkResponse;
-                if (networkResponse != null) {
-                    Log.e("Volley", "Error. HTTP Status Code:"+networkResponse.statusCode);
-                }
-
-                if (error instanceof TimeoutError) {
-                    Log.e("Volley", "TimeoutError");
-                }else if(error instanceof NoConnectionError){
-                    Log.e("Volley", "NoConnectionError");
-                } else if (error instanceof AuthFailureError) {
-                    Log.e("Volley", "AuthFailureError");
-                } else if (error instanceof ServerError) {
-                    Log.e("Volley", "ServerError");
-                } else if (error instanceof NetworkError) {
-                    Log.e("Volley", "NetworkError");
-                } else if (error instanceof ParseError) {
-                    Log.e("Volley", "ParseError");
-                }
             }
         }){
             @Override
-            public byte[] getBody() throws AuthFailureError {
-                JSONObject jobj = new JSONObject();
-                try {
-                    jobj.put("uri", recipe.getUri());
-                    jobj.put("label",recipe.getLabel());
-                    jobj.put("imageurl", recipe.getImageUrl());
-                    jobj.put("source", recipe.getSource());
-                    jobj.put("url", recipe.getUrl());
-                    jobj.put("shareas", recipe.getShareAs());
-                    jobj.put("yield", recipe.getYield());
-                    jobj.put("calories", recipe.getCalories());
-                    jobj.put("totalweight", recipe.getTotalWeight());
-                    jobj.put("userid", data.getId());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                Log.i("Param", jobj.toString());
-
-                return jobj.toString().getBytes();
-            }
-
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String,String> headers = new HashMap<>();
-//                headers.put("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+//                headers.put("Content-Type","application/x-www-form-urlencoded");
 //                headers.put("Content-Type", "text/html; charset=utf-8");
 //                headers.put("Content-Type", "application/xml; charset=utf-8");
-//                headers.put("Content-Type", "application/json; charset=utf-8");
-//                return headers;
-//            }
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                return headers;
+            }
         };
 
-        AppController.getInstance().addToRequestQueue(request, TAG);
+        AppController.getInstance().addToRequestQueue(objectRequest, TAG);
     }
 
     private void showProgressDialog() {

@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
@@ -126,7 +127,8 @@ public class Login extends AppCompatActivity {
 
                             JSONObject picObj = object.getJSONObject("picture");
                             JSONObject picData = picObj.getJSONObject("data");
-                            String picUrl = picData.getString("url");
+                           // String picUrl = picData.getString("url");
+                            String picUrl = "https://graph.facebook.com/"+id+"/picture?type=large";
 
                             User user = new User("Facebook", id, name, email, picUrl);
                             postStudent(user);
@@ -144,21 +146,30 @@ public class Login extends AppCompatActivity {
     }
 
     //Post Request
-    void postStudent(final User user){
+    void postStudent(final User user) throws JSONException {
         showProgressDialog();
         final String TAG = "Log User";
-        StringRequest request = new StringRequest(Request.Method.POST, AppConfig.INTERNAL_USERS_API,
-                new Response.Listener<String>() {
+
+        JSONObject params = new JSONObject();
+        params.put("logintype", user.getLoginType());
+        params.put("userid", user.getUserid());
+        params.put("name", user.getName());
+        params.put("email", user.getEmail());
+        params.put("imageurl", user.getImageUrl());
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
+                AppConfig.INTERNAL_USERS_API,
+                params,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, response);
-                        hideProgressDialog();
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+
                         try {
-                            JSONObject object = new JSONObject(response);
                             Intent it = new Intent(Login.this, MainActivity.class);
-                            User u = new User(object.getInt("id"), object.getString("logintype"),
-                                    object.getString("userid"), object.getString("name"),
-                                    object.getString("email"), object.getString("imageurl"));
+                            User u = new User(response.getInt("id"), response.getString("logintype"),
+                                    response.getString("userid"), response.getString("name"),
+                                    response.getString("email"), response.getString("imageurl"));
                             AppController.setUser(u);
                             updateUI(it);
 
@@ -192,21 +203,11 @@ public class Login extends AppCompatActivity {
             }
         }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> params = new HashMap<>();
-                params.put("logintype", user.getLoginType());
-                params.put("userid", user.getUserid());
-                params.put("name", user.getName());
-                params.put("email", user.getEmail());
-                params.put("imageurl", user.getImageUrl());
-
-                return params;
-            }
-            @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                return params;
+                Map<String,String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                return headers;
             }
         };
 
@@ -263,6 +264,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void updateUI(Intent i){
+        hideProgressDialog();
         startActivity(i);
         finish();
     }

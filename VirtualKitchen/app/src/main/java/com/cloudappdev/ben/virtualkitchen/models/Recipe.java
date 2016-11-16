@@ -41,6 +41,22 @@ public class Recipe implements Serializable{
         this.totalWeight = totalWeight;
     }
 
+    public Recipe(int id, String uri, String label, String imageUrl, String source, String url, String shareAs, double yield, String dietLabels, String healthLabels, String cautions, String ingredientLines, double calories, double totalWeight) {
+        this.id = id;
+        this.uri = uri;
+        this.label = label;
+        this.imageUrl = imageUrl;
+        this.source = source;
+        this.url = url;
+        this.shareAs = shareAs;
+        this.yield = yield;
+        this.dietLabels = dietLabels;
+        this.healthLabels = healthLabels;
+        this.cautions = cautions;
+        this.ingredientLines = ingredientLines;
+        this.calories = calories;
+        this.totalWeight = totalWeight;
+    }
 
     public String getUri() {
         return uri;

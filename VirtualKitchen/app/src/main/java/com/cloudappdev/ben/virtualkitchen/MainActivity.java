@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.cloudappdev.ben.virtualkitchen.activities.MyIngredients;
 import com.cloudappdev.ben.virtualkitchen.activities.RecipesActivity;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.User;
@@ -33,10 +34,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
-    Button recipeBtn, signoutBtn;
+    Button recipeBtn, signoutBtn, ingredientBtn;
     TextView nameTv;
-    ImageButton profileImage;
+    CircleImageView profileImage;
 
     private static final String TAG = "SignOutActivity";
     public String imgurl;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_main);
 
-        profileImage = (ImageButton) findViewById(R.id.profile_img);
+        profileImage = (CircleImageView) findViewById(R.id.profile_img);
         nameTv = (TextView) findViewById(R.id.name_tv);
 
         signoutBtn = (Button) findViewById(R.id.sign_out_btn);
@@ -69,12 +72,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        ingredientBtn = (Button) findViewById(R.id.ingredient_btn);
+        ingredientBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, MyIngredients.class);
+                startActivity(i);
+            }
+        });
     }
     void loadProfile(){
         if(AppController.getUser() != null) {
 
             data = AppController.getUser();
-            imgurl = data.getImageUrl();
+            imgurl = "https://graph.facebook.com/"+data.getUserid()+"/picture?type=large";
             nameTv.setText(data.getName());
 
             Picasso.with(getApplicationContext())

@@ -114,4 +114,5 @@
     <string name="title">Title</string>
     <string name="title_activity_maps">Map</string>
     <string name="saving_recipe">Saving Recipe</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
 </resources>
