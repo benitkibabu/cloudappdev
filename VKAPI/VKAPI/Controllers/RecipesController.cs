@@ -34,7 +34,7 @@ namespace VKAPI.Controllers
 
         // PUT: api/recipes/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Putrecipe(int id, recipe recipe)
+        public async Task<IHttpActionResult> Putrecipe(int id, [FromBody]recipe recipe)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace VKAPI.Controllers
 
         // POST: api/recipes
         [ResponseType(typeof(recipe))]
-        public async Task<IHttpActionResult> Postrecipe(recipe recipe)
+        public async Task<IHttpActionResult> Postrecipe([FromBody]recipe recipe)
         {
             if (!ModelState.IsValid)
             {

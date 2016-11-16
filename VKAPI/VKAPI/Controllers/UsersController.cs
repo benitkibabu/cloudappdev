@@ -69,7 +69,7 @@ namespace VKAPI.Controllers
 
         // POST: api/Users
         [ResponseType(typeof(user))]
-        public async Task<IHttpActionResult> Postuser(user user)
+        public async Task<IHttpActionResult> Postuser([FromBody]user user)
         {
             if (!ModelState.IsValid)
             {

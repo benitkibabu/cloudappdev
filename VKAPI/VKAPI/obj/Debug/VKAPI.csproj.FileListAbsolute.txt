@@ -157,3 +157,4 @@ C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\bin\System.Web.WebPag
 C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\bin\System.Web.WebPages.Razor.xml
 C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\obj\Debug\VKAPI.dll
 C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\obj\Debug\VKAPI.pdb
+C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\obj\Debug\VKAPI.csprojResolveAssemblyReference.cache

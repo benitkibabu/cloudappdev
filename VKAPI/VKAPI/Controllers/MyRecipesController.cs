@@ -18,9 +18,9 @@ namespace VKAPI.Controllers
         private virtualkitchendbEntities db = new virtualkitchendbEntities();
 
         // GET: api/MyRecipes
-        public IQueryable<my_recipes> Getmy_recipes()
+        public async Task<IHttpActionResult> Getmy_recipes()
         {
-            return db.my_recipes;
+            return Ok(await db.my_recipes.ToListAsync());
         }
 
         // GET: api/MyRecipes/5
@@ -38,7 +38,7 @@ namespace VKAPI.Controllers
 
         // PUT: api/MyRecipes/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Putmy_recipes(int id, my_recipes my_recipes)
+        public async Task<IHttpActionResult> Putmy_recipes(int id, [FromBody]my_recipes my_recipes)
         {
             if (!ModelState.IsValid)
             {
@@ -73,7 +73,7 @@ namespace VKAPI.Controllers
 
         // POST: api/MyRecipes
         [ResponseType(typeof(my_recipes))]
-        public async Task<IHttpActionResult> Postmy_recipes(my_recipes my_recipes)
+        public async Task<IHttpActionResult> Postmy_recipes([FromBody]my_recipes my_recipes)
         {
             if (!ModelState.IsValid)
             {

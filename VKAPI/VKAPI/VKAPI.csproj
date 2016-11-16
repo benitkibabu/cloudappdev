@@ -210,6 +210,7 @@
     <Compile Include="Controllers\DevicesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IngredientsController.cs" />
+    <Compile Include="Controllers\ManageFavouritesController.cs" />
     <Compile Include="Controllers\ManageRecipesController.cs" />
     <Compile Include="Controllers\ManageUserController.cs" />
     <Compile Include="Controllers\MyRecipesController.cs" />
@@ -351,6 +352,11 @@
     <Content Include="Views\ManageRecipes\Details.cshtml" />
     <Content Include="Views\ManageRecipes\Edit.cshtml" />
     <Content Include="Views\ManageRecipes\Index.cshtml" />
+    <Content Include="Views\ManageFavourites\Create.cshtml" />
+    <Content Include="Views\ManageFavourites\Delete.cshtml" />
+    <Content Include="Views\ManageFavourites\Details.cshtml" />
+    <Content Include="Views\ManageFavourites\Edit.cshtml" />
+    <Content Include="Views\ManageFavourites\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
