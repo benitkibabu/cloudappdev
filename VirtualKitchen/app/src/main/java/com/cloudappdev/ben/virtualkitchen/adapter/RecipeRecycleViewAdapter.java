@@ -23,13 +23,11 @@ import java.util.List;
  * Created by Ben on 24/10/2016.
  */
 
-public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycleViewAdapter.ViewHolder> {
+public class RecipeRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<RecipeRecycleViewAdapter.ViewHolder> {
     Context context;
     int layoutId;
     List<Recipe> recipeList;
     OnItemClickListener clickListener;
-    OnItemLongClickListener longClickListener;
-    OnCreateContextMenu createContextMenu;
 
     public RecipeRecycleViewAdapter(Context context, int layoutId){
         this.context = context;
@@ -50,8 +48,7 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
-            View.OnLongClickListener, View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener{
+    public class ViewHolder extends ContextMenuRecyclerView.ViewHolder implements View.OnClickListener{
         public RecipeItemHolder itemHolder;
 
         public ViewHolder(View view){
@@ -65,45 +62,13 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
             itemHolder.imageView = (ImageView) view.findViewById(R.id.rec_icon);
 
             view.setOnClickListener(this);
-            view.setOnLongClickListener(this);
-            view.setOnCreateContextMenuListener(this);
+            //view.st
         }
 
         @Override
         public void onClick(View view){
             if(clickListener != null)
                 clickListener.onItemClick(itemView, getAdapterPosition());
-        }
-
-        @Override
-        public boolean onLongClick(View view){
-            return longClickListener.onItemLongClicked(getAdapterPosition());
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            //menu.setHeaderTitle("Select The Action");
-            menu.add(0, v.getId(), 0, "Delete");//groupId, itemId, order, title
-            menu.add(0, v.getId(), 0, "SMS");
-
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            int recyclerId = getLayoutPosition();
-            switch(item.getItemId()) {
-                case R.id.action_add:
-                    //some code
-                    return true;
-                case R.id.action_copy:
-                    //some code
-                    return true;
-                case R.id.action_delete:
-                    //enter code here`
-                    return true;
-                default:
-                    return false;
-            }
         }
     }
 
@@ -115,6 +80,7 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.itemView.setLongClickable(true);
         String label = recipeList.get(position).getLabel();
         String imageUrl = recipeList.get(position).getImageUrl();
         String list = recipeList.get(position).getIngredientLines();
@@ -136,30 +102,20 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
     public interface OnItemClickListener{
         void onItemClick(View view, int position);
     }
-    public interface OnItemLongClickListener {
-        boolean onItemLongClicked(int position);
-    }
-
-    public interface OnCreateContextMenu{
-        void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo);
-    }
 
     public void setOnItemClickListener(final OnItemClickListener clickListener){
         this.clickListener = clickListener;
     }
 
-    public boolean setOnItemLongClickListener(final OnItemLongClickListener longClickListener){
-        this.longClickListener = longClickListener;
-        return true;
-    }
-
-    public void setOnCreateContextMenu(final OnCreateContextMenu createContextMenu){
-        this.createContextMenu = createContextMenu;
-    }
 
     private static class RecipeItemHolder{
         LinearLayout placeholder;
         TextView textView, textView2;
         ImageView imageView;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 }

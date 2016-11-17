@@ -90,7 +90,7 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_web_view"
-            android:theme="@style/KitchenTheme"></activity>
+            android:theme="@style/KitchenTheme" />
     </application>
 
 </manifest>
