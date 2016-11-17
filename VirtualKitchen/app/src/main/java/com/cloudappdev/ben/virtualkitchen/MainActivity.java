@@ -37,7 +37,7 @@ import java.net.URL;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
-    Button recipeBtn, signoutBtn, ingredientBtn;
+    Button recipeBtn, signoutBtn, ingredientBtn, favouriteBtn;
     TextView nameTv;
     CircleImageView profileImage;
 
@@ -67,8 +67,18 @@ public class MainActivity extends AppCompatActivity {
         recipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppController.setNavFragement("R");
                 Intent i = new Intent(MainActivity.this, RecipesActivity.class);
-                i.putExtra("User", data);
+                startActivity(i);
+            }
+        });
+
+        favouriteBtn = (Button) findViewById(R.id.favourite_btn);
+        favouriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppController.setNavFragement("F");
+                Intent i = new Intent(MainActivity.this, RecipesActivity.class);
                 startActivity(i);
             }
         });

@@ -10,7 +10,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -68,6 +71,9 @@ public class RecipeListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
+
+
         if (AppController.getUser() != null) {
             user = AppController.getUser();
         }
@@ -84,6 +90,7 @@ public class RecipeListFragment extends Fragment {
         recyclerView  = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+        registerForContextMenu(recyclerView);
 
         adapter = new RecipeRecycleViewAdapter(getActivity(), R.layout.recipe_item);
 
@@ -96,6 +103,13 @@ public class RecipeListFragment extends Fragment {
                 Recipe r = recipeList.get(position);
                 i.putExtra("Recipe", r);
                 startActivity(i);
+            }
+        });
+        adapter.setOnItemLongClickListener(new RecipeRecycleViewAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(int position) {
+                recyclerView.showContextMenu();
+                return true;
             }
         });
 
@@ -210,6 +224,33 @@ public class RecipeListFragment extends Fragment {
 
         AppController.getInstance().addToRequestQueue(request, TAG);
         return recipeList;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        //if (v.getId()==R.id.action_add) {
+            MenuInflater inflater = getActivity().getMenuInflater();
+            inflater.inflate(R.menu.menu_context, menu);
+        //}
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_add:
+                //some code
+                return true;
+            case R.id.action_copy:
+                //some code
+                return true;
+            case R.id.action_delete:
+                //enter code here`
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override

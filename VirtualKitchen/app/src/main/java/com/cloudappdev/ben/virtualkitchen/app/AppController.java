@@ -19,6 +19,7 @@ public class AppController extends Application {
     private RequestQueue mRequestQueue;
     private static AppController mInstance;
     static User user;
+    static String navFragement;
 
     @Override
     public void onCreate() {
@@ -60,5 +61,13 @@ public class AppController extends Application {
 
     public static void setUser(User user) {
         AppController.user = user;
+    }
+
+    public static String getNavFragement() {
+        return navFragement;
+    }
+
+    public static void setNavFragement(String navFragement) {
+        AppController.navFragement = navFragement;
     }
 }

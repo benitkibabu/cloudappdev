@@ -51,10 +51,12 @@ public class WebViewActivity extends AppCompatActivity {
 
         myWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
         myWebView.setWebViewClient(new WebViewClient(){
+
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 pd.setVisibility(View.VISIBLE);
+                setTitle(url);
             }
 //            @Override
 //            public void onLoadResource(WebView view, String url) {
@@ -67,6 +69,7 @@ public class WebViewActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 pd.setVisibility(View.GONE);
+                setTitle(view.getTitle());
 
             }
             @Override
@@ -79,6 +82,8 @@ public class WebViewActivity extends AppCompatActivity {
         if(getIntent().hasExtra(URL) && getIntent().hasExtra("R")){
             myWebView.loadUrl(getIntent().getStringExtra(URL));
             r = (Recipe) getIntent().getSerializableExtra("R");
+
+
         }else{
             goBack();
         }

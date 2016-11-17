@@ -2,7 +2,9 @@ package com.cloudappdev.ben.virtualkitchen.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,6 +28,8 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
     int layoutId;
     List<Recipe> recipeList;
     OnItemClickListener clickListener;
+    OnItemLongClickListener longClickListener;
+    OnCreateContextMenu createContextMenu;
 
     public RecipeRecycleViewAdapter(Context context, int layoutId){
         this.context = context;
@@ -41,14 +45,13 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
     }
 
     public void addAll(List<Recipe> list){
-        if(recipeList != null && !recipeList.isEmpty()){
-            recipeList.clear();
-        }
+        clear();
         this.recipeList.addAll(list);
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener, View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener{
         public RecipeItemHolder itemHolder;
 
         public ViewHolder(View view){
@@ -61,13 +64,46 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
 
             itemHolder.imageView = (ImageView) view.findViewById(R.id.rec_icon);
 
-            itemHolder.placeholder.setOnClickListener(this);
+            view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
+            view.setOnCreateContextMenuListener(this);
         }
 
         @Override
         public void onClick(View view){
             if(clickListener != null)
                 clickListener.onItemClick(itemView, getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view){
+            return longClickListener.onItemLongClicked(getAdapterPosition());
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            //menu.setHeaderTitle("Select The Action");
+            menu.add(0, v.getId(), 0, "Delete");//groupId, itemId, order, title
+            menu.add(0, v.getId(), 0, "SMS");
+
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            int recyclerId = getLayoutPosition();
+            switch(item.getItemId()) {
+                case R.id.action_add:
+                    //some code
+                    return true;
+                case R.id.action_copy:
+                    //some code
+                    return true;
+                case R.id.action_delete:
+                    //enter code here`
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 
@@ -100,9 +136,25 @@ public class RecipeRecycleViewAdapter extends RecyclerView.Adapter<RecipeRecycle
     public interface OnItemClickListener{
         void onItemClick(View view, int position);
     }
+    public interface OnItemLongClickListener {
+        boolean onItemLongClicked(int position);
+    }
+
+    public interface OnCreateContextMenu{
+        void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo);
+    }
 
     public void setOnItemClickListener(final OnItemClickListener clickListener){
         this.clickListener = clickListener;
+    }
+
+    public boolean setOnItemLongClickListener(final OnItemLongClickListener longClickListener){
+        this.longClickListener = longClickListener;
+        return true;
+    }
+
+    public void setOnCreateContextMenu(final OnCreateContextMenu createContextMenu){
+        this.createContextMenu = createContextMenu;
     }
 
     private static class RecipeItemHolder{
