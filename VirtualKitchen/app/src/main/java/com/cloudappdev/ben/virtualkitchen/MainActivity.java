@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         recipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppController.setNavFragement("R");
+                AppController.getInstance().setNavFragement("R");
                 Intent i = new Intent(MainActivity.this, RecipesActivity.class);
                 startActivity(i);
             }
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         favouriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppController.setNavFragement("F");
+                AppController.getInstance().setNavFragement("F");
                 Intent i = new Intent(MainActivity.this, RecipesActivity.class);
                 startActivity(i);
             }
@@ -93,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     void loadProfile(){
-        if(AppController.getUser() != null) {
+        if(AppController.getInstance().getUser() != null) {
 
-            data = AppController.getUser();
+            data = AppController.getInstance().getUser();
             imgurl = "https://graph.facebook.com/"+data.getUserid()+"/picture?type=large";
             nameTv.setText(data.getName());
 
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(fbLogout){
-            AppController.setUser(null);
+            AppController.getInstance().setUser(null);
             Intent i = new Intent(MainActivity.this, Login.class);
             startActivity(i);
             finish();

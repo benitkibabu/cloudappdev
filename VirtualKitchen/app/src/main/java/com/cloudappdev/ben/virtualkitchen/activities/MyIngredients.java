@@ -1,7 +1,9 @@
 package com.cloudappdev.ben.virtualkitchen.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,9 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.cloudappdev.ben.virtualkitchen.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.adapter.RecipeRecycleViewAdapter;
@@ -33,7 +38,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyIngredients extends AppCompatActivity {
 
@@ -42,6 +49,7 @@ public class MyIngredients extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecipeRecycleViewAdapter adapter;
+    private ProgressDialog mProgressDialog;
 
     List<Ingredient> myIngredients;
 
@@ -55,8 +63,8 @@ public class MyIngredients extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(AppController.getUser() != null){
-            user = AppController.getUser();
+        if(AppController.getInstance().getUser() != null){
+            user = AppController.getInstance().getUser();
         }else{
             goBack();
         }
@@ -110,9 +118,9 @@ public class MyIngredients extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getMyFavourite(){
-        String TAG = "Get MyFavourite";
-        Uri url = Uri.parse(AppConfig.INTERNAL_RECIPES_API)
+    private void getMyIngredient(){
+        final String TAG = "Get Ingredients";
+        Uri url = Uri.parse(AppConfig.INTERNAL_INGREDIENT_API)
                 .buildUpon()
                 .appendQueryParameter("userid", String.valueOf(user.getId()))
                 .build();
@@ -123,17 +131,19 @@ public class MyIngredients extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.w("My Ingredi", response.toString());
+                        Log.w(TAG, response.toString());
                         myIngredients = new ArrayList<>();
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject j = response.getJSONObject(i);
-                                Ingredient in = new Ingredient(j.getInt("id"),
-                                        j.getString("uri"), j.getDouble("quantity"),
-                                        j.getString("measure"), j.getDouble("weight"),
-                                        j.getString("food"));
+                                if(j.getInt("userid") == user.getId()) {
+                                    Ingredient in = new Ingredient(j.getInt("id"),
+                                            j.getString("uri"), j.getDouble("quantity"),
+                                            j.getString("measure"), j.getDouble("weight"),
+                                            j.getString("food"), j.getInt("userid"));
 
-                                myIngredients.add(in);
+                                    myIngredients.add(in);
+                                }
                             }
                             //adapter.addAll(myIngredients);
                         }catch(JSONException e){
@@ -150,4 +160,66 @@ public class MyIngredients extends AppCompatActivity {
 
         AppController.getInstance().addToRequestQueue(request, TAG);
     }
+
+    void addIngredient(final Ingredient ingred, final View view) throws JSONException {
+        showProgressDialog();
+        final String TAG = "Saving Recipe";
+
+        JSONObject jobj = new JSONObject();
+
+        jobj.put("uri", ingred.getUri());
+        jobj.put("quantity", ingred.getQuantity());
+        jobj.put("measure", ingred.getMeasure());
+        jobj.put("weight", ingred.getWeight());
+        jobj.put("food", ingred.getFood());
+        jobj.put("userid", user.getId());
+
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST,
+                AppConfig.INTERNAL_RECIPES_API,
+                jobj,
+                new Response.Listener<JSONObject>(){
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Snackbar.make(view, "Recipe added to favourite ", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        hideProgressDialog();
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hideProgressDialog();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                return headers;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(objectRequest, TAG);
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.saving_recipe));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.show();
+        }else{
+            mProgressDialog.setMessage(getString(R.string.saving_recipe));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.show();
+        }
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
 }

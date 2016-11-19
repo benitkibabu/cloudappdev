@@ -19,6 +19,7 @@ import java.util.UUID;
  */
 
 public class AppConfig {
+
     public static final String SENDER_ID = "1059451623513";
     public static final String EXTRA_MESSAGE = "message";
     public static final String DISPLAY_MSG_ACTION = "com.cloudappdev.ben.virtualkitchen.notification.DISPLAY_MESSAGE";

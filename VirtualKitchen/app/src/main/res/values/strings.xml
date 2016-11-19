@@ -118,4 +118,5 @@
     <string name="delete">Delete</string>
     <string name="paste">Paste</string>
     <string name="copy">Copy</string>
+    <string name="search_hint">Type what you want to search</string>
 </resources>

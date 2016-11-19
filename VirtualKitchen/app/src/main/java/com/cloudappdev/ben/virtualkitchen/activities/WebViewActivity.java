@@ -1,6 +1,5 @@
 package com.cloudappdev.ben.virtualkitchen.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,7 +23,6 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.cloudappdev.ben.virtualkitchen.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.models.Recipe;
 
@@ -132,11 +130,11 @@ public class WebViewActivity extends AppCompatActivity {
             return true;
         }
         else if(id == android.R.id.home){
-            if (myWebView.canGoBack()) {
-                myWebView.goBack();
-            }else {
+//            if (myWebView.canGoBack()) {
+//                myWebView.goBack();
+//            }else {
                 goBack();
-            }
+//            }
             return true;
         }
         return super.onOptionsItemSelected(item);

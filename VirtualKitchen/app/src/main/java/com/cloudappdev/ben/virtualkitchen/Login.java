@@ -170,7 +170,7 @@ public class Login extends AppCompatActivity {
                             User u = new User(response.getInt("id"), response.getString("logintype"),
                                     response.getString("userid"), response.getString("name"),
                                     response.getString("email"), response.getString("imageurl"));
-                            AppController.setUser(u);
+                            AppController.getInstance().setUser(u);
                             updateUI(it);
 
                         } catch (JSONException e) {

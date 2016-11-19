@@ -16,10 +16,12 @@ import com.facebook.appevents.AppEventsLogger;
 public class AppController extends Application {
     public static final String TAG = AppController.class.getSimpleName();
 
+    public String searchKey = "chicken";
+
     private RequestQueue mRequestQueue;
     private static AppController mInstance;
-    static User user;
-    static String navFragement;
+    User user;
+    String navFragement;
 
     @Override
     public void onCreate() {
@@ -55,19 +57,19 @@ public class AppController extends Application {
         }
     }
 
-    public static User getUser() {
+    public User getUser() {
         return user;
     }
 
-    public static void setUser(User user) {
-        AppController.user = user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public static String getNavFragement() {
+    public String getNavFragement() {
         return navFragement;
     }
 
-    public static void setNavFragement(String navFragement) {
-        AppController.navFragement = navFragement;
+    public void setNavFragement(String navFragement) {
+        this.navFragement = navFragement;
     }
 }

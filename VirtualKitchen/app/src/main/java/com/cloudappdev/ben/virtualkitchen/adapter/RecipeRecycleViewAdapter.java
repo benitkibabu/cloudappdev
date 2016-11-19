@@ -28,6 +28,22 @@ public class RecipeRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Re
     int layoutId;
     List<Recipe> recipeList;
     OnItemClickListener clickListener;
+    OnItemLongCLickListener longCLickListener;
+
+    public interface OnItemClickListener{
+        void onItemClick(View view, int position);
+    }
+
+    public interface  OnItemLongCLickListener{
+        void onItemLongClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener clickListener){
+        this.clickListener = clickListener;
+    }
+    public void setOnItemLongClickListener(final OnItemLongCLickListener longClickListener){
+        this.longCLickListener = longClickListener;
+    }
 
     public RecipeRecycleViewAdapter(Context context, int layoutId){
         this.context = context;
@@ -48,7 +64,7 @@ public class RecipeRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Re
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends ContextMenuRecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends ContextMenuRecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
         public RecipeItemHolder itemHolder;
 
         public ViewHolder(View view){
@@ -70,6 +86,13 @@ public class RecipeRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Re
             if(clickListener != null)
                 clickListener.onItemClick(itemView, getAdapterPosition());
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if(longCLickListener != null)
+                longCLickListener.onItemLongClick(itemView, getAdapterPosition());
+            return false;
+        }
     }
 
     @Override
@@ -81,6 +104,7 @@ public class RecipeRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Re
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemView.setLongClickable(true);
+
         String label = recipeList.get(position).getLabel();
         String imageUrl = recipeList.get(position).getImageUrl();
         String list = recipeList.get(position).getIngredientLines();
@@ -98,15 +122,6 @@ public class RecipeRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Re
     public int getItemCount() {
         return recipeList.size();
     }
-
-    public interface OnItemClickListener{
-        void onItemClick(View view, int position);
-    }
-
-    public void setOnItemClickListener(final OnItemClickListener clickListener){
-        this.clickListener = clickListener;
-    }
-
 
     private static class RecipeItemHolder{
         LinearLayout placeholder;

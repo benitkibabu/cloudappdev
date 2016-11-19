@@ -1,15 +1,18 @@
 package com.cloudappdev.ben.virtualkitchen.activities;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.os.Bundle;
@@ -61,6 +64,7 @@ public class RecipesActivity extends AppCompatActivity {
     String API_KEY;
 
     List<Recipe> recipeList;
+    int itemPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,45 +91,68 @@ public class RecipesActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new RecipeRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
                 Intent i = new Intent(RecipesActivity.this, RecipeDetails.class);
                 Recipe r = recipeList.get(position);
                 i.putExtra("Recipe", r);
                 startActivity(i);
             }
         });
-//        adapter.setOnItemLongClickListener(new RecipeRecycleViewAdapter.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClicked(View view, int position) {
-//                //view.showContextMenu();
-//                return true;
-//            }
-//        });
+
+        adapter.setOnItemLongClickListener(new RecipeRecycleViewAdapter.OnItemLongCLickListener() {
+            @Override
+            public void onItemLongClick(View view, int position) {
+                itemPosition = position;
+                Snackbar.make(view, "WOuld you like to delete this? " + itemPosition,
+                        Snackbar.LENGTH_LONG)
+                        .setAction("Delete", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        }).show();
+            }
+        });
 
     }
 
-    int position = 0;
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_context, menu);
-
-       // position = ((ContextMenuRecyclerView.RecyclerContextMenuInfo) menuInfo).position;
-        // Inflate Menu from xml resource
-
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        ContextMenuRecyclerView.RecyclerContextMenuInfo info =
-                (ContextMenuRecyclerView.RecyclerContextMenuInfo) item.getMenuInfo();
-        Toast.makeText(this, " User selected something " + info.id, Toast.LENGTH_LONG).show();
-        return false;
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater menuInflater = getMenuInflater();
+//        menuInflater.inflate(R.menu.menu_context, menu);
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        ContextMenuRecyclerView.RecyclerContextMenuInfo info =
+//                (ContextMenuRecyclerView.RecyclerContextMenuInfo) item.getMenuInfo();
+//
+//        return false;
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_recipes, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        //searchView.setSearchableInfo( searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                AppController.getInstance().searchKey = query;
+                getRecipe(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -144,8 +171,8 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     void loadUser(){
-        if(AppController.getUser() != null) {
-            data = AppController.getUser();
+        if(AppController.getInstance().getUser() != null) {
+            data = AppController.getInstance().getUser();
         }else{
             goBack();
         }
@@ -155,10 +182,10 @@ public class RecipesActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         loadUser();
-        if(AppController.getNavFragement() != null && !AppController.getNavFragement().isEmpty()){
-            String f= AppController.getNavFragement();
+        if(AppController.getInstance().getNavFragement() != null && !AppController.getInstance().getNavFragement().isEmpty()){
+            String f= AppController.getInstance().getNavFragement();
             if(f.equals("R")){
-                loadRecipeList();
+                getRecipe(AppController.getInstance().searchKey);
             }else{
                 getMyFavourite();
             }
@@ -167,13 +194,8 @@ public class RecipesActivity extends AppCompatActivity {
         }
     }
 
-
-    void loadRecipeList(){
-        getRecipe("chicken", API_KEY, API_ID, this);
-    }
-
-    public void getRecipe(final String query, final String API_KEY, final String API_ID, final Context context){
-        final ProgressDialog dialog = new ProgressDialog(context);
+    public void getRecipe(final String query){
+        final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
         dialog.setMessage("Loading Data...");
 
@@ -228,7 +250,7 @@ public class RecipesActivity extends AppCompatActivity {
                             JSONObject val = ing.getJSONObject(x);
                             Ingredient ingr = new Ingredient(val.getString("text"),
                                     val.getDouble("quantity"),val.getString("measure"),
-                                    val.getDouble("weight"),  val.getString("food"));
+                                    val.getDouble("weight"), val.getString("food"));
                             ingredientsList.add(ingr);
                         }
 

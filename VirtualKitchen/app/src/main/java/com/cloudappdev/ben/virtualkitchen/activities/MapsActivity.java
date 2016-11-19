@@ -95,10 +95,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Location location = getMyLocation();
         if (location != null)
         {
-            LatLng sydney = new LatLng(-34, 151);
-            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location Marker"));
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
@@ -179,7 +179,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recipes, menu);
+        getMenuInflater().inflate(R.menu.menu_options, menu);
         return true;
     }
 

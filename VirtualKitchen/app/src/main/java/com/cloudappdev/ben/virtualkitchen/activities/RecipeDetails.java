@@ -64,8 +64,8 @@ public class RecipeDetails extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(getIntent().hasExtra("Recipe") && AppController.getUser() != null){
-            data = AppController.getUser();
+        if(getIntent().hasExtra("Recipe") && AppController.getInstance().getUser() != null){
+            data = AppController.getInstance().getUser();
             r = (Recipe) getIntent().getSerializableExtra("Recipe");
             setTitle(r.getLabel());
 
@@ -112,7 +112,19 @@ public class RecipeDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        saveRecipe(r, view);
+                        String f= AppController.getInstance().getNavFragement();
+                        if(f.equals("R")) {
+                            saveRecipe(r, view);
+                        }else{
+                            Snackbar.make(view, "Already in your favourites",
+                                    Snackbar.LENGTH_INDEFINITE)
+                                    .setAction("Dismiss", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                        }
+                                    }).show();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -166,9 +178,6 @@ public class RecipeDetails extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<>();
-//                headers.put("Content-Type","application/x-www-form-urlencoded");
-//                headers.put("Content-Type", "text/html; charset=utf-8");
-//                headers.put("Content-Type", "application/xml; charset=utf-8");
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
                 return headers;
