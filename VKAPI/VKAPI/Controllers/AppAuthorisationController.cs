@@ -11,107 +11,109 @@ using VKAPI.Models;
 
 namespace VKAPI.Controllers
 {
-    public class ManageUserController : Controller
+    public class AppAuthorisationController : Controller
     {
         private VkitchenContext db = new VkitchenContext();
 
-        // GET: ManageUser
+        // GET: AppAuthorisation
         public async Task<ActionResult> Index()
         {
-            return View(await db.users.ToListAsync());
+            return View(await db.auth_app.ToListAsync());
         }
 
-        // GET: ManageUser/Details/5
+        // GET: AppAuthorisation/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = await db.users.FindAsync(id);
-            if (user == null)
+            auth_app auth_app = await db.auth_app.FindAsync(id);
+            if (auth_app == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(auth_app);
         }
 
-        // GET: ManageUser/Create
+        // GET: AppAuthorisation/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ManageUser/Create
+        // POST: AppAuthorisation/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "id,logintype,userid,name,email,imageurl")] user user)
+        public async Task<ActionResult> Create([Bind(Include = "id,app_name")] auth_app auth_app)
         {
-            if (ModelState.IsValid)
+            auth_app.auth_key = Guid.NewGuid().ToString();
+            if (auth_app.app_name.Length >0 )
             {
-                db.users.Add(user);
+                
+                db.auth_app.Add(auth_app);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            return View(auth_app);
         }
 
-        // GET: ManageUser/Edit/5
+        // GET: AppAuthorisation/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = await db.users.FindAsync(id);
-            if (user == null)
+            auth_app auth_app = await db.auth_app.FindAsync(id);
+            if (auth_app == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(auth_app);
         }
 
-        // POST: ManageUser/Edit/5
+        // POST: AppAuthorisation/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "id,logintype,userid,name,email,imageurl")] user user)
+        public async Task<ActionResult> Edit([Bind(Include = "id,auth_key,app_name")] auth_app auth_app)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
+                db.Entry(auth_app).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(user);
+            return View(auth_app);
         }
 
-        // GET: ManageUser/Delete/5
+        // GET: AppAuthorisation/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = await db.users.FindAsync(id);
-            if (user == null)
+            auth_app auth_app = await db.auth_app.FindAsync(id);
+            if (auth_app == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(auth_app);
         }
 
-        // POST: ManageUser/Delete/5
+        // POST: AppAuthorisation/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            user user = await db.users.FindAsync(id);
-            db.users.Remove(user);
+            auth_app auth_app = await db.auth_app.FindAsync(id);
+            db.auth_app.Remove(auth_app);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

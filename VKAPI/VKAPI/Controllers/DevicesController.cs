@@ -11,7 +11,7 @@ namespace VKAPI.Controllers
 {
     public class DevicesController : ApiController
     {
-        private virtualkitchendbEntities db = new virtualkitchendbEntities();
+        private VkitchenContext db = new VkitchenContext();
 
         // GET: api/Devices
         public async Task<IHttpActionResult> Getdevices()

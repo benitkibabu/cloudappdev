@@ -6,17 +6,17 @@ namespace VKAPI.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("virtualkitchendb.devices")]
-    public partial class device
+    [Table("virtualkitchendb.auth_app")]
+    public partial class auth_app
     {
         public int id { get; set; }
 
-        public int userid { get; set; }
+        [Required]
+        [StringLength(200)]
+        public string auth_key { get; set; }
 
         [Required]
-        [StringLength(500)]
-        public string deviceid { get; set; }
-
-        public virtual user user { get; set; }
+        [StringLength(200)]
+        public string app_name { get; set; }
     }
 }

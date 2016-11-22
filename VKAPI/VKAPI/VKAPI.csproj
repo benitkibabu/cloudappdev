@@ -207,6 +207,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AppAuthorisationController.cs" />
     <Compile Include="Controllers\DevicesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IngredientsController.cs" />
@@ -220,36 +221,18 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\device.cs">
-      <DependentUpon>VKModel.tt</DependentUpon>
+    <Compile Include="Migrations\201611221931500_InitialCreate.cs" />
+    <Compile Include="Migrations\201611221931500_InitialCreate.Designer.cs">
+      <DependentUpon>201611221931500_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\ingredient.cs">
-      <DependentUpon>VKModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_recipes.cs">
-      <DependentUpon>VKModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\recipe.cs">
-      <DependentUpon>VKModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\user.cs">
-      <DependentUpon>VKModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\VKModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>VKModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\VKModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>VKModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\VKModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>VKModel.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\auth_app.cs" />
+    <Compile Include="Models\device.cs" />
+    <Compile Include="Models\ingredient.cs" />
+    <Compile Include="Models\my_recipes.cs" />
+    <Compile Include="Models\recipe.cs" />
+    <Compile Include="Models\user.cs" />
+    <Compile Include="Models\VkitchenContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -261,16 +244,6 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Models\VKModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>VKModel.edmx</DependentUpon>
-      <LastGenOutput>VKModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\VKModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>VKModel.edmx</DependentUpon>
-      <LastGenOutput>VKModel.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\ai.0.22.19-build00125.js" />
     <Content Include="Scripts\ai.0.22.19-build00125.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -303,13 +276,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <EntityDeploy Include="Models\VKModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>VKModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\VKModel.edmx.diagram">
-      <DependentUpon>VKModel.edmx</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\virtualkitchen1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\virtualkitchen1 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -357,6 +323,11 @@
     <Content Include="Views\ManageFavourites\Details.cshtml" />
     <Content Include="Views\ManageFavourites\Edit.cshtml" />
     <Content Include="Views\ManageFavourites\Index.cshtml" />
+    <Content Include="Views\AppAuthorisation\Create.cshtml" />
+    <Content Include="Views\AppAuthorisation\Delete.cshtml" />
+    <Content Include="Views\AppAuthorisation\Details.cshtml" />
+    <Content Include="Views\AppAuthorisation\Edit.cshtml" />
+    <Content Include="Views\AppAuthorisation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -369,6 +340,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201611221931500_InitialCreate.resx">
+      <DependentUpon>201611221931500_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

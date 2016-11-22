@@ -11,7 +11,7 @@ namespace VKAPI.Controllers
 {
     public class RecipesController : ApiController
     {
-        private virtualkitchendbEntities db = new virtualkitchendbEntities();
+        private VkitchenContext db = new VkitchenContext();
 
         // GET: api/recipes
         public async Task<IHttpActionResult> Getrecipes()

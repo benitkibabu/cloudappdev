@@ -13,7 +13,7 @@ namespace VKAPI.Controllers
 {
     public class ManageFavouritesController : Controller
     {
-        private virtualkitchendbEntities db = new virtualkitchendbEntities();
+        private VkitchenContext db = new VkitchenContext();
 
         // GET: ManageFavourites
         public async Task<ActionResult> Index()

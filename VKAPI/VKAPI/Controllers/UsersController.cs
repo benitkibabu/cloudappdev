@@ -11,7 +11,7 @@ namespace VKAPI.Controllers
 {
     public class UsersController : ApiController
     {
-        private virtualkitchendbEntities db = new virtualkitchendbEntities();
+        private VkitchenContext db = new VkitchenContext();
 
         // GET: api/Users
         public async Task<IHttpActionResult> Getusers()

@@ -11,7 +11,7 @@ namespace VKAPI.Controllers
 {
     public class IngredientsController : ApiController
     {
-        private virtualkitchendbEntities db = new virtualkitchendbEntities();
+        private VkitchenContext db = new VkitchenContext();
 
         // GET: api/Ingredients
         public async Task<IHttpActionResult> Getingredients()
@@ -21,7 +21,7 @@ namespace VKAPI.Controllers
 
         // GET: api/Ingredients/5
         [ResponseType(typeof(ingredient))]
-        public async Task<IHttpActionResult> Getingredient(int id)
+        public async Task<IHttpActionResult> Getingredient(string auth_key, int id)
         {
             ingredient ingredient = await db.ingredients.FindAsync(id);
             if (ingredient == null)
@@ -34,7 +34,7 @@ namespace VKAPI.Controllers
 
         // PUT: api/Ingredients/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Putingredient(int id, ingredient ingredient)
+        public async Task<IHttpActionResult> Putingredient(string auth_key,int id, ingredient ingredient)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace VKAPI.Controllers
 
         // POST: api/Ingredients
         [ResponseType(typeof(ingredient))]
-        public async Task<IHttpActionResult> Postingredient(ingredient ingredient)
+        public async Task<IHttpActionResult> Postingredient(string auth_key, ingredient ingredient)
         {
             if (!ModelState.IsValid)
             {
@@ -84,7 +84,7 @@ namespace VKAPI.Controllers
 
         // DELETE: api/Ingredients/5
         [ResponseType(typeof(ingredient))]
-        public async Task<IHttpActionResult> Deleteingredient(int id)
+        public async Task<IHttpActionResult> Deleteingredient(string auth_key, int id)
         {
             ingredient ingredient = await db.ingredients.FindAsync(id);
             if (ingredient == null)
