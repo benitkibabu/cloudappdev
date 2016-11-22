@@ -47,11 +47,16 @@ import java.util.Map;
 
 public class RecipeDetails extends AppCompatActivity {
 
-
     User data;
     Recipe r;
     Button instructionBtn;
     private ProgressDialog mProgressDialog;
+    TextView title ;
+    TextView ingredients;
+    TextView nutrition ;
+    TextView summary;
+    ImageView img, fav_icon;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +64,32 @@ public class RecipeDetails extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        title = (TextView) findViewById(R.id.title);
+        ingredients = (TextView) findViewById(R.id.ingredient);
+        nutrition = (TextView) findViewById(R.id.nutrition);
+        summary = (TextView) findViewById(R.id.summary);
+        instructionBtn = (Button) findViewById(R.id.instruction_btn);
+        fav_icon = (ImageView) findViewById(R.id.fav_icon);
+        img = (ImageView) findViewById(R.id.recipe_img);
+
+        final String f= AppController.getInstance().getNavFragement();
+
+        if(f.equals("R")){
+            fav_icon.setVisibility(View.INVISIBLE);
+            fab.setVisibility(View.VISIBLE);
+        }else{
+            fab.setVisibility(View.INVISIBLE);
+            fav_icon.setVisibility(View.VISIBLE);
+        }
 
         if(getIntent().hasExtra("Recipe") && AppController.getInstance().getUser() != null){
             data = AppController.getInstance().getUser();
             r = (Recipe) getIntent().getSerializableExtra("Recipe");
             setTitle(r.getLabel());
 
-            TextView title = (TextView) findViewById(R.id.title);
-            TextView ingredients = (TextView) findViewById(R.id.ingredient);
-            TextView nutrition = (TextView) findViewById(R.id.nutrition);
-            TextView summary = (TextView) findViewById(R.id.summary);
-
-            instructionBtn = (Button) findViewById(R.id.instruction_btn);
             instructionBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -91,9 +106,15 @@ public class RecipeDetails extends AppCompatActivity {
             String il = "";
             String hl = "";
             String sum = "";
-            //int count = r.getIngredients().size();
+            int count = 0;
+            if(r.getIngredients().size()> 0)
+                count = r.getIngredients().size();
 
-            String i = "Ingredients: \n" + r.getIngredientLines();
+                //count = r.getIngredientLines().split(System.getProperty("\\r\\n")).length;
+
+            //String[] lines = r.getIngredientLines().split(System.getProperty("\\r\\n"));
+
+            String i = count+ " Ingredients: \n" + r.getIngredientLines();
             nut += r.getHealthLabels();
             nut += "\n\nCalories: " + Math.floor(r.getCalories()) + "/ Serving";
             sum += r.getSource();
@@ -102,7 +123,7 @@ public class RecipeDetails extends AppCompatActivity {
             nutrition.setText(nut);
             summary.setText(sum);
 
-            ImageView img = (ImageView) findViewById(R.id.recipe_img);
+
             Picasso.with(getApplicationContext())
                     .load(r.getImageUrl())
                     .resize(512,512).centerCrop()
@@ -112,19 +133,7 @@ public class RecipeDetails extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        String f= AppController.getInstance().getNavFragement();
-                        if(f.equals("R")) {
-                            saveRecipe(r, view);
-                        }else{
-                            Snackbar.make(view, "Already in your favourites",
-                                    Snackbar.LENGTH_INDEFINITE)
-                                    .setAction("Dismiss", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-
-                                        }
-                                    }).show();
-                        }
+                        saveRecipe(r, view);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -187,6 +196,45 @@ public class RecipeDetails extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(objectRequest, TAG);
     }
 
+    void removeRecipe(final Recipe recipe, final View view) throws JSONException {
+        showProgressDialog();
+        final String TAG = "Removing Recipe";
+
+        JSONObject jobj = new JSONObject();
+
+        jobj.put("id", recipe.getId());
+
+        Log.i("Param", jobj.toString());
+
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.DELETE,
+                AppConfig.INTERNAL_RECIPES_API,
+                jobj,
+                new Response.Listener<JSONObject>(){
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Snackbar.make(view, "Recipe removed from favourite ", Snackbar.LENGTH_LONG)
+                                .show();
+                        hideProgressDialog();
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hideProgressDialog();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                return headers;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(objectRequest, TAG);
+    }
+
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -214,9 +262,13 @@ public class RecipeDetails extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_recipes, menu);
+        if(!AppController.getInstance().getNavFragement().equals("R")) {
+            getMenuInflater().inflate(R.menu.menu_recipe_deails, menu);
+        }
         return true;
     }
+
+
 
     void goBack(){
         Intent upIntent = new Intent(this, RecipesActivity.class);
@@ -237,6 +289,11 @@ public class RecipeDetails extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            try {
+                removeRecipe(r, title);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         else if(id == android.R.id.home){

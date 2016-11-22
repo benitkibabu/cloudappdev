@@ -37,6 +37,8 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/KitchenTheme.PopupOverlay" />
 
+
+
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -50,5 +52,15 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@mipmap/ic_action_favorite" />
+    <ImageView
+        android:id="@+id/fav_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_action_favorite"
+        app:layout_anchor="@id/toolbar"
+        app:layout_anchorGravity="bottom|end"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -2,10 +2,13 @@ package com.cloudappdev.ben.virtualkitchen.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +36,9 @@ import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
 import com.cloudappdev.ben.virtualkitchen.models.Recipe;
 import com.cloudappdev.ben.virtualkitchen.models.User;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,11 +107,36 @@ public class MyIngredients extends AppCompatActivity {
         }
     }
 
+    private void loadBarcode(){
+        BarcodeDetector detector = new BarcodeDetector.Builder(getApplicationContext())
+                .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
+                .build();
+        if(!detector.isOperational()){
+            Snackbar.make(recyclerView, "Could not set up Detector", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        //Barcode image to be used
+        Bitmap myBitmap = BitmapFactory.decodeResource(
+                getApplicationContext().getResources(),
+                R.drawable.places_ic_search);
+
+        //Finding frames of the barcodes
+        Frame frame = new Frame.Builder().setBitmap(myBitmap).build();
+        SparseArray<Barcode> barcodes = detector.detect(frame);
+
+        //to decode the array
+        Barcode thisCode = barcodes.valueAt(0);
+        //thisCode.rawValue
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_add) {
+            //Show Camera here for scanning items
+
             return true;
         }
         else if (id == R.id.action_stores) {

@@ -1,6 +1,8 @@
 package com.cloudappdev.ben.virtualkitchen.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ben on 21/10/2016.
@@ -22,6 +24,8 @@ public class Recipe implements Serializable{
     double calories;
     double totalWeight;
 
+    List<Ingredient> ingredients;
+
     public Recipe(String uri, String label, String imageUrl, String source, String url,
                   String shareAs, double yield, String dietLabels, String healthLabels,
                   String cautions, String ingredientLines,
@@ -39,6 +43,7 @@ public class Recipe implements Serializable{
         this.ingredientLines = ingredientLines;
         this.calories = calories;
         this.totalWeight = totalWeight;
+        this.ingredients = new ArrayList<>();
     }
 
     public Recipe(int id, String uri, String label, String imageUrl, String source, String url, String shareAs, double yield, String dietLabels, String healthLabels, String cautions, String ingredientLines, double calories, double totalWeight) {
@@ -56,6 +61,7 @@ public class Recipe implements Serializable{
         this.ingredientLines = ingredientLines;
         this.calories = calories;
         this.totalWeight = totalWeight;
+        this.ingredients = new ArrayList<>();
     }
 
     public String getUri() {
@@ -112,5 +118,13 @@ public class Recipe implements Serializable{
 
     public double getTotalWeight() {
         return totalWeight;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

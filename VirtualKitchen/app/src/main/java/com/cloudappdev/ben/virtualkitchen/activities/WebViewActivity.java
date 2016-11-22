@@ -80,8 +80,6 @@ public class WebViewActivity extends AppCompatActivity {
         if(getIntent().hasExtra(URL) && getIntent().hasExtra("R")){
             myWebView.loadUrl(getIntent().getStringExtra(URL));
             r = (Recipe) getIntent().getSerializableExtra("R");
-
-
         }else{
             goBack();
         }

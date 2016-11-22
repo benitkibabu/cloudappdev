@@ -56,6 +56,7 @@ import java.util.List;
 public class RecipesActivity extends AppCompatActivity {
 
     User data;
+    ProgressDialog mProgressDialog;
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -103,33 +104,23 @@ public class RecipesActivity extends AppCompatActivity {
             @Override
             public void onItemLongClick(View view, int position) {
                 itemPosition = position;
-                Snackbar.make(view, "WOuld you like to delete this? " + itemPosition,
-                        Snackbar.LENGTH_LONG)
-                        .setAction("Delete", new View.OnClickListener() {
+                Snackbar.make(view, "Would you like to remove this? " + itemPosition,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Yes", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
 
+                            }
+                        })
+                        .setAction("No", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                             }
                         }).show();
             }
         });
 
     }
-
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        MenuInflater menuInflater = getMenuInflater();
-//        menuInflater.inflate(R.menu.menu_context, menu);
-//    }
-//
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        ContextMenuRecyclerView.RecyclerContextMenuInfo info =
-//                (ContextMenuRecyclerView.RecyclerContextMenuInfo) item.getMenuInfo();
-//
-//        return false;
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -195,13 +186,10 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     public void getRecipe(final String query){
-        final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setCancelable(false);
-        dialog.setMessage("Loading Data...");
+
+        showProgressDialog();
 
         final String TAG = "Get Recipe";
-
-        dialog.show();
 
         Uri url = Uri.parse( AppConfig.RECIPE_API)
                 .buildUpon()
@@ -235,16 +223,16 @@ public class RecipesActivity extends AppCompatActivity {
                         String ingredientLines = " ";
 
                         for(int x = 0; x < dL.length(); x++){
-                            dietLabels += dL.getString(x)+", ";
+                            dietLabels += dL.getString(x)+"\n";
                         }
                         for(int x = 0; x < hL.length(); x++){
-                            healthLabels += hL.getString(x)+", ";
+                            healthLabels += hL.getString(x)+"\n";
                         }
                         for(int x = 0; x < ca.length(); x++){
-                            cautions += ca.getString(x)+", ";
+                            cautions += ca.getString(x)+"\n";
                         }
                         for(int x = 0; x < iL.length(); x++){
-                            ingredientLines += iL.getString(x)+", ";
+                            ingredientLines += iL.getString(x)+"\n";
                         }
                         for(int x = 0; x < ing.length(); x++){
                             JSONObject val = ing.getJSONObject(x);
@@ -254,11 +242,11 @@ public class RecipesActivity extends AppCompatActivity {
                             ingredientsList.add(ingr);
                         }
 
-
                         Recipe rec = new Recipe(re.getString("uri"), re.getString("label"), re.getString("image"),
                                 re.getString("source"), re.getString("url"),re.getString("shareAs"),
                                 Math.floor(re.getDouble("yield")), dietLabels, healthLabels, cautions, ingredientLines,
                                 Math.floor(re.getDouble("calories")),  Math.floor(re.getDouble("totalWeight")));
+                        rec.setIngredients(ingredientsList);
                         recipeList.add(rec);
                     }
                     adapter.addAll(recipeList);
@@ -267,14 +255,14 @@ public class RecipesActivity extends AppCompatActivity {
                     Log.d("API REQUEST catch:", e.getMessage());
                 }
 
-                dialog.dismiss();
+                hideProgressDialog();
 
             }
         }, new Response.ErrorListener(){
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                dialog.dismiss();
+                hideProgressDialog();
                 NetworkResponse networkResponse = error.networkResponse;
                 if (networkResponse != null) {
                     Log.e("Volley", "Error. HTTP Status Code:"+networkResponse.statusCode);
@@ -300,6 +288,7 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     private void getMyFavourite(){
+        showProgressDialog();
         String TAG = "Get MyFavourite";
         Uri url = Uri.parse(AppConfig.INTERNAL_RECIPES_API)
                 .buildUpon()
@@ -318,7 +307,8 @@ public class RecipesActivity extends AppCompatActivity {
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject j = response.getJSONObject(i);
-                                Recipe r = new Recipe(j.getInt("id"),
+                                Recipe r = new Recipe(
+                                        j.getInt("id"),
                                         j.getString("uri"), j.getString("label"),
                                         j.getString("imageurl"), j.getString("source"),
                                         j.getString("url"), j.getString("shareas"),
@@ -334,12 +324,14 @@ public class RecipesActivity extends AppCompatActivity {
                         }catch(JSONException e){
                             e.printStackTrace();
                         }
+
+                        hideProgressDialog();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        hideProgressDialog();
                     }
                 });
 
@@ -357,6 +349,25 @@ public class RecipesActivity extends AppCompatActivity {
         }else {
             NavUtils.navigateUpTo(this, upIntent);
             finish();
+        }
+    }
+
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.show();
+        }else{
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.show();
+        }
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
     }
 }

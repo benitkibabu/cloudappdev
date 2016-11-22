@@ -78,6 +78,7 @@ public class RecipeRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Re
             itemHolder.imageView = (ImageView) view.findViewById(R.id.rec_icon);
 
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
             //view.st
         }
 
@@ -91,7 +92,7 @@ public class RecipeRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Re
         public boolean onLongClick(View v) {
             if(longCLickListener != null)
                 longCLickListener.onItemLongClick(itemView, getAdapterPosition());
-            return false;
+            return true;
         }
     }
 
