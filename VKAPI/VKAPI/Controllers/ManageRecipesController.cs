@@ -18,7 +18,7 @@ namespace VKAPI.Controllers
         // GET: ManageRecipes
         public async Task<ActionResult> Index()
         {
-            var recipes = db.recipes.Include(r => r.user);
+            var recipes = db.recipes.Include(r => r.clientuser);
             return View(await recipes.ToListAsync());
         }
 
@@ -40,7 +40,7 @@ namespace VKAPI.Controllers
         // GET: ManageRecipes/Create
         public ActionResult Create()
         {
-            ViewBag.userid = new SelectList(db.users, "id", "logintype");
+            ViewBag.userid = new SelectList(db.clientusers, "id", "logintype");
             return View();
         }
 
@@ -58,7 +58,7 @@ namespace VKAPI.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.userid = new SelectList(db.users, "id", "logintype", recipe.userid);
+            ViewBag.userid = new SelectList(db.clientusers, "id", "logintype", recipe.userid);
             return View(recipe);
         }
 
@@ -74,7 +74,7 @@ namespace VKAPI.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.userid = new SelectList(db.users, "id", "logintype", recipe.userid);
+            ViewBag.userid = new SelectList(db.clientusers, "id", "logintype", recipe.userid);
             return View(recipe);
         }
 
@@ -91,7 +91,7 @@ namespace VKAPI.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.userid = new SelectList(db.users, "id", "logintype", recipe.userid);
+            ViewBag.userid = new SelectList(db.clientusers, "id", "logintype", recipe.userid);
             return View(recipe);
         }
 

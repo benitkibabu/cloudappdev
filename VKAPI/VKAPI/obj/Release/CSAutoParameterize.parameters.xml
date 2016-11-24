@@ -3,4 +3,7 @@
   <parameter name="virtualkitchendbEntities-Web.config Connection String" description="virtualkitchendbEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.VKModel.csdl|res://*/Models.VKModel.ssdl|res://*/Models.VKModel.msl;provider=MySql.Data.MySqlClient;provider connection string=&quot;user id=virtualkitchendb;password=Do2kj_DaB!3c;persistsecurityinfo=True;server=mysql2.gear.host;database=virtualkitchendb&quot;" tags="SqlConnectionString">
     <parameterEntry kind="XmlFile" scope="C:\\Users\\Ben\\AndroidStudioProjects\\cloudappdev\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='virtualkitchendbEntities']/@connectionString" />
   </parameter>
+  <parameter name="VkitchenContext-Web.config Connection String" description="VkitchenContext Connection String used in web.config by the application to access the database." defaultValue="user id=virtualkitchendb;password=Do2kj_DaB!3c;persistsecurityinfo=True;server=mysql2.gear.host;database=virtualkitchendb" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Ben\\AndroidStudioProjects\\cloudappdev\\VKAPI\\VKAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='VkitchenContext']/@connectionString" />
+  </parameter>
 </parameters>

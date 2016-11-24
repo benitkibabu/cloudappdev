@@ -29,6 +29,6 @@ namespace VKAPI.Models
         [StringLength(100)]
         public string food { get; set; }
 
-        public virtual user user { get; set; }
+        public virtual clientuser clientuser { get; set; }
     }
 }

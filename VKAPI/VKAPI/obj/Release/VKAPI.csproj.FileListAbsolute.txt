@@ -158,3 +158,5 @@ C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\bin\System.Web.WebPag
 C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\obj\Release\VKAPI.csprojResolveAssemblyReference.cache
 C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\obj\Release\VKAPI.dll
 C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\obj\Release\VKAPI.pdb
+C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\obj\Release\VKAPI.Migrations.InitialCreate.resources
+C:\Users\Ben\AndroidStudioProjects\cloudappdev\VKAPI\VKAPI\obj\Release\VKAPI.csproj.GenerateResource.Cache

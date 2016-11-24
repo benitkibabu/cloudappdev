@@ -11,107 +11,107 @@ using VKAPI.Models;
 
 namespace VKAPI.Controllers
 {
-    public class ManageUserController : Controller
+    public class ManageclientuserController : Controller
     {
         private VkitchenContext db = new VkitchenContext();
 
-        // GET: ManageUser
+        // GET: Manageclientuser
         public async Task<ActionResult> Index()
         {
-            return View(await db.users.ToListAsync());
+            return View(await db.clientusers.ToListAsync());
         }
 
-        // GET: ManageUser/Details/5
+        // GET: Manageclientuser/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = await db.users.FindAsync(id);
-            if (user == null)
+            clientuser clientuser = await db.clientusers.FindAsync(id);
+            if (clientuser == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(clientuser);
         }
 
-        // GET: ManageUser/Create
+        // GET: Manageclientuser/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ManageUser/Create
+        // POST: Manageclientuser/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "id,logintype,userid,name,email,imageurl")] user user)
+        public async Task<ActionResult> Create([Bind(Include = "id,logintype,clientuserid,name,email,imageurl")] clientuser clientuser)
         {
             if (ModelState.IsValid)
             {
-                db.users.Add(user);
+                db.clientusers.Add(clientuser);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            return View(clientuser);
         }
 
-        // GET: ManageUser/Edit/5
+        // GET: Manageclientuser/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = await db.users.FindAsync(id);
-            if (user == null)
+            clientuser clientuser = await db.clientusers.FindAsync(id);
+            if (clientuser == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(clientuser);
         }
 
-        // POST: ManageUser/Edit/5
+        // POST: Manageclientuser/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "id,logintype,userid,name,email,imageurl")] user user)
+        public async Task<ActionResult> Edit([Bind(Include = "id,logintype,clientuserid,name,email,imageurl")] clientuser clientuser)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
+                db.Entry(clientuser).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(user);
+            return View(clientuser);
         }
 
-        // GET: ManageUser/Delete/5
+        // GET: Manageclientuser/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            user user = await db.users.FindAsync(id);
-            if (user == null)
+            clientuser clientuser = await db.clientusers.FindAsync(id);
+            if (clientuser == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(clientuser);
         }
 
-        // POST: ManageUser/Delete/5
+        // POST: Manageclientuser/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            user user = await db.users.FindAsync(id);
-            db.users.Remove(user);
+            clientuser clientuser = await db.clientusers.FindAsync(id);
+            db.clientusers.Remove(clientuser);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

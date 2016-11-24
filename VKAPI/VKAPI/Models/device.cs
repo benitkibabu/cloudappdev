@@ -17,6 +17,6 @@ namespace VKAPI.Models
         [StringLength(500)]
         public string deviceid { get; set; }
 
-        public virtual user user { get; set; }
+        public virtual clientuser clientuser { get; set; }
     }
 }

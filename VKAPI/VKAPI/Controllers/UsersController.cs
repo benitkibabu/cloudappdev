@@ -16,37 +16,37 @@ namespace VKAPI.Controllers
         // GET: api/Users
         public async Task<IHttpActionResult> Getusers()
         {
-            return Ok(await db.users.ToListAsync());
+            return Ok(await db.clientusers.ToListAsync());
         }
 
         // GET: api/Users/5
-        [ResponseType(typeof(user))]
+        [ResponseType(typeof(clientuser))]
         public async Task<IHttpActionResult> Getuser(int id)
         {
-            user user = await db.users.FindAsync(id);
-            if (user == null)
+            clientuser clientuser = await db.clientusers.FindAsync(id);
+            if (clientuser == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(clientuser);
         }
 
         // PUT: api/Users/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Putuser(int id, user user)
+        public async Task<IHttpActionResult> Putuser(int id, clientuser clientuser)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.id)
+            if (id != clientuser.id)
             {
                 return BadRequest();
             }
 
-            db.Entry(user).State = EntityState.Modified;
+            db.Entry(clientuser).State = EntityState.Modified;
 
             try
             {
@@ -68,41 +68,41 @@ namespace VKAPI.Controllers
         }
 
         // POST: api/Users
-        [ResponseType(typeof(user))]
-        public async Task<IHttpActionResult> Postuser([FromBody]user user)
+        [ResponseType(typeof(clientuser))]
+        public async Task<IHttpActionResult> Postuser([FromBody]clientuser clientuser)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (userExists(user.userid))
+            if (userExists(clientuser.userid))
             {
-                return Ok(await db.users.Where(a => a.userid == user.userid).FirstAsync());
+                return Ok(await db.clientusers.Where(a => a.userid == clientuser.userid).FirstAsync());
             }else
             {
-                db.users.Add(user);
+                db.clientusers.Add(clientuser);
                 await db.SaveChangesAsync();
 
-                return CreatedAtRoute("DefaultApi", new { id = user.id }, user);
+                return CreatedAtRoute("DefaultApi", new { id = clientuser.id }, clientuser);
             }
            
         }
 
         // DELETE: api/Users/5
-        [ResponseType(typeof(user))]
+        [ResponseType(typeof(clientuser))]
         public async Task<IHttpActionResult> Deleteuser(int id)
         {
-            user user = await db.users.FindAsync(id);
-            if (user == null)
+            clientuser clientuser = await db.clientusers.FindAsync(id);
+            if (clientuser == null)
             {
                 return NotFound();
             }
 
-            db.users.Remove(user);
+            db.clientusers.Remove(clientuser);
             await db.SaveChangesAsync();
 
-            return Ok(user);
+            return Ok(clientuser);
         }
 
         protected override void Dispose(bool disposing)
@@ -116,11 +116,11 @@ namespace VKAPI.Controllers
 
         private bool userExists(int id)
         {
-            return db.users.Count(e => e.id == id) > 0;
+            return db.clientusers.Count(e => e.id == id) > 0;
         }
         private bool userExists(string userid)
         {
-            return db.users.Count(e => e.userid == userid) > 0;
+            return db.clientusers.Count(e => e.userid == userid) > 0;
         }
     }
 }

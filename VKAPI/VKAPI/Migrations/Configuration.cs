@@ -22,7 +22,7 @@ namespace VKAPI.Migrations
             context.auth_app.AddOrUpdate(
                 app => app.app_name,
                 new auth_app {
-                app_name = "Virtual Kictchen",
+                app_name = "Virtual Kitchen",
                 auth_key =  Guid.NewGuid().ToString() });
 
             context.SaveChangesAsync();

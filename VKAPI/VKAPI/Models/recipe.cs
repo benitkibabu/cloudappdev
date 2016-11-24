@@ -49,6 +49,6 @@ namespace VKAPI.Models
 
         public int userid { get; set; }
 
-        public virtual user user { get; set; }
+        public virtual clientuser clientuser { get; set; }
     }
 }
