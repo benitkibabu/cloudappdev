@@ -11,6 +11,7 @@ using VKAPI.Models;
 
 namespace VKAPI.Controllers
 {
+    [Authorize]
     public class AppAuthorisationController : Controller
     {
         private VkitchenContext db = new VkitchenContext();
