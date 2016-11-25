@@ -13,12 +13,24 @@ using vkwebapp.Models;
 
 namespace vkwebapp.Controllers
 {
-    public class UsersController : ApiController
+    public class IngredientsController : ApiController
     {
         private ServiceModels db = new ServiceModels();
 
-        // GET: api/Users
-        public async Task<IHttpActionResult> GetClientUsers(string app_key)
+        // GET: api/Ingredients
+        public async Task<IHttpActionResult> GetIngredients(string app_key)
+        {
+            AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
+            if (app == null)
+            {
+                return NotFound();
+            }
+            return Ok (await db.Ingredients.ToListAsync());
+        }
+
+        // GET: api/Ingredients/5
+        [ResponseType(typeof(Ingredient))]
+        public async Task<IHttpActionResult> GetIngredient(string app_key, int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -26,31 +38,18 @@ namespace vkwebapp.Controllers
                 return NotFound();
             }
 
-            return Ok(await db.ClientUsers.ToListAsync());
-        }
-
-        // GET: api/Users/5
-        [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> GetClientUser(string app_key, int id)
-        {
-            AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
-            if(app == null)
+            Ingredient ingredient = await db.Ingredients.FindAsync(id);
+            if (ingredient == null)
             {
                 return NotFound();
             }
 
-            ClientUser clientUser = await db.ClientUsers.FindAsync(id);
-            if (clientUser == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(clientUser);
+            return Ok(ingredient);
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Ingredients/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutClientUser(string app_key, int id, ClientUser clientUser)
+        public async Task<IHttpActionResult> PutIngredient(string app_key, int id, Ingredient ingredient)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -63,12 +62,12 @@ namespace vkwebapp.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != clientUser.id)
+            if (id != ingredient.id)
             {
                 return BadRequest();
             }
 
-            db.Entry(clientUser).State = EntityState.Modified;
+            db.Entry(ingredient).State = EntityState.Modified;
 
             try
             {
@@ -76,7 +75,7 @@ namespace vkwebapp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClientUserExists(id))
+                if (!IngredientExists(id))
                 {
                     return NotFound();
                 }
@@ -89,9 +88,9 @@ namespace vkwebapp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users
-        [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> PostClientUser(string app_key, ClientUser clientUser)
+        // POST: api/Ingredients
+        [ResponseType(typeof(Ingredient))]
+        public async Task<IHttpActionResult> PostIngredient(string app_key, Ingredient ingredient)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -104,31 +103,32 @@ namespace vkwebapp.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.ClientUsers.Add(clientUser);
+            db.Ingredients.Add(ingredient);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = clientUser.id }, clientUser);
+            return CreatedAtRoute("DefaultApi", new { id = ingredient.id }, ingredient);
         }
 
-        // DELETE: api/Users/5
-        [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> DeleteClientUser(string app_key, int id)
+        // DELETE: api/Ingredients/5
+        [ResponseType(typeof(Ingredient))]
+        public async Task<IHttpActionResult> DeleteIngredient(string app_key, int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
             {
                 return NotFound();
             }
-            ClientUser clientUser = await db.ClientUsers.FindAsync(id);
-            if (clientUser == null)
+
+            Ingredient ingredient = await db.Ingredients.FindAsync(id);
+            if (ingredient == null)
             {
                 return NotFound();
             }
 
-            db.ClientUsers.Remove(clientUser);
+            db.Ingredients.Remove(ingredient);
             await db.SaveChangesAsync();
 
-            return Ok(clientUser);
+            return Ok(ingredient);
         }
 
         protected override void Dispose(bool disposing)
@@ -140,9 +140,9 @@ namespace vkwebapp.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ClientUserExists(int id)
+        private bool IngredientExists(int id)
         {
-            return db.ClientUsers.Count(e => e.id == id) > 0;
+            return db.Ingredients.Count(e => e.id == id) > 0;
         }
     }
 }

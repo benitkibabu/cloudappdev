@@ -13,12 +13,12 @@ using vkwebapp.Models;
 
 namespace vkwebapp.Controllers
 {
-    public class UsersController : ApiController
+    public class DevicesController : ApiController
     {
         private ServiceModels db = new ServiceModels();
 
-        // GET: api/Users
-        public async Task<IHttpActionResult> GetClientUsers(string app_key)
+        // GET: api/Devices
+        public async Task<IHttpActionResult> GetDevices(string app_key)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -26,31 +26,30 @@ namespace vkwebapp.Controllers
                 return NotFound();
             }
 
-            return Ok(await db.ClientUsers.ToListAsync());
+            return Ok(await db.Devices.ToListAsync());
         }
 
-        // GET: api/Users/5
-        [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> GetClientUser(string app_key, int id)
+        // GET: api/Devices/5
+        [ResponseType(typeof(Device))]
+        public async Task<IHttpActionResult> GetDevice(string app_key, int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
-            if(app == null)
+            if (app == null)
+            {
+                return NotFound();
+            }
+            Device device = await db.Devices.FindAsync(id);
+            if (device == null)
             {
                 return NotFound();
             }
 
-            ClientUser clientUser = await db.ClientUsers.FindAsync(id);
-            if (clientUser == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(clientUser);
+            return Ok(device);
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Devices/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutClientUser(string app_key, int id, ClientUser clientUser)
+        public async Task<IHttpActionResult> PutDevice(string app_key, int id, Device device)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -63,12 +62,12 @@ namespace vkwebapp.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != clientUser.id)
+            if (id != device.id)
             {
                 return BadRequest();
             }
 
-            db.Entry(clientUser).State = EntityState.Modified;
+            db.Entry(device).State = EntityState.Modified;
 
             try
             {
@@ -76,7 +75,7 @@ namespace vkwebapp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClientUserExists(id))
+                if (!DeviceExists(id))
                 {
                     return NotFound();
                 }
@@ -89,9 +88,9 @@ namespace vkwebapp.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users
-        [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> PostClientUser(string app_key, ClientUser clientUser)
+        // POST: api/Devices
+        [ResponseType(typeof(Device))]
+        public async Task<IHttpActionResult> PostDevice(string app_key, Device device)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -104,31 +103,32 @@ namespace vkwebapp.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.ClientUsers.Add(clientUser);
+            db.Devices.Add(device);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = clientUser.id }, clientUser);
+            return CreatedAtRoute("DefaultApi", new { id = device.id }, device);
         }
 
-        // DELETE: api/Users/5
-        [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> DeleteClientUser(string app_key, int id)
+        // DELETE: api/Devices/5
+        [ResponseType(typeof(Device))]
+        public async Task<IHttpActionResult> DeleteDevice(string app_key, int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
             {
                 return NotFound();
             }
-            ClientUser clientUser = await db.ClientUsers.FindAsync(id);
-            if (clientUser == null)
+
+            Device device = await db.Devices.FindAsync(id);
+            if (device == null)
             {
                 return NotFound();
             }
 
-            db.ClientUsers.Remove(clientUser);
+            db.Devices.Remove(device);
             await db.SaveChangesAsync();
 
-            return Ok(clientUser);
+            return Ok(device);
         }
 
         protected override void Dispose(bool disposing)
@@ -140,9 +140,9 @@ namespace vkwebapp.Controllers
             base.Dispose(disposing);
         }
 
-        private bool ClientUserExists(int id)
+        private bool DeviceExists(int id)
         {
-            return db.ClientUsers.Count(e => e.id == id) > 0;
+            return db.Devices.Count(e => e.id == id) > 0;
         }
     }
 }

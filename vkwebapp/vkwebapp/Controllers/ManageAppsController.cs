@@ -8,6 +8,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using vkwebapp.Models;
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 
 namespace vkwebapp.Controllers
 {
@@ -50,7 +52,9 @@ namespace vkwebapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "id,auth_key,app_name,UserID")] AuthApp authApp)
         {
-            if (ModelState.IsValid)
+            authApp.auth_key = Guid.NewGuid().ToString();
+            authApp.UserID = User.Identity.GetUserId().ToString();
+            if (authApp.app_name.Length > 1)
             {
                 db.AuthApps.Add(authApp);
                 await db.SaveChangesAsync();
