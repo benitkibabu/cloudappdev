@@ -1,0 +1,11 @@
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/bin/Debug/AspNet.Identity.MySQL.dll.config
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/bin/Debug/AspNet.Identity.MySQL.dll.mdb
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/bin/Debug/AspNet.Identity.MySQL.dll
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/obj/Debug/AspNet.Identity.MySQL.dll
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/obj/Debug/AspNet.Identity.MySQL.dll.mdb
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/bin/Debug/Microsoft.AspNet.Identity.Core.dll
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/bin/Debug/Microsoft.AspNet.Identity.Owin.dll
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/bin/Debug/MySql.AspNet.Identity.dll
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/bin/Debug/MySql.Data.dll
+/home/ben/Documents/cloudappdev/AspNet.Identity.MySQL/bin/Debug/Owin.dll
