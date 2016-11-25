@@ -24,6 +24,8 @@ C:\Users\Ben\AndroidStudioProjects\cloudappdev\AspNet.Identity.MySQL\bin\Debug\N
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\AspNet.Identity.MySQL.dll.config
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\AspNet.Identity.MySQL.dll
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\AspNet.Identity.MySQL.pdb
+H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\EntityFramework.dll
+H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\EntityFramework.SqlServer.dll
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Microsoft.AspNet.Identity.Core.dll
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Microsoft.AspNet.Identity.Owin.dll
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Microsoft.Owin.dll
@@ -32,8 +34,12 @@ H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Microsoft.Owin.Security.d
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Microsoft.Owin.Security.OAuth.dll
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\MySql.AspNet.Identity.dll
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\MySql.Data.dll
+H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\MySql.Data.Entity.EF6.dll
+H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\MySql.Web.dll
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Newtonsoft.Json.dll
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Owin.dll
+H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\EntityFramework.xml
+H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\EntityFramework.SqlServer.xml
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Microsoft.AspNet.Identity.Core.xml
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Microsoft.AspNet.Identity.Owin.xml
 H:\cloudappdev\project\AspNet.Identity.MySQL\bin\Debug\Microsoft.Owin.xml

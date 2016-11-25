@@ -1,0 +1,294 @@
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\ApplicationInsights.config
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\csc.exe
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CSharp.Core.targets
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\Microsoft.VisualBasic.Core.targets
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\System.Collections.Immutable.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\System.Reflection.Metadata.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\vbc.exe
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\VBCSCompiler.exe
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\roslyn\VBCSCompiler.exe.config
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\vkwebapp.dll.config
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\vkwebapp.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\vkwebapp.pdb
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Antlr3.Runtime.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\EntityFramework.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\EntityFramework.SqlServer.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.Agent.Intercept.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.DependencyCollector.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.PerfCounterCollector.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.ServerTelemetryChannel.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.Web.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.WindowsServer.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.ApplicationInsights.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Core.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Owin.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Host.SystemWeb.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Cookies.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Facebook.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Google.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.OAuth.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Twitter.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Web.Infrastructure.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Newtonsoft.Json.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Owin.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Net.Http.Formatting.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Helpers.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Http.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Http.WebHost.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Mvc.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Optimization.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Razor.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.WebPages.Deployment.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.WebPages.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.WebPages.Razor.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\WebGrease.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.DependencyCollector.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.ServerTelemetryChannel.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.Web.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AI.WindowsServer.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.ApplicationInsights.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Helpers.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Mvc.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Optimization.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Razor.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.WebPages.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.WebPages.Deployment.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.WebPages.Razor.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Antlr3.Runtime.pdb
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Newtonsoft.Json.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Net.Http.Formatting.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Http.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\System.Web.Http.WebHost.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\EntityFramework.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\EntityFramework.SqlServer.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Core.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Owin.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Host.SystemWeb.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Facebook.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Cookies.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.OAuth.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Google.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Twitter.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csprojResolveAssemblyReference.cache
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\obj\Debug\vkwebapp.dll
+c:\users\x08424179\documents\visual studio 2015\Projects\vkwebapp\vkwebapp\obj\Debug\vkwebapp.pdb
+H:\cloudappdev\vkwebapp\vkwebapp\bin\ApplicationInsights.config
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\csc.exe
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CSharp.Core.targets
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.VisualBasic.Core.targets
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\System.Collections.Immutable.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\System.Reflection.Metadata.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\vbc.exe
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\VBCSCompiler.exe
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\VBCSCompiler.exe.config
+H:\cloudappdev\vkwebapp\vkwebapp\bin\vkwebapp.dll.config
+H:\cloudappdev\vkwebapp\vkwebapp\bin\vkwebapp.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\vkwebapp.pdb
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Antlr3.Runtime.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\EntityFramework.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\EntityFramework.SqlServer.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.Agent.Intercept.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.DependencyCollector.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.PerfCounterCollector.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.ServerTelemetryChannel.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.Web.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.WindowsServer.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.ApplicationInsights.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Core.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Owin.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Host.SystemWeb.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Cookies.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Facebook.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Google.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.OAuth.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Twitter.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Web.Infrastructure.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Newtonsoft.Json.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Owin.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Net.Http.Formatting.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Helpers.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Http.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Http.WebHost.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Mvc.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Optimization.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Razor.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.WebPages.Deployment.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.WebPages.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.WebPages.Razor.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\WebGrease.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.DependencyCollector.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.ServerTelemetryChannel.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.Web.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AI.WindowsServer.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.ApplicationInsights.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Helpers.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Mvc.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Optimization.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Razor.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.WebPages.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.WebPages.Deployment.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.WebPages.Razor.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Antlr3.Runtime.pdb
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Newtonsoft.Json.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Net.Http.Formatting.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Http.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\System.Web.Http.WebHost.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\EntityFramework.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\EntityFramework.SqlServer.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Core.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Owin.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Host.SystemWeb.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Facebook.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Cookies.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.OAuth.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Google.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Twitter.xml
+H:\cloudappdev\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+H:\cloudappdev\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csprojResolveAssemblyReference.cache
+H:\cloudappdev\vkwebapp\vkwebapp\obj\Debug\vkwebapp.dll
+H:\cloudappdev\vkwebapp\vkwebapp\obj\Debug\vkwebapp.pdb
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\csc.exe.config
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\csc.rsp
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\csi.exe
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\csi.rsp
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\System.AppContext.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\System.Diagnostics.StackTrace.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\System.IO.FileSystem.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\System.IO.FileSystem.Primitives.dll
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\vbc.exe.config
+H:\cloudappdev\vkwebapp\vkwebapp\bin\roslyn\vbc.rsp
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\ApplicationInsights.config
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\csc.exe
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\csc.exe.config
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\csc.rsp
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\csi.exe
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\csi.rsp
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\System.AppContext.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\System.IO.FileSystem.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\vbc.exe
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\vbc.exe.config
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\vbc.rsp
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\VBCSCompiler.exe
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\vkwebapp.dll.config
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\vkwebapp.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\vkwebapp.pdb
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Antlr3.Runtime.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\EntityFramework.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\EntityFramework.SqlServer.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.Web.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.ApplicationInsights.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Facebook.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Google.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Twitter.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Newtonsoft.Json.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Owin.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Net.Http.Formatting.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Helpers.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Http.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Http.WebHost.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Mvc.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Optimization.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Razor.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.WebPages.Deployment.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.WebPages.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.WebPages.Razor.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\WebGrease.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Antlr3.Runtime.pdb
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.Web.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.ApplicationInsights.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Newtonsoft.Json.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Helpers.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Mvc.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Optimization.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Razor.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.WebPages.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.WebPages.Deployment.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.WebPages.Razor.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Net.Http.Formatting.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Http.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\System.Web.Http.WebHost.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\EntityFramework.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\EntityFramework.SqlServer.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Facebook.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Google.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Twitter.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csprojResolveAssemblyReference.cache
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.dll
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.pdb
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.Migrations.InitialCreate.resources
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csproj.GenerateResource.Cache
