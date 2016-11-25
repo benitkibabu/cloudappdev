@@ -391,7 +391,6 @@ H:\cloudappdev\project\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.OAuth.xml
 H:\cloudappdev\project\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Google.xml
 H:\cloudappdev\project\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Twitter.xml
 H:\cloudappdev\project\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-H:\cloudappdev\project\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csprojResolveAssemblyReference.cache
 H:\cloudappdev\project\vkwebapp\vkwebapp\obj\Debug\vkwebapp.Migrations.InitialCreate.resources
 H:\cloudappdev\project\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csproj.GenerateResource.Cache
 H:\cloudappdev\project\vkwebapp\vkwebapp\obj\Debug\vkwebapp.dll

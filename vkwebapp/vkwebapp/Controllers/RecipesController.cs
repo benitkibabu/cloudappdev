@@ -18,7 +18,7 @@ namespace vkwebapp.Controllers
         private ServiceModels db = new ServiceModels();
 
         // GET: api/Recipes
-        public async Task<IHttpActionResult> GetRecipes(string app_key)
+        public async Task<IHttpActionResult> GetRecipes([FromBody]string app_key)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -30,7 +30,7 @@ namespace vkwebapp.Controllers
 
         // GET: api/Recipes/5
         [ResponseType(typeof(Recipe))]
-        public async Task<IHttpActionResult> GetRecipe(string app_key, int id)
+        public async Task<IHttpActionResult> GetRecipe([FromBody]string app_key, [FromBody]int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -48,7 +48,7 @@ namespace vkwebapp.Controllers
 
         // PUT: api/Recipes/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutRecipe(string app_key, int id, Recipe recipe)
+        public async Task<IHttpActionResult> PutRecipe([FromBody]string app_key, [FromBody]int id, [FromBody]Recipe recipe)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -89,7 +89,7 @@ namespace vkwebapp.Controllers
 
         // POST: api/Recipes
         [ResponseType(typeof(Recipe))]
-        public async Task<IHttpActionResult> PostRecipe(string app_key, Recipe recipe)
+        public async Task<IHttpActionResult> PostRecipe([FromBody]string app_key, [FromBody]Recipe recipe)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -110,7 +110,7 @@ namespace vkwebapp.Controllers
 
         // DELETE: api/Recipes/5
         [ResponseType(typeof(Recipe))]
-        public async Task<IHttpActionResult> DeleteRecipe(string app_key, int id)
+        public async Task<IHttpActionResult> DeleteRecipe([FromBody]string app_key, [FromBody]int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)

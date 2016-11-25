@@ -18,7 +18,7 @@ namespace vkwebapp.Controllers
         private ServiceModels db = new ServiceModels();
 
         // GET: api/Ingredients
-        public async Task<IHttpActionResult> GetIngredients(string app_key)
+        public async Task<IHttpActionResult> GetIngredients([FromBody]string app_key)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -30,7 +30,7 @@ namespace vkwebapp.Controllers
 
         // GET: api/Ingredients/5
         [ResponseType(typeof(Ingredient))]
-        public async Task<IHttpActionResult> GetIngredient(string app_key, int id)
+        public async Task<IHttpActionResult> GetIngredient([FromBody]string app_key, [FromBody]int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -49,7 +49,7 @@ namespace vkwebapp.Controllers
 
         // PUT: api/Ingredients/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutIngredient(string app_key, int id, Ingredient ingredient)
+        public async Task<IHttpActionResult> PutIngredient([FromBody]string app_key, [FromBody]int id, [FromBody]Ingredient ingredient)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -90,7 +90,7 @@ namespace vkwebapp.Controllers
 
         // POST: api/Ingredients
         [ResponseType(typeof(Ingredient))]
-        public async Task<IHttpActionResult> PostIngredient(string app_key, Ingredient ingredient)
+        public async Task<IHttpActionResult> PostIngredient([FromBody]string app_key, [FromBody]Ingredient ingredient)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -111,7 +111,7 @@ namespace vkwebapp.Controllers
 
         // DELETE: api/Ingredients/5
         [ResponseType(typeof(Ingredient))]
-        public async Task<IHttpActionResult> DeleteIngredient(string app_key, int id)
+        public async Task<IHttpActionResult> DeleteIngredient([FromBody]string app_key, [FromBody]int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)

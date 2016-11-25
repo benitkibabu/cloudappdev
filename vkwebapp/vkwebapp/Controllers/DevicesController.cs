@@ -18,7 +18,7 @@ namespace vkwebapp.Controllers
         private ServiceModels db = new ServiceModels();
 
         // GET: api/Devices
-        public async Task<IHttpActionResult> GetDevices(string app_key)
+        public async Task<IHttpActionResult> GetDevices([FromBody]string app_key)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -31,7 +31,7 @@ namespace vkwebapp.Controllers
 
         // GET: api/Devices/5
         [ResponseType(typeof(Device))]
-        public async Task<IHttpActionResult> GetDevice(string app_key, int id)
+        public async Task<IHttpActionResult> GetDevice([FromBody]string app_key, [FromBody]int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -49,7 +49,7 @@ namespace vkwebapp.Controllers
 
         // PUT: api/Devices/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutDevice(string app_key, int id, Device device)
+        public async Task<IHttpActionResult> PutDevice([FromBody]string app_key, [FromBody]int id, [FromBody]Device device)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -90,7 +90,7 @@ namespace vkwebapp.Controllers
 
         // POST: api/Devices
         [ResponseType(typeof(Device))]
-        public async Task<IHttpActionResult> PostDevice(string app_key, Device device)
+        public async Task<IHttpActionResult> PostDevice([FromBody]string app_key, [FromBody]Device device)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -111,7 +111,7 @@ namespace vkwebapp.Controllers
 
         // DELETE: api/Devices/5
         [ResponseType(typeof(Device))]
-        public async Task<IHttpActionResult> DeleteDevice(string app_key, int id)
+        public async Task<IHttpActionResult> DeleteDevice([FromBody]string app_key, [FromBody]int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)

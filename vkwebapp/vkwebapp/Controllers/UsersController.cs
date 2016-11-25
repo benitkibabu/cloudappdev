@@ -18,7 +18,7 @@ namespace vkwebapp.Controllers
         private ServiceModels db = new ServiceModels();
 
         // GET: api/Users
-        public async Task<IHttpActionResult> GetClientUsers(string app_key)
+        public async Task<IHttpActionResult> GetClientUsers([FromBody]string app_key)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -31,7 +31,7 @@ namespace vkwebapp.Controllers
 
         // GET: api/Users/5
         [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> GetClientUser(string app_key, int id)
+        public async Task<IHttpActionResult> GetClientUser([FromBody]string app_key, [FromBody]int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if(app == null)
@@ -50,7 +50,7 @@ namespace vkwebapp.Controllers
 
         // PUT: api/Users/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutClientUser(string app_key, int id, ClientUser clientUser)
+        public async Task<IHttpActionResult> PutClientUser([FromBody]string app_key, [FromBody]int id, [FromBody]ClientUser clientUser)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -91,7 +91,7 @@ namespace vkwebapp.Controllers
 
         // POST: api/Users
         [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> PostClientUser(string app_key, ClientUser clientUser)
+        public async Task<IHttpActionResult> PostClientUser([FromBody]string app_key, [FromBody]ClientUser clientUser)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
@@ -112,7 +112,7 @@ namespace vkwebapp.Controllers
 
         // DELETE: api/Users/5
         [ResponseType(typeof(ClientUser))]
-        public async Task<IHttpActionResult> DeleteClientUser(string app_key, int id)
+        public async Task<IHttpActionResult> DeleteClientUser([FromBody]string app_key, [FromBody]int id)
         {
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)

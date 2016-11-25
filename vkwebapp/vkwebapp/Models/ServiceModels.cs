@@ -179,6 +179,7 @@ namespace vkwebapp.Models
 
         [Required]
         [StringLength(128)]
+        [Display(Name = "User Name")]
         public string UserID { get; set; }
     }
 }
