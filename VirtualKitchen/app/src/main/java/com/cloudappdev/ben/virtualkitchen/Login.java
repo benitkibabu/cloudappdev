@@ -151,11 +151,14 @@ public class Login extends AppCompatActivity {
         final String TAG = "Log User";
 
         JSONObject params = new JSONObject();
+       // params.put("app_key", AppController.getInstance().appKey());
         params.put("logintype", user.getLoginType());
         params.put("userid", user.getUserid());
         params.put("name", user.getName());
         params.put("email", user.getEmail());
         params.put("imageurl", user.getImageUrl());
+
+        Log.d(TAG, params.toString());
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
                 AppConfig.INTERNAL_USERS_API,
@@ -207,6 +210,7 @@ public class Login extends AppCompatActivity {
                 Map<String,String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
+                headers.put("app_key", AppController.getInstance().appKey());
                 return headers;
             }
         };

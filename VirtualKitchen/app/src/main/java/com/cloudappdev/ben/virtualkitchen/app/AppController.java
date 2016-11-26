@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
@@ -71,5 +72,9 @@ public class AppController extends Application {
 
     public void setNavFragement(String navFragement) {
         this.navFragement = navFragement;
+    }
+
+    public String appKey(){
+        return getString(R.string.vk_api_app_id);
     }
 }

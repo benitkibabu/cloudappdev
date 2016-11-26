@@ -51,7 +51,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecipesActivity extends AppCompatActivity {
 
@@ -236,10 +238,10 @@ public class RecipesActivity extends AppCompatActivity {
                         }
                         for(int x = 0; x < ing.length(); x++){
                             JSONObject val = ing.getJSONObject(x);
-                            Ingredient ingr = new Ingredient(val.getString("text"),
-                                    val.getDouble("quantity"),val.getString("measure"),
-                                    val.getDouble("weight"), val.getString("food"));
-                            ingredientsList.add(ingr);
+//                            Ingredient ingr = new Ingredient(val.getString("text"),
+//                                    val.getDouble("quantity"),val.getString("measure"),
+//                                    val.getDouble("weight"), val.getString("food"));
+//                            ingredientsList.add(ingr);
                         }
 
                         Recipe rec = new Recipe(re.getString("uri"), re.getString("label"), re.getString("image"),
@@ -282,7 +284,16 @@ public class RecipesActivity extends AppCompatActivity {
                     Log.e("Volley", "ParseError");
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                headers.put("app_key", AppController.getInstance().appKey());
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(request, TAG);
     }
@@ -333,7 +344,16 @@ public class RecipesActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         hideProgressDialog();
                     }
-                });
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                headers.put("app_key", AppController.getInstance().appKey());
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(request, TAG);
     }

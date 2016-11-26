@@ -188,7 +188,16 @@ public class MyIngredients extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
 
                     }
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                headers.put("app_key", AppController.getInstance().appKey());
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(request, TAG);
     }
@@ -228,6 +237,7 @@ public class MyIngredients extends AppCompatActivity {
                 Map<String,String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
+                headers.put("app_key", AppController.getInstance().appKey());
                 return headers;
             }
         };
