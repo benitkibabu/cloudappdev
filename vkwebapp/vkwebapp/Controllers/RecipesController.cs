@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -18,8 +19,15 @@ namespace vkwebapp.Controllers
         private ServiceModels db = new ServiceModels();
 
         // GET: api/Recipes
-        public async Task<IHttpActionResult> GetRecipes([FromBody]string app_key)
+        public async Task<IHttpActionResult> GetRecipes()
         {
+            HttpRequestHeaders headers = this.Request.Headers;
+            string app_key = string.Empty;
+            if (headers.Contains("app_key"))
+            {
+                app_key = headers.GetValues("app_key").First();
+            }
+                
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
             {
@@ -30,8 +38,14 @@ namespace vkwebapp.Controllers
 
         // GET: api/Recipes/5
         [ResponseType(typeof(Recipe))]
-        public async Task<IHttpActionResult> GetRecipe([FromBody]string app_key, [FromBody]int id)
+        public async Task<IHttpActionResult> GetRecipe(int id)
         {
+            HttpRequestHeaders headers = this.Request.Headers;
+            string app_key = string.Empty;
+            if (headers.Contains("app_key"))
+            {
+                app_key = headers.GetValues("app_key").First();
+            }
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
             {
@@ -48,8 +62,14 @@ namespace vkwebapp.Controllers
 
         // PUT: api/Recipes/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutRecipe([FromBody]string app_key, [FromBody]int id, [FromBody]Recipe recipe)
+        public async Task<IHttpActionResult> PutRecipe([FromBody]int id, [FromBody]Recipe recipe)
         {
+            HttpRequestHeaders headers = this.Request.Headers;
+            string app_key = string.Empty;
+            if (headers.Contains("app_key"))
+            {
+                app_key = headers.GetValues("app_key").First();
+            }
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
             {
@@ -89,8 +109,14 @@ namespace vkwebapp.Controllers
 
         // POST: api/Recipes
         [ResponseType(typeof(Recipe))]
-        public async Task<IHttpActionResult> PostRecipe([FromBody]string app_key, [FromBody]Recipe recipe)
+        public async Task<IHttpActionResult> PostRecipe( [FromBody]Recipe recipe)
         {
+            HttpRequestHeaders headers = this.Request.Headers;
+            string app_key = string.Empty;
+            if (headers.Contains("app_key"))
+            {
+                app_key = headers.GetValues("app_key").First();
+            }
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
             {
@@ -110,8 +136,14 @@ namespace vkwebapp.Controllers
 
         // DELETE: api/Recipes/5
         [ResponseType(typeof(Recipe))]
-        public async Task<IHttpActionResult> DeleteRecipe([FromBody]string app_key, [FromBody]int id)
+        public async Task<IHttpActionResult> DeleteRecipe( [FromBody]int id)
         {
+            HttpRequestHeaders headers = this.Request.Headers;
+            string app_key = string.Empty;
+            if (headers.Contains("app_key"))
+            {
+                app_key = headers.GetValues("app_key").First();
+            }
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
             {
