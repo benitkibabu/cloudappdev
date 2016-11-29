@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
+using System.Data.Entity;
 using System.Web.Mvc;
+using vkwebapp.Models;
+using System.Linq;
 
 namespace vkwebapp.Controllers
 {
+    //
+    /// <summary>
+    /// Source of Image from http://soft1info.blogspot.ie/p/3d.html
+    /// </summary>
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        private ServiceModels db = new ServiceModels();
+
+        public async Task<ActionResult> Index()
         {
-            return View();
+            int limit = 6;
+            return View(await db.AuthApps.Take(limit).ToListAsync());
         }
 
         public ActionResult About()
