@@ -499,3 +499,4 @@ C:\Users\Ben\AndroidStudioProjects\cloudapp\vkwebapp\vkwebapp\obj\Debug\vkwebapp
 C:\Users\Ben\AndroidStudioProjects\cloudapp\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csproj.GenerateResource.Cache
 C:\Users\Ben\AndroidStudioProjects\cloudapp\vkwebapp\vkwebapp\obj\Debug\vkwebapp.dll
 C:\Users\Ben\AndroidStudioProjects\cloudapp\vkwebapp\vkwebapp\obj\Debug\vkwebapp.pdb
+H:\cloudappdev\project\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csprojResolveAssemblyReference.cache

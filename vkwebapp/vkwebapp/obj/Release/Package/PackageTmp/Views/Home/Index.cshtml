@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<vkwebapp.Models.AuthApp>
+
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -8,13 +10,27 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-       
+    <div class="col-md-12">
+        <h3>Apps Using this Service</h3>
     </div>
+</div>
+<hr />
+<div class="row">
+@foreach (var item in Model)
+{
     <div class="col-md-4">
-       
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">@Html.DisplayFor(modelItem => item.app_name)</h3>
+            </div>
+            <div class="panel-body thumbnail">
+                <img src="http://i41.fastpic.ru/big/2012/0709/77/71643439e1a5ba11254ce1929f1a2377.jpg" alt="...">                
+                <p></p>
+            </div>
+            <div class="panel-footer">
+                © 2016
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-       
-    </div>
+}
 </div>
