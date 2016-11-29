@@ -71,7 +71,7 @@ namespace vkwebapp.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
 
-        [Display(Name = "User")]
+        [Display(Name = "User Id")]
         public int userid { get; set; }
 
         [Required]
@@ -79,16 +79,6 @@ namespace vkwebapp.Models
         public string text { get; set; }
 
         public decimal quantity { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public string measure { get; set; }
-
-        public decimal weight { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public string food { get; set; }
 
         [ForeignKey("userid")]
         public virtual ClientUser clientuser { get; set; }
