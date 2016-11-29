@@ -33,6 +33,11 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Manage Apps", "Index", "ManageApps")</li>
+                    @using Microsoft.AspNet.Identity
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("API", "Index", "Help", new { area = ""}, null)</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
