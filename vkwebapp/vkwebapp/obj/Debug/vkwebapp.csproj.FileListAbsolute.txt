@@ -290,8 +290,6 @@ C:\Users\x08424179\Documents\vkwebapp\vkwebapp\bin\Microsoft.Owin.Security.Micro
 C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csprojResolveAssemblyReference.cache
 C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.dll
 C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.pdb
-C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.Migrations.InitialCreate.resources
-C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csproj.GenerateResource.Cache
 H:\cloudappdev\project\vkwebapp\vkwebapp\bin\ApplicationInsights.config
 H:\cloudappdev\project\vkwebapp\vkwebapp\bin\roslyn\csc.exe
 H:\cloudappdev\project\vkwebapp\vkwebapp\bin\roslyn\csc.exe.config
@@ -500,3 +498,5 @@ C:\Users\Ben\AndroidStudioProjects\cloudapp\vkwebapp\vkwebapp\obj\Debug\vkwebapp
 C:\Users\Ben\AndroidStudioProjects\cloudapp\vkwebapp\vkwebapp\obj\Debug\vkwebapp.dll
 C:\Users\Ben\AndroidStudioProjects\cloudapp\vkwebapp\vkwebapp\obj\Debug\vkwebapp.pdb
 H:\cloudappdev\project\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csprojResolveAssemblyReference.cache
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.Migrations.InitialCreate.resources
+C:\Users\x08424179\Documents\vkwebapp\vkwebapp\obj\Debug\vkwebapp.csproj.GenerateResource.Cache

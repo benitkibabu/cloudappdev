@@ -247,9 +247,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201611251355477_InitialCreate.cs" />
-    <Compile Include="Migrations\201611251355477_InitialCreate.Designer.cs">
-      <DependentUpon>201611251355477_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201611251344031_InitialCreate.cs" />
+    <Compile Include="Migrations\201611251344031_InitialCreate.Designer.cs">
+      <DependentUpon>201611251344031_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -377,8 +377,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201611251355477_InitialCreate.resx">
-      <DependentUpon>201611251355477_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201611251344031_InitialCreate.resx">
+      <DependentUpon>201611251344031_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,5 +1,6 @@
 namespace vkwebapp.Migrations
 {
+    using Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -26,6 +27,16 @@ namespace vkwebapp.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            //context.ClientUsers.AddOrUpdate(p => p.email,
+            //    new ClientUser
+            //    {
+            //        id = 1,
+            //        email = "d12side@hotmail.com",
+            //        name = "benit kibabu",
+            //        userid = "1231244231",
+            //        imageurl = "empty",
+            //        logintype = "local"
+            //    });
         }
     }
 }

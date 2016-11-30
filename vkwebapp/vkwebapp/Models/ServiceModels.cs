@@ -52,6 +52,7 @@ namespace vkwebapp.Models
 
         [Required]
         [StringLength(100)]
+        [EmailAddress]
         public string email { get; set; }
 
         [Required]
