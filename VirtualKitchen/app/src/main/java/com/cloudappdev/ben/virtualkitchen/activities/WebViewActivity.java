@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -24,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.models.Recipe;
 
 public class WebViewActivity extends AppCompatActivity {
@@ -78,8 +80,20 @@ public class WebViewActivity extends AppCompatActivity {
         });
 
         if(getIntent().hasExtra(URL) && getIntent().hasExtra("R")){
-            myWebView.loadUrl(getIntent().getStringExtra(URL));
-            r = (Recipe) getIntent().getSerializableExtra("R");
+            if(AppConfig.isNetworkAvailable(this)){
+                myWebView.loadUrl(getIntent().getStringExtra(URL));
+                r = (Recipe) getIntent().getSerializableExtra("R");
+            }else{
+                Snackbar.make(myWebView, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Connect", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Connect method goes here
+                                startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            }
+                        }).show();
+            }
+
         }else{
             goBack();
         }
@@ -124,10 +138,7 @@ public class WebViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if(id == android.R.id.home){
+        if(id == android.R.id.home){
 //            if (myWebView.canGoBack()) {
 //                myWebView.goBack();
 //            }else {

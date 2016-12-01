@@ -8,37 +8,20 @@ import java.io.Serializable;
 
 public class Ingredient implements Serializable{
     int id;
-    String uri;
+    String text;
     double quantity;
-    String measure;
-    double weight;
-    String food;
     int userid;
 
-    public Ingredient(int id, String uri, double quantity, String measure, double weight, String food, int userid) {
+    public Ingredient(int id, String text, double quantity, int userid) {
         this.id = id;
-        this.uri = uri;
+        this.text = text;
         this.quantity = quantity;
-        this.measure = measure;
-        this.weight = weight;
-        this.food = food;
         this.userid = userid;
     }
 
-    public Ingredient(String uri, double quantity, String measure, double weight, String food) {
-        this.id = id;
-        this.uri = uri;
+    public Ingredient(String text, double quantity, int userid) {
+        this.text = text;
         this.quantity = quantity;
-        this.measure = measure;
-        this.weight = weight;
-        this.food = food;
-    }
-    public Ingredient(String uri, double quantity, String measure, double weight, String food, int userid) {
-        this.uri = uri;
-        this.quantity = quantity;
-        this.measure = measure;
-        this.weight = weight;
-        this.food = food;
         this.userid = userid;
     }
 
@@ -46,23 +29,15 @@ public class Ingredient implements Serializable{
         return id;
     }
 
-    public String getUri() {
-        return uri;
+    public String getText() {
+        return text;
     }
 
     public double getQuantity() {
         return quantity;
     }
 
-    public String getMeasure() {
-        return measure;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public String getFood() {
-        return food;
+    public int getUserid() {
+        return userid;
     }
 }

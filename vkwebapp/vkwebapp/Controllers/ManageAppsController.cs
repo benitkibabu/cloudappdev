@@ -21,7 +21,8 @@ namespace vkwebapp.Controllers
         // GET: ManageApps
         public async Task<ActionResult> Index()
         {
-            return View(await db.AuthApps.ToListAsync());
+            string userId = User.Identity.GetUserId().ToString();
+            return View(await db.AuthApps.Where(a=>a.UserID.Equals(userId)).ToListAsync());
         }
 
         // GET: ManageApps/Details/5

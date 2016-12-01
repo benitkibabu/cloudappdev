@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
@@ -259,6 +260,18 @@ public class RecipeDetails extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+        if(AppConfig.isNetworkAvailable(this)){
+
+        }else{
+            Snackbar.make(title, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Connect", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Connect method goes here
+                            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                        }
+                    }).show();
+        }
     }
 
     @Override
@@ -270,11 +283,8 @@ public class RecipeDetails extends AppCompatActivity {
         return true;
     }
 
-
-
     void goBack(){
         Intent upIntent = new Intent(this, RecipesActivity.class);
-        upIntent.putExtra("User", data);
         if(NavUtils.shouldUpRecreateTask(this, upIntent)){
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
@@ -289,8 +299,7 @@ public class RecipeDetails extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_remove) {
             try {
                 removeRecipe(r, title);
             } catch (JSONException e) {

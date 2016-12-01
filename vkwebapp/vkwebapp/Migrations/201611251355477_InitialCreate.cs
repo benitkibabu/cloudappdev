@@ -51,9 +51,6 @@ namespace vkwebapp.Migrations
                         userid = c.Int(nullable: false),
                         text = c.String(nullable: false, maxLength: 200),
                         quantity = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        measure = c.String(nullable: false, maxLength: 100),
-                        weight = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        food = c.String(nullable: false, maxLength: 100),
                     })
                 .PrimaryKey(t => t.id)
                 .ForeignKey("dbo.ClientUsers", t => t.userid, cascadeDelete: true)

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.provider.Settings;
 import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -21,10 +22,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,6 +45,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
@@ -61,23 +65,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         layout = (LinearLayout) findViewById(R.id.activity_maps);
-
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        if(AppConfig.isNetworkAvailable(this)){
+            mGoogleApiClient = new GoogleApiClient
+                    .Builder(this)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .enableAutoManage(this, this)
+                    .build();
+            mapFragment.getMapAsync(this);
+
+        }else{
+            Snackbar.make(layout, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Connect", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Connect method goes here
+                            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+
+                        }
+                    }).show();
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Snackbar.make(layout, "Google Client Api Failed", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(layout, "Google Api Failed", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -98,15 +121,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location Marker"));
 
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 13));
-
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
-                    .zoom(17)                   // Sets the zoom
-                    .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16));
         }else{
             Toast.makeText(this, "Location is null", Toast.LENGTH_LONG).show();
         }
@@ -117,11 +132,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
                 for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                    Log.i("Places", String.format("Place '%s' has likelihood: %g",
-                            placeLikelihood.getPlace().getName(),
-                            placeLikelihood.getLikelihood()));
                 }
                 likelyPlaces.release();
+            }
+        });
+
+        mMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
+            @Override
+            public void onPoiClick(PointOfInterest pointOfInterest) {
+                Snackbar.make(layout, pointOfInterest.name, Snackbar.LENGTH_LONG).show();
+
             }
         });
     }
@@ -200,11 +220,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if(id == android.R.id.home){
-            goBack();//NavUtils.navigateUpFromSameTask(this);
+        if(id == android.R.id.home){
+            //NavUtils.navigateUpFromSameTask(this);
+            goBack();
         }
         return super.onOptionsItemSelected(item);
     }

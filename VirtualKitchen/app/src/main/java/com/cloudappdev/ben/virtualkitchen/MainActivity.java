@@ -1,22 +1,39 @@
 package com.cloudappdev.ben.virtualkitchen;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDialogFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.cloudappdev.ben.virtualkitchen.activities.MyIngredients;
 import com.cloudappdev.ben.virtualkitchen.activities.RecipesActivity;
+import com.cloudappdev.ben.virtualkitchen.adapter.CustomMoodAdapter;
+import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
+import com.cloudappdev.ben.virtualkitchen.models.Emotes;
+import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
@@ -29,15 +46,21 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
-    Button recipeBtn, signoutBtn, ingredientBtn, favouriteBtn;
+    Button recipeBtn, signoutBtn, ingredientBtn, favouriteBtn, moodBtn;
     TextView nameTv;
     CircleImageView profileImage;
 
@@ -91,6 +114,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        moodBtn = (Button) findViewById(R.id.mood_btn);
+        moodBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowMoodDialog.newInstance().show(getSupportFragmentManager(), "MoodDialog");
+            }
+        });
     }
     void loadProfile(){
         if(AppController.getInstance().getUser() != null) {
@@ -112,7 +143,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void onResume(){
         super.onResume();
-        loadProfile();
+        if(AppConfig.isNetworkAvailable(this)){
+            loadProfile();
+        }else{
+            Snackbar.make(profileImage, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Connect", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Connect method goes here
+                            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                        }
+                    }).show();
+        }
+
     }
 
     private void facebookSignOut(){
@@ -138,5 +181,74 @@ public class MainActivity extends AppCompatActivity {
 //                fbLogout = true;
 //            }
 //        }).executeAsync();
+    }
+
+    public static class ShowMoodDialog extends AppCompatDialogFragment {
+        private static final String ITEM_NAME = "name";
+
+        public static ShowMoodDialog newInstance(){
+            ShowMoodDialog fragment = new ShowMoodDialog();
+            return fragment;
+        }
+
+        public ShowMoodDialog(){}
+
+        @Override
+        public void onCreate(@Nullable final Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                setStyle(STYLE_NO_TITLE, R.style.KitchenTheme);
+//            } else {
+//                setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
+//            }
+
+        }
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            //LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            final View view  = inflater.inflate(R.layout.my_mood_layout, null);
+            final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+            final CustomMoodAdapter adapter = new CustomMoodAdapter(getActivity().getApplicationContext(),
+                    R.layout.mood_item);
+
+            recyclerView.setAdapter(adapter);
+
+            final List<Emotes> emotes = new ArrayList<>();
+            Emotes e1 = new Emotes("Happy", 0x1F601);
+            Emotes e2 = new Emotes("Sad", 0x1F621);
+            Emotes e3 = new Emotes("Frustrated", 0x1F635);
+            Emotes e4 = new Emotes("Warm",0x1F60E);
+            Emotes e5 = new Emotes("Cold", 0x1F630);
+            Emotes e6 = new Emotes("Tired", 0x1F62B);
+            Emotes e7 = new Emotes("Sick", 0x1F637);
+            Emotes e8 = new Emotes("Festive", 0x2744);
+            emotes.add(e1);
+            emotes.add(e2);
+            emotes.add(e3);
+            emotes.add(e4);
+            emotes.add(e5);
+            emotes.add(e6);
+            emotes.add(e7);
+            emotes.add(e8);
+
+            adapter.addAll(emotes);
+
+            adapter.setOnItemClickListener(new CustomMoodAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Intent i = new Intent(getActivity(),RecipesActivity.class);
+                    AppController.getInstance().searchKey = emotes.get(position).getLabel();
+                    AppController.getInstance().setNavFragement("R");
+                    startActivity(i);
+                }
+            });
+
+            return view;
+        }
+
     }
 }

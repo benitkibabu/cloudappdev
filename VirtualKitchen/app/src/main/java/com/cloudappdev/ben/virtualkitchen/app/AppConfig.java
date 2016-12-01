@@ -24,11 +24,13 @@ public class AppConfig {
     public static final String EXTRA_MESSAGE = "message";
     public static final String DISPLAY_MSG_ACTION = "com.cloudappdev.ben.virtualkitchen.notification.DISPLAY_MESSAGE";
 
-    public static final String INTERNAL_USERS_API = "http://virtualkitchen1.gear.host/api/users";
-    public static final String INTERNAL_DEVICES_API = "http://virtualkitchen-virtualkitchenwebservice.azurewebsites.net//api/devices";
-    public static final String INTERNAL_RECIPES_API = "http://virtualkitchen-virtualkitchenwebservice.azurewebsites.net//api/recipes";
-    public static final String INTERNAL_INGREDIENT_API = "http://virtualkitchen-virtualkitchenwebservice.azurewebsites.net//api/ingredients";
+    public static final String INTERNAL_USERS_API = "http://virtualkitchen.azurewebsites.net/api/users";
+    public static final String INTERNAL_DEVICES_API = "http://virtualkitchen.azurewebsites.net/api/devices";
+    public static final String INTERNAL_RECIPES_API = "http://virtualkitchen.azurewebsites.net/api/recipes";
+    public static final String INTERNAL_INGREDIENT_API = "http://virtualkitchen.azurewebsites.net/api/ingredients";
     public static final String TESCO_API = "http://itrackerapp.gear.host/ncigo/";
+    public static final String UPCDB = "http://api.upcdatabase.org/json/";//http://api.upcdatabase.org/json/APIKEY/CODE
+    public static final String UPLOOKUP = "https://api.upcitemdb.com/prod/trial/lookup";//http://api.upcdatabase.org/json/APIKEY/CODE
     public static final String RECIPE_API = "https://api.edamam.com/search";
 
     static DateFormat dateTimeFormat =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

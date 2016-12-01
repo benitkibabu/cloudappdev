@@ -10,7 +10,7 @@
     <WebStackScaffolding_DbContextTypeFullName>vkwebapp.Models.ServiceModels</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>True</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
-    <NameOfLastUsedPublishProfile>virtualkitchen__virtualkitchenwebservice</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>virtualkitchen - Web Deploy</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

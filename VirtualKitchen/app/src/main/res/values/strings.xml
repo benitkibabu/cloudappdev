@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Virtual Kitchen</string>
-    <string name="my_kitchen">My Kitchen</string>
     <string name="recipes">Recipes</string>
     <string name="favourites">Favourites</string>
     <string name="my_ingredient">Ingredient</string>
@@ -9,14 +8,12 @@
     <string name="loading">Signing In..</string>
 
     <string name="facebook_app_id">1733782833613796</string>
-    <string name="vk_api_app_id">c9d45a77-066a-4ad8-96af-4b948f49c86a</string>
+    <string name="vk_api_app_id">5177f31f-a0ba-4552-bd3f-cc44f95a4df2</string>
     <string name="sing_out">Sign Out</string>
     <string name="profile_pick">Profile Pick</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_recipes">Recipes</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_recipe_details">RecipeDetails</string>
     <string name="instructions">Instructions</string>
     <string name="nutrition">Nutrition</string>
@@ -27,8 +24,9 @@
     <string name="title_activity_maps">Map</string>
     <string name="saving_recipe">Saving Recipe</string>
     <string name="title_activity_web_view">WebViewActivity</string>
-    <string name="delete">Delete</string>
-    <string name="paste">Paste</string>
-    <string name="copy">Copy</string>
     <string name="search_hint">Type what you want to search</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_ingredient">Add Ingredient</string>
+    <string name="save_ingredient">Save Ingredient</string>
+    <string name="remove">Remove</string>
 </resources>

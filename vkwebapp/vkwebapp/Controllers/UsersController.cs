@@ -129,6 +129,11 @@ namespace vkwebapp.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (ClientUserExists(clientUser.email))
+            {
+                return Ok(db.ClientUsers.Where(c=> c.email.Equals(clientUser.email)).First());
+            }
+
             db.ClientUsers.Add(clientUser);
             await db.SaveChangesAsync();
 
@@ -174,6 +179,10 @@ namespace vkwebapp.Controllers
         private bool ClientUserExists(int id)
         {
             return db.ClientUsers.Count(e => e.id == id) > 0;
+        }
+        private bool ClientUserExists(string email)
+        {
+            return db.ClientUsers.Count(e => e.email.Equals(email)) > 0;
         }
     }
 }

@@ -54,9 +54,9 @@ namespace vkwebapp
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "1733782833613796",
+               appSecret: "22d7d9b3550a9bb6bcb6ff2314017805");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{

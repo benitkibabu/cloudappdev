@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -17,12 +18,9 @@ import android.support.v7.widget.Toolbar;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -38,13 +36,16 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cloudappdev.ben.virtualkitchen.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
-import com.cloudappdev.ben.virtualkitchen.adapter.ContextMenuRecyclerView;
-import com.cloudappdev.ben.virtualkitchen.adapter.RecipeRecycleViewAdapter;
+import com.cloudappdev.ben.virtualkitchen.adapter.CustomRecycleViewAdapter;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
 import com.cloudappdev.ben.virtualkitchen.models.Recipe;
 import com.cloudappdev.ben.virtualkitchen.models.User;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,12 +63,17 @@ public class RecipesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RecipeRecycleViewAdapter adapter;
+    private CustomRecycleViewAdapter adapter;
     String API_ID;
     String API_KEY;
 
     List<Recipe> recipeList;
     int itemPosition;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +87,17 @@ public class RecipesActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView  = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         registerForContextMenu(recyclerView);
 
-        adapter = new RecipeRecycleViewAdapter(this, R.layout.recipe_item);
+        adapter = new CustomRecycleViewAdapter(this, R.layout.recipe_item);
 
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new RecipeRecycleViewAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new CustomRecycleViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -102,7 +108,7 @@ public class RecipesActivity extends AppCompatActivity {
             }
         });
 
-        adapter.setOnItemLongClickListener(new RecipeRecycleViewAdapter.OnItemLongCLickListener() {
+        adapter.setOnItemLongClickListener(new CustomRecycleViewAdapter.OnItemLongCLickListener() {
             @Override
             public void onItemLongClick(View view, int position) {
                 itemPosition = position;
@@ -122,29 +128,35 @@ public class RecipesActivity extends AppCompatActivity {
             }
         });
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_recipes, menu);
 
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        //searchView.setSearchableInfo( searchManager.getSearchableInfo(getComponentName()));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                AppController.getInstance().searchKey = query;
-                getRecipe(query);
-                return false;
-            }
+        //If we are viewing the Online Recipes, We should be able to search it.
+        if (AppController.getInstance().getNavFragement().equals("R")) {
+            // Associate searchable configuration with the SearchView
+            // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+            //searchView.setSearchableInfo( searchManager.getSearchableInfo(getComponentName()));
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    AppController.getInstance().searchKey = query;
+                    getRecipe(query);
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+        }
 
         return true;
     }
@@ -153,63 +165,74 @@ public class RecipesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        else if(id == android.R.id.home){
+        if (id == android.R.id.home) {
             goBack();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    void loadUser(){
-        if(AppController.getInstance().getUser() != null) {
+    void loadUser() {
+        if (AppController.getInstance().getUser() != null) {
             data = AppController.getInstance().getUser();
-        }else{
+        } else {
             goBack();
         }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         loadUser();
-        if(AppController.getInstance().getNavFragement() != null && !AppController.getInstance().getNavFragement().isEmpty()){
-            String f= AppController.getInstance().getNavFragement();
-            if(f.equals("R")){
-                getRecipe(AppController.getInstance().searchKey);
-            }else{
-                getMyFavourite();
+        if (AppConfig.isNetworkAvailable(this)) {
+            if (AppController.getInstance().getNavFragement() != null && !AppController.getInstance().getNavFragement().isEmpty()) {
+                String f = AppController.getInstance().getNavFragement();
+                if (f.equals("R")) {
+                    getRecipe(AppController.getInstance().searchKey);
+                } else {
+                    getMyFavourite();
+                }
+            } else {
+                goBack();
             }
-        }else{
-            goBack();
+        } else {
+            Snackbar.make(recyclerView, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Connect", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Connect method goes here
+                            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                        }
+                    }).show();
         }
+
     }
 
-    public void getRecipe(final String query){
+    //Search Recipes online from external API
+    public void getRecipe(final String query) {
 
         showProgressDialog();
 
         final String TAG = "Get Recipe";
 
-        Uri url = Uri.parse( AppConfig.RECIPE_API)
+        Uri url = Uri.parse(AppConfig.RECIPE_API)
                 .buildUpon()
                 .appendQueryParameter("q", query)
                 .appendQueryParameter("app_id", API_ID)
                 .appendQueryParameter("app_key", API_KEY)
                 .build();
 
-        StringRequest request = new StringRequest(Request.Method.GET,url.toString(), new Response.Listener<String>(){
+        //Log.w("RecipeURL", url.toString());
+
+        StringRequest request = new StringRequest(Request.Method.GET, url.toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 recipeList = new ArrayList<>();
                 setTitle("Online Recipes");
-                Log.d("API RESULT", response);
-                try{
+                try {
                     JSONObject obj = new JSONObject(response);
                     JSONArray hits = obj.getJSONArray("hits");
-                    for(int i = 0; i<hits.length(); i++) {
+                    for (int i = 0; i < hits.length(); i++) {
                         JSONObject r = hits.getJSONObject(i);
                         JSONObject re = r.getJSONObject("recipe");
                         JSONArray dL = re.getJSONArray("dietLabels");
@@ -219,60 +242,69 @@ public class RecipesActivity extends AppCompatActivity {
                         JSONArray ing = re.getJSONArray("ingredients");
 
                         ArrayList<Ingredient> ingredientsList = new ArrayList<>();
-                        String dietLabels = " ";
-                        String healthLabels = " ";
-                        String cautions = " ";
-                        String ingredientLines = " ";
+                        String dietLabels = "";
+                        String healthLabels = "";
+                        String cautions = "";
+                        String ingredientLines = "";
 
-                        for(int x = 0; x < dL.length(); x++){
-                            dietLabels += dL.getString(x)+"\n";
+                        for (int x = 0; x < dL.length(); x++) {
+                            dietLabels += dL.getString(x) + "\n";
                         }
-                        for(int x = 0; x < hL.length(); x++){
-                            healthLabels += hL.getString(x)+"\n";
+                        for (int x = 0; x < hL.length(); x++) {
+                            healthLabels += hL.getString(x) + "\n";
                         }
-                        for(int x = 0; x < ca.length(); x++){
-                            cautions += ca.getString(x)+"\n";
+                        for (int x = 0; x < ca.length(); x++) {
+                            cautions += ca.getString(x) + "\n";
                         }
-                        for(int x = 0; x < iL.length(); x++){
-                            ingredientLines += iL.getString(x)+"\n";
+                        for (int x = 0; x < iL.length(); x++) {
+                            ingredientLines += iL.getString(x) + "\n";
                         }
-                        for(int x = 0; x < ing.length(); x++){
+                        for (int x = 0; x < ing.length(); x++) {
                             JSONObject val = ing.getJSONObject(x);
 //                            Ingredient ingr = new Ingredient(val.getString("text"),
-//                                    val.getDouble("quantity"),val.getString("measure"),
-//                                    val.getDouble("weight"), val.getString("food"));
+//                                    val.getDouble("weights"), data.getId());
 //                            ingredientsList.add(ingr);
                         }
 
+                        Log.w("Lines", ingredientLines);
+
                         Recipe rec = new Recipe(re.getString("uri"), re.getString("label"), re.getString("image"),
-                                re.getString("source"), re.getString("url"),re.getString("shareAs"),
+                                re.getString("source"), re.getString("url"), re.getString("shareAs"),
                                 Math.floor(re.getDouble("yield")), dietLabels, healthLabels, cautions, ingredientLines,
-                                Math.floor(re.getDouble("calories")),  Math.floor(re.getDouble("totalWeight")));
+                                Math.floor(re.getDouble("calories")), Math.floor(re.getDouble("totalWeight")));
                         rec.setIngredients(ingredientsList);
                         recipeList.add(rec);
                     }
                     adapter.addAll(recipeList);
+                    if (recipeList.isEmpty()) {
+                        Snackbar.make(recyclerView, "Recipes were not found!", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Done", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                    }
+                                }).show();
+                    }
 
                 } catch (JSONException e) {
-                    Log.d("API REQUEST catch:", e.getMessage());
+                    Log.d("catch:", e.getMessage());
                 }
 
                 hideProgressDialog();
 
             }
-        }, new Response.ErrorListener(){
+        }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
                 hideProgressDialog();
                 NetworkResponse networkResponse = error.networkResponse;
                 if (networkResponse != null) {
-                    Log.e("Volley", "Error. HTTP Status Code:"+networkResponse.statusCode);
+                    Log.e("Volley", "Error. HTTP Status Code:" + networkResponse.statusCode);
                 }
 
                 if (error instanceof TimeoutError) {
                     Log.e("Volley", "TimeoutError");
-                }else if(error instanceof NoConnectionError){
+                } else if (error instanceof NoConnectionError) {
                     Log.e("Volley", "NoConnectionError");
                 } else if (error instanceof AuthFailureError) {
                     Log.e("Volley", "AuthFailureError");
@@ -284,10 +316,10 @@ public class RecipesActivity extends AppCompatActivity {
                     Log.e("Volley", "ParseError");
                 }
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
                 headers.put("app_key", AppController.getInstance().appKey());
@@ -298,7 +330,8 @@ public class RecipesActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request, TAG);
     }
 
-    private void getMyFavourite(){
+    //Retrieve User favourite Recipe from internal API
+    private void getMyFavourite() {
         showProgressDialog();
         String TAG = "Get MyFavourite";
         Uri url = Uri.parse(AppConfig.INTERNAL_RECIPES_API)
@@ -332,7 +365,7 @@ public class RecipesActivity extends AppCompatActivity {
                             }
 
                             adapter.addAll(recipeList);
-                        }catch(JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
@@ -344,10 +377,10 @@ public class RecipesActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         hideProgressDialog();
                     }
-                }){
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
                 headers.put("app_key", AppController.getInstance().appKey());
@@ -358,15 +391,14 @@ public class RecipesActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request, TAG);
     }
 
-    void goBack(){
+    void goBack() {
         Intent upIntent = new Intent(this, MainActivity.class);
-        upIntent.putExtra("User", data);
-        if(NavUtils.shouldUpRecreateTask(this, upIntent)){
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
             finish();
-        }else {
+        } else {
             NavUtils.navigateUpTo(this, upIntent);
             finish();
         }
@@ -378,7 +410,7 @@ public class RecipesActivity extends AppCompatActivity {
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();
-        }else{
+        } else {
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();
@@ -389,5 +421,41 @@ public class RecipesActivity extends AppCompatActivity {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Recipes Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }

@@ -3,6 +3,7 @@ package com.cloudappdev.ben.virtualkitchen;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -66,8 +67,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        mProgressDialog = new ProgressDialog(this);
         setContentView(R.layout.activity_login);
+        mProgressDialog = new ProgressDialog(this);
 
         fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
         fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile", "user_photos"));
@@ -76,7 +77,18 @@ public class Login extends AppCompatActivity {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                handleFacebookSignInResult(loginResult.getAccessToken());
+                if(AppConfig.isNetworkAvailable(Login.this)){
+                    handleFacebookSignInResult(loginResult.getAccessToken());
+                }else{
+                    Snackbar.make(fbLoginBtn, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Connect", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //Connect method goes here
+                                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                                }
+                            }).show();
+                }
             }
 
             @Override
@@ -91,6 +103,12 @@ public class Login extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -98,10 +116,21 @@ public class Login extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if (accessToken != null) {
-            Log.d(TAG, ">>>" + "Signed In");
-            handleFacebookSignInResult(accessToken);
+        if(AppConfig.isNetworkAvailable(this)){
+            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+            if (accessToken != null) {
+                Log.d(TAG, ">>>" + "Signed In");
+                handleFacebookSignInResult(accessToken);
+            }
+        }else{
+            Snackbar.make(fbLoginBtn, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Connect", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Connect method goes here
+                            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                        }
+                    }).show();
         }
     }
 
