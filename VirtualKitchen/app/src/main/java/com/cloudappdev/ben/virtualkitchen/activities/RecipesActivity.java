@@ -286,7 +286,7 @@ public class RecipesActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-                    Log.d("catch:", e.getMessage());
+                    Log.d("#catch:", e.getMessage());
                 }
 
                 hideProgressDialog();
