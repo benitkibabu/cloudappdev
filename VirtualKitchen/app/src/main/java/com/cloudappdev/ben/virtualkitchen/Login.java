@@ -1,5 +1,6 @@
 package com.cloudappdev.ben.virtualkitchen;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,8 +8,10 @@ import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -67,6 +70,8 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
         setContentView(R.layout.activity_login);
         mProgressDialog = new ProgressDialog(this);
 
@@ -298,7 +303,7 @@ public class Login extends AppCompatActivity {
 
     public void updateUI(Intent i){
         hideProgressDialog();
-        startActivity(i);
+        startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         finish();
     }
 }

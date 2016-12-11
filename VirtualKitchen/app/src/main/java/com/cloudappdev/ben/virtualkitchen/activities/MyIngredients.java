@@ -1,5 +1,6 @@
 package com.cloudappdev.ben.virtualkitchen.activities;
 
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -21,13 +22,16 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -63,13 +67,14 @@ public class MyIngredients extends AppCompatActivity  {
 
     private static RecyclerView recyclerView;
     private static CustomIngredientRecyclerAdapter adapter;
-    private static ProgressDialog mProgressDialog;
+    static ProgressBar progressBar;
 
     static List<Ingredient> myIngredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         setContentView(R.layout.activity_my_ingredients);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -77,14 +82,13 @@ public class MyIngredients extends AppCompatActivity  {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar3);
+
         if(AppController.getInstance().getUser() != null){
             user = AppController.getInstance().getUser();
         }else{
             goBack();
         }
-
-
-        mProgressDialog = new ProgressDialog(this);
 
         recyclerView  = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -124,7 +128,7 @@ public class MyIngredients extends AppCompatActivity  {
         if(NavUtils.shouldUpRecreateTask(this, upIntent)){
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
+                    .startActivities(ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             finish();
         }else {
             NavUtils.navigateUpTo(this, upIntent);
@@ -206,21 +210,11 @@ public class MyIngredients extends AppCompatActivity  {
     }
 
     private static void showProgressDialog( String m) {
-        if (mProgressDialog == null) {
-            mProgressDialog.setMessage(m);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.show();
-        }else{
-            mProgressDialog.setMessage(m);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.show();
-        }
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private static void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     /*

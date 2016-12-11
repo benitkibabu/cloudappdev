@@ -1,5 +1,6 @@
 package com.cloudappdev.ben.virtualkitchen.activities;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -17,10 +18,13 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.os.Bundle;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -62,8 +66,8 @@ public class RecipesActivity extends AppCompatActivity {
     ProgressDialog mProgressDialog;
 
     private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private CustomRecycleViewAdapter adapter;
+    ProgressBar progressBar;
     String API_ID;
     String API_KEY;
 
@@ -78,6 +82,7 @@ public class RecipesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         setContentView(R.layout.activity_recipes);
 
         API_ID = getString(R.string.edamam_api_id);
@@ -86,6 +91,7 @@ public class RecipesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar3);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -104,7 +110,7 @@ public class RecipesActivity extends AppCompatActivity {
                 Intent i = new Intent(RecipesActivity.this, RecipeDetails.class);
                 Recipe r = recipeList.get(position);
                 i.putExtra("Recipe", r);
-                startActivity(i);
+                startActivity(i, ActivityOptions.makeSceneTransitionAnimation(RecipesActivity.this).toBundle());
             }
         });
 
@@ -135,10 +141,12 @@ public class RecipesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_recipes, menu);
+
 
         //If we are viewing the Online Recipes, We should be able to search it.
         if (AppController.getInstance().getNavFragement().equals("R")) {
+            getMenuInflater().inflate(R.menu.menu_recipes, menu);
+
             // Associate searchable configuration with the SearchView
             // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
@@ -396,7 +404,7 @@ public class RecipesActivity extends AppCompatActivity {
         if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
+                    .startActivities(ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             finish();
         } else {
             NavUtils.navigateUpTo(this, upIntent);
@@ -405,22 +413,11 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.show();
-        } else {
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.show();
-        }
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     /**

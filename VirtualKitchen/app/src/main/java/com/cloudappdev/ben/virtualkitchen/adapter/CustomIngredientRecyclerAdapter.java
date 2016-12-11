@@ -5,15 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by ben on 28/11/16.
@@ -71,7 +73,7 @@ public class CustomIngredientRecyclerAdapter extends RecyclerView.Adapter<Custom
             itemHolder.textView = (TextView) view.findViewById(R.id.label);
             itemHolder.textView2 = (TextView) view.findViewById(R.id.ingredientlines);
 
-            itemHolder.imageView = (ImageView) view.findViewById(R.id.rec_icon);
+            itemHolder.itemIcon = (CircleImageView) view.findViewById(R.id.rec_icon);
 
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
@@ -103,13 +105,12 @@ public class CustomIngredientRecyclerAdapter extends RecyclerView.Adapter<Custom
         holder.itemView.setLongClickable(true);
 
         String label = ingredientList.get(position).getText();
-        String quantity = ""+ingredientList.get(position).getQuantity();
+        String quantity = "Quantity: x"+ingredientList.get(position).getQuantity();
 
         holder.itemHolder.textView.setText(label);
-
         holder.itemHolder.textView2.setText(quantity);
 
-        //Picasso.with(context).load(imageUrl).resize(128,128).centerCrop().into(holder.itemHolder.imageView);
+        Picasso.with(context).load(R.mipmap.cart_items).resize(128,128).centerCrop().into(holder.itemHolder.itemIcon);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class CustomIngredientRecyclerAdapter extends RecyclerView.Adapter<Custom
     private static class RecipeItemHolder{
         LinearLayout placeholder;
         TextView textView, textView2;
-        ImageView imageView;
+        CircleImageView itemIcon;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.cloudappdev.ben.virtualkitchen.activities;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,10 +20,12 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -57,6 +60,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         setContentView(R.layout.activity_maps);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -119,9 +123,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (location != null)
         {
             LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(myLocation).title("My Location Marker"));
-
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16));
+
         }else{
             Toast.makeText(this, "Location is null", Toast.LENGTH_LONG).show();
         }
@@ -208,7 +211,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(NavUtils.shouldUpRecreateTask(this, upIntent)){
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
+                    .startActivities(ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             finish();
         }else {
             NavUtils.navigateUpTo(this, upIntent);
@@ -226,5 +229,4 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

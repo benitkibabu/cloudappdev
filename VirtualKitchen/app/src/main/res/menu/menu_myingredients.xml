@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_add"
         android:orderInCategory="100"
-        android:icon="@mipmap/recipes"
+        android:icon="@mipmap/shopping_cart"
         android:title="Add Ingredient"
         app:showAsAction="always" />
     <item

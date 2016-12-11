@@ -1,5 +1,6 @@
 package com.cloudappdev.ben.virtualkitchen;
 
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,10 +19,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         setContentView(R.layout.activity_main);
 
         profileImage = (CircleImageView) findViewById(R.id.profile_img);
@@ -92,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AppController.getInstance().setNavFragement("R");
                 Intent i = new Intent(MainActivity.this, RecipesActivity.class);
-                startActivity(i);
+                startActivity(i, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
 
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AppController.getInstance().setNavFragement("F");
                 Intent i = new Intent(MainActivity.this, RecipesActivity.class);
-                startActivity(i);
+                startActivity(i, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
 
@@ -111,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, MyIngredients.class);
-                startActivity(i);
+                startActivity(i, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         });
 
@@ -243,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent i = new Intent(getActivity(),RecipesActivity.class);
                     AppController.getInstance().searchKey = emotes.get(position).getLabel();
                     AppController.getInstance().setNavFragement("R");
-                    startActivity(i);
+                    startActivity(i, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                 }
             });
 

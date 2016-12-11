@@ -34,6 +34,13 @@
         android:orientation="vertical"
         tools:context="com.cloudappdev.ben.virtualkitchen.fragments.RecipeListFragment">
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar3"
+            android:indeterminate="true" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
