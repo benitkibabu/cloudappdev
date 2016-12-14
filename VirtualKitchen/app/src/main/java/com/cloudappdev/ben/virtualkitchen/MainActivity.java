@@ -63,7 +63,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     Button recipeBtn, signoutBtn, ingredientBtn, favouriteBtn, moodBtn;
     TextView nameTv;
     CircleImageView profileImage;
@@ -73,12 +73,24 @@ public class MainActivity extends AppCompatActivity {
     boolean fbLogout = false, gLogout = false;
     User data;
 
+    GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
+
         setContentView(R.layout.activity_main);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
         profileImage = (CircleImageView) findViewById(R.id.profile_img);
         nameTv = (TextView) findViewById(R.id.name_tv);
@@ -165,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void facebookSignOut(){
         if (AccessToken.getCurrentAccessToken() == null) {
+
             fbLogout = true;
         }else{
             LoginManager.getInstance().logOut();
@@ -172,6 +185,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(fbLogout){
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+            new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    // [START_EXCLUDE]
+                    // [END_EXCLUDE]
+                }
+            });
             AppController.getInstance().setUser(null);
             Intent i = new Intent(MainActivity.this, Login.class);
             startActivity(i);
@@ -186,6 +207,11 @@ public class MainActivity extends AppCompatActivity {
 //                fbLogout = true;
 //            }
 //        }).executeAsync();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     public static class ShowMoodDialog extends AppCompatDialogFragment {

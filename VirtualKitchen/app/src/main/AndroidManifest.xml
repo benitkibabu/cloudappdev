@@ -9,11 +9,14 @@
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
+
     -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera"      android:required="true" />
 
     <application
         android:name=".app.AppController"
@@ -39,10 +42,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -58,13 +63,13 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudappdev.ben.virtualkitchen.MainActivity" />
-
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
         </activity>
 
         <activity
@@ -76,7 +81,7 @@
             android:theme="@style/KitchenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudappdev.ben.virtualkitchen.activities.RecipesActivity" />
+                android:value=".activities.RecipesActivity" />
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -84,7 +89,7 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -94,46 +99,48 @@
             android:name=".activities.MapsActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/title_activity_maps"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.MyIngredients">
+            android:parentActivityName=".activities.MyIngredients"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudappdev.ben.virtualkitchen.activities.MyIngredients" />
+                android:value=".activities.MyIngredients" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.MyIngredients"
-            android:screenOrientation="portrait"
-            android:theme="@style/KitchenTheme"
+        <activity
+            android:name=".activities.MyIngredients"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:parentActivityName=".MainActivity"
-            >
+            android:screenOrientation="portrait"
+            android:theme="@style/KitchenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudappdev.ben.virtualkitchen.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
-        <activity android:name=".activities.SimpleScannerActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/KitchenTheme"
+        <activity
+            android:name=".activities.SimpleScannerActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            />
+            android:screenOrientation="portrait"
+            android:theme="@style/KitchenTheme" />
         <activity
             android:name=".activities.WebViewActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/title_activity_web_view"
-            android:screenOrientation="portrait"
             android:parentActivityName=".activities.RecipeDetails"
-            android:theme="@style/KitchenTheme" >
+            android:screenOrientation="portrait"
+            android:theme="@style/KitchenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.cloudappdev.ben.virtualkitchen.activities.RecipeDetails" />
-            </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+                android:value=".activities.RecipeDetails" />
+        </activity>
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+            App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

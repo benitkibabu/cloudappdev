@@ -47,6 +47,7 @@ import com.cloudappdev.ben.virtualkitchen.adapter.CustomIngredientRecyclerAdapte
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
+import com.cloudappdev.ben.virtualkitchen.models.Recipe;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.google.zxing.Result;
 
@@ -54,6 +55,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +69,7 @@ public class MyIngredients extends AppCompatActivity  {
 
     private static RecyclerView recyclerView;
     private static CustomIngredientRecyclerAdapter adapter;
-    static ProgressBar progressBar;
+    static ProgressDialog progressBar;
 
     static List<Ingredient> myIngredients;
 
@@ -75,6 +77,8 @@ public class MyIngredients extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
+
         setContentView(R.layout.activity_my_ingredients);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,7 +86,7 @@ public class MyIngredients extends AppCompatActivity  {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar3);
+        progressBar = new ProgressDialog(this);
 
         if(AppController.getInstance().getUser() != null){
             user = AppController.getInstance().getUser();
@@ -96,6 +100,40 @@ public class MyIngredients extends AppCompatActivity  {
 
         adapter = new CustomIngredientRecyclerAdapter(this, R.layout.ingredient_item);
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new CustomIngredientRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                final Ingredient mI = myIngredients.get(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyIngredients.this);
+
+                builder.setTitle("DELETE?!");
+                builder.setMessage("Do you want to remove this Item?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing but close the dialog
+                        removeIngredient(mI, recyclerView);
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+            }
+        });
 
     }
 
@@ -131,7 +169,7 @@ public class MyIngredients extends AppCompatActivity  {
                     .startActivities(ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             finish();
         }else {
-            NavUtils.navigateUpTo(this, upIntent);
+            NavUtils.navigateUpFromSameTask(this);
             finish();
         }
     }
@@ -145,13 +183,16 @@ public class MyIngredients extends AppCompatActivity  {
             showEditDialog();
             return true;
         }
+
         else if (id == R.id.action_stores) {
             Intent i = new Intent(MyIngredients.this, MapsActivity.class);
             startActivity(i);
             return true;
         }
         else if(id == android.R.id.home){
-            goBack();
+            //goBack();
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -210,11 +251,14 @@ public class MyIngredients extends AppCompatActivity  {
     }
 
     private static void showProgressDialog( String m) {
-        progressBar.setVisibility(View.VISIBLE);
+        //if(progressBar == null){
+        progressBar.setTitle(m);
+        progressBar.show();
+        //}
     }
 
     private static void hideProgressDialog() {
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.hide();
     }
 
     /*
@@ -437,6 +481,52 @@ public class MyIngredients extends AppCompatActivity  {
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
                 headers.put("app_key", AppController.getInstance().appKey());
+                return headers;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(objectRequest, TAG);
+    }
+
+    void removeIngredient(final Ingredient ingredient, final View view) {
+        showProgressDialog("");
+        final String TAG = "Removing Recipe";
+
+        StringRequest objectRequest = new StringRequest(Request.Method.DELETE,
+                AppConfig.INTERNAL_INGREDIENT_API,
+                new Response.Listener<String>(){
+                    @Override
+                    public void onResponse(String response) {
+
+                        Snackbar.make(view, "Ingredient removed", Snackbar.LENGTH_LONG)
+                                .show();
+                        getMyIngredient();
+                        hideProgressDialog();
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hideProgressDialog();
+                        try {
+                            String r = new String(error.networkResponse.data, "UTF-8");
+                            JSONObject o = new JSONObject(r);
+                            Log.e("Rec Remove", o.toString());
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }){
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                headers.put("app_key", AppController.getInstance().appKey());
+                headers.put("id", ""+ingredient.getId());
                 return headers;
             }
         };

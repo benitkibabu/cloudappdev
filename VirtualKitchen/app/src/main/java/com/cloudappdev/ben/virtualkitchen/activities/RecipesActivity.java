@@ -73,16 +73,15 @@ public class RecipesActivity extends AppCompatActivity {
 
     List<Recipe> recipeList;
     int itemPosition;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
+
         setContentView(R.layout.activity_recipes);
 
         API_ID = getString(R.string.edamam_api_id);
@@ -169,16 +168,7 @@ public class RecipesActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            goBack();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     void loadUser() {
         if (AppController.getInstance().getUser() != null) {
@@ -410,6 +400,19 @@ public class RecipesActivity extends AppCompatActivity {
             NavUtils.navigateUpTo(this, upIntent);
             finish();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+            //goBack();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void showProgressDialog() {

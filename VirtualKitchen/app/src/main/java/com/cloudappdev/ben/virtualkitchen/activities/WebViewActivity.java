@@ -42,7 +42,11 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
+
         setContentView(R.layout.activity_web_view);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -146,8 +150,9 @@ public class WebViewActivity extends AppCompatActivity {
 //            if (myWebView.canGoBack()) {
 //                myWebView.goBack();
 //            }else {
-                goBack();
+                //goBack();
 //            }
+            NavUtils.navigateUpFromSameTask(this);
             return true;
         }
         return super.onOptionsItemSelected(item);

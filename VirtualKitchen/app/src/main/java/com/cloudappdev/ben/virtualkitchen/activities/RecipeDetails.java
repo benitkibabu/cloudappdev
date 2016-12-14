@@ -22,37 +22,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
+import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
 import com.cloudappdev.ben.virtualkitchen.models.Recipe;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RecipeDetails extends AppCompatActivity {
 
     User data;
     Recipe r;
-    Button instructionBtn;
+    Button instructionBtn, findBtn;
     private ProgressDialog mProgressDialog;
     TextView title ;
     TextView ingredients;
@@ -60,14 +61,14 @@ public class RecipeDetails extends AppCompatActivity {
     TextView summary;
     ImageView img, fav_icon;
     FloatingActionButton fab;
+    static List<Ingredient> ingredientList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        // set an exit transition
-        getWindow().setExitTransition(new Slide());
-        getWindow().setEnterTransition(new Slide());
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
+
         setContentView(R.layout.activity_recipe_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,6 +82,7 @@ public class RecipeDetails extends AppCompatActivity {
         instructionBtn = (Button) findViewById(R.id.instruction_btn);
         fav_icon = (ImageView) findViewById(R.id.fav_icon);
         img = (ImageView) findViewById(R.id.recipe_img);
+        findBtn = (Button) findViewById(R.id.view_ingredient);
 
         final String f= AppController.getInstance().getNavFragement();
 
@@ -107,6 +109,13 @@ public class RecipeDetails extends AppCompatActivity {
                 }
             });
 
+            findBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Comming Soon!", Snackbar.LENGTH_LONG).show();
+                }
+            });
+
             title.setText(r.getLabel());
 
             String nut = "";
@@ -114,17 +123,27 @@ public class RecipeDetails extends AppCompatActivity {
             String hl = "";
             String sum = "";
             int count = 0;
+            BufferedReader b = new BufferedReader(new StringReader(r.getIngredientLines()));
+            String thisLine;
+
+            try {
+                while ((thisLine = b.readLine()) != null) {
+                    count ++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             if(r.getIngredients().size()> 0)
                 count = r.getIngredients().size();
 
-                //count = r.getIngredientLines().split(System.getProperty("\\r\\n")).length;
-
+            //count = r.getIngredientLines().split(System.getProperty("\\r\\n")).length;s
             //String[] lines = r.getIngredientLines().split(System.getProperty("\\r\\n"));
 
             String i = count+ " Ingredients: \n" + r.getIngredientLines();
             nut += r.getHealthLabels();
             nut += "\n\nCalories: " + Math.floor(r.getCalories()) + "/ Serving";
-            sum += r.getSource();
+            sum += "Source: " + r.getSource();
 
             ingredients.setText(i);
             nutrition.setText(nut);
@@ -150,6 +169,60 @@ public class RecipeDetails extends AppCompatActivity {
             goBack();
         }
     }
+
+    private void getMyIngredient(List<String> ingredList){
+        showProgressDialog();
+        final String TAG = "Get Ingredients";
+        Uri url = Uri.parse(AppConfig.INTERNAL_INGREDIENT_API)
+                .buildUpon()
+                .appendQueryParameter("userid", String.valueOf(data.getId()))
+                .build();
+
+        Log.w("Url", url.toString());
+
+        JsonArrayRequest request = new JsonArrayRequest(url.toString(),
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        hideProgressDialog();
+                        Log.w(TAG, response.toString());
+                        ingredientList = new ArrayList<>();
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject j = response.getJSONObject(i);
+                               if(j.getInt("userid") == data.getId()) {
+                                    Ingredient in = new Ingredient(j.getInt("id"),
+                                            j.getString("text"), j.getDouble("quantity"),
+                                            j.getInt("userid"));
+
+                                    ingredientList.add(in);
+                                }
+                            }
+                            //adapter.addAll(myIngredients);
+                        }catch(JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        hideProgressDialog();
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("User-agent", System.getProperty("http.agent"));
+                headers.put("app_key", AppController.getInstance().appKey());
+                return headers;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(request, TAG);
+    }
+
 
     void saveRecipe(final Recipe recipe, final View view) throws JSONException {
         showProgressDialog();
@@ -214,12 +287,12 @@ public class RecipeDetails extends AppCompatActivity {
 
         Log.i("Param", jobj.toString());
 
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.DELETE,
+        StringRequest objectRequest = new StringRequest(Request.Method.DELETE,
                 AppConfig.INTERNAL_RECIPES_API,
-                jobj,
-                new Response.Listener<JSONObject>(){
+                new Response.Listener<String>(){
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
+                        Log.w("RRMV", response);
                         Snackbar.make(view, "Recipe removed from favourite ", Snackbar.LENGTH_LONG)
                                 .show();
                         hideProgressDialog();
@@ -229,14 +302,25 @@ public class RecipeDetails extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         hideProgressDialog();
+                        try {
+                            String r = new String(error.networkResponse.data, "UTF-8");
+                            JSONObject o = new JSONObject(r);
+                            Log.e("Rec Remove", o.toString());
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }){
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
                 headers.put("app_key", AppController.getInstance().appKey());
+                headers.put("id", ""+recipe.getId());
                 return headers;
             }
         };
@@ -314,7 +398,9 @@ public class RecipeDetails extends AppCompatActivity {
             return true;
         }
         else if(id == android.R.id.home){
-            goBack();//NavUtils.navigateUpFromSameTask(this);
+            //goBack();//
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

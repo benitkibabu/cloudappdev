@@ -61,6 +61,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
+
         setContentView(R.layout.activity_maps);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -224,8 +226,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = item.getItemId();
 
         if(id == android.R.id.home){
-            //NavUtils.navigateUpFromSameTask(this);
-            goBack();
+            NavUtils.navigateUpFromSameTask(this);
+            //goBack();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -12,38 +12,6 @@
     android:background="@color/green"
     tools:context="com.cloudappdev.ben.virtualkitchen.Login">
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/facebook_login_button"
-        android:layout_width="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:elevation="6dp"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:layout_marginBottom="186dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
-
-    <ImageView
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        app:srcCompat="@mipmap/oven"
-        android:id="@+id/imageView2"
-        android:contentDescription="@string/user_image"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
-
-    <ImageView
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        app:srcCompat="@mipmap/refrigerator"
-        android:id="@+id/imageView"
-        android:contentDescription="@string/user_image"
-        android:layout_marginStart="45dp"
-        android:layout_marginBottom="73dp"
-        android:layout_above="@+id/facebook_login_button"
-        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="@string/app_name"
@@ -56,8 +24,60 @@
         android:textColor="@color/white"
         android:textSize="36sp"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        app:srcCompat="@mipmap/refrigerator"
+        android:id="@+id/imageView"
+        android:contentDescription="@string/user_image"
+        android:layout_marginStart="41dp"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        app:srcCompat="@mipmap/oven"
+        android:id="@+id/imageView2"
+        android:contentDescription="@string/user_image"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebook_login_button"
+        android:layout_width="match_parent"
+        android:elevation="6dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp" />
+
+    <TextView
+        android:text="OR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/facebook_login_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp" />
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:id="@+id/textView2"
+        android:textStyle="normal|bold"
+        android:textSize="24sp" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:elevation="6dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

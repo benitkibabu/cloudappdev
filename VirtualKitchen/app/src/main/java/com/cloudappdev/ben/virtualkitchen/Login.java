@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,10 +42,12 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
+
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
@@ -57,7 +60,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     LoginButton fbLoginBtn;
 
     private static final String TAG = "SignInActivity";
@@ -65,14 +68,33 @@ public class Login extends AppCompatActivity {
 
     private ProgressDialog mProgressDialog;
     CallbackManager callbackManager;
+    GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
 
         setContentView(R.layout.activity_login);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
+            }
+        });
+
         mProgressDialog = new ProgressDialog(this);
 
         fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
@@ -107,6 +129,11 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -127,6 +154,28 @@ public class Login extends AppCompatActivity {
                 Log.d(TAG, ">>>" + "Signed In");
                 handleFacebookSignInResult(accessToken);
             }
+            else{
+                OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+                if (opr.isDone()) {
+                    // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+                    // and the GoogleSignInResult will be available instantly.
+                    Log.d(TAG, "Got cached sign-in");
+                    GoogleSignInResult result = opr.get();
+                    handleSignInResult(result);
+                } else {
+                    // If the user has not previously signed in on this device or the sign-in has expired,
+                    // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+                    // single sign-on will occur in this branch.
+                    showProgressDialog();
+                    opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                        @Override
+                        public void onResult(GoogleSignInResult googleSignInResult) {
+                            hideProgressDialog();
+                            handleSignInResult(googleSignInResult);
+                        }
+                    });
+                }
+            }
         }else{
             Snackbar.make(fbLoginBtn, "No internet connection", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Connect", new View.OnClickListener() {
@@ -142,7 +191,36 @@ public class Login extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_SIGN_IN){
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+
+                String name = acct.getDisplayName();
+                String email = acct.getEmail();
+                String id = acct.getId();
+
+                String picUrl = acct.getPhotoUrl().toString();
+                Log.w("GImg", picUrl);
+                User user = new User("Facebook", id, name, email, picUrl);
+            try {
+                postStudent(user);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        } else {
+            // Signed out, show unauthenticated UI.
+        }
     }
 
     private void handleFacebookSignInResult(AccessToken accessToken){
@@ -252,36 +330,6 @@ public class Login extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request, TAG);
     }
 
-    private void GetUser() {
-        String req = "get_news";
-        Uri url = Uri.parse(AppConfig.INTERNAL_USERS_API)
-                .buildUpon()
-                .appendQueryParameter("tag", "getUpdates")
-                .build();
-        StringRequest request = new StringRequest(Request.Method.GET, url.toString(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("News response", response);
-
-                        try {
-                            JSONObject obj = new JSONObject(response);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Updates Error", "Error " + error.getMessage());
-            }
-        });
-        AppController.getInstance().addToRequestQueue(request, req);
-    }
-
-
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -305,5 +353,10 @@ public class Login extends AppCompatActivity {
         hideProgressDialog();
         startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         finish();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
