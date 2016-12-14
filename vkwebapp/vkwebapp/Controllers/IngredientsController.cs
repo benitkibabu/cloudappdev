@@ -144,6 +144,10 @@ namespace vkwebapp.Controllers
             {
                 app_key = headers.GetValues("app_key").First();
             }
+            if (headers.Contains("id"))
+            {                
+                id = int.Parse(headers.GetValues("id").First());
+            }
             AuthApp app = await db.AuthApps.Where(a => a.auth_key.Equals(app_key)).FirstAsync();
             if (app == null)
             {
