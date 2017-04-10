@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
@@ -53,6 +54,7 @@ import com.google.android.gms.common.api.Status;
 
 import com.facebook.FacebookSdk;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -277,20 +279,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 params,
                 new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-
-                        try {
-                            Intent it = new Intent(Login.this, MainActivity.class);
-                            User u = new User(response.getInt("id"), response.getString("logintype"),
-                                    response.getString("userid"), response.getString("name"),
-                                    response.getString("email"), response.getString("imageurl"));
-                            AppController.getInstance().setUser(u);
-                            updateUI(it);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    public void onResponse(JSONObject job) {
+                        Log.d("Response", job.toString());
+                        getUser(user);
                     }
                 }, new Response.ErrorListener() {
 
@@ -298,6 +289,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             public void onErrorResponse(VolleyError error) {
                 hideProgressDialog();
                 NetworkResponse networkResponse = error.networkResponse;
+
+                getUser(user);
+
                 if (networkResponse != null) {
                     Log.e("Volley", "Error. HTTP Status Code:"+networkResponse.statusCode);
                 }
@@ -328,6 +322,46 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         };
 
         AppController.getInstance().addToRequestQueue(request, TAG);
+    }
+
+    public void getUser(final User user){
+
+        StringRequest request = new StringRequest(Request.Method.GET, AppConfig.INTERNAL_USERS_API,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray array = new JSONArray(response);
+                            JSONObject obj = null;
+                            for(int i=0; i<array.length(); i++){
+                                JSONObject temp = array.getJSONObject(i);
+                                if(temp.getString("userid").equals(user.getUserid()) &&
+                                        temp.getString("logintype").equals(user.getLoginType())){
+                                    obj = temp;
+                                    break;
+                                }
+                            }
+
+                            Intent it = new Intent(Login.this, MainActivity.class);
+                            User u = new User(obj.getInt("id"), obj.getString("logintype"),
+                                    obj.getString("userid"), obj.getString("name"),
+                                    obj.getString("email"), obj.getString("imageurl"));
+                            AppController.getInstance().setUser(u);
+                            updateUI(it);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     private void showProgressDialog() {

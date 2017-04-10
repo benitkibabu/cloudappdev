@@ -24,10 +24,10 @@ public class AppConfig {
     public static final String EXTRA_MESSAGE = "message";
     public static final String DISPLAY_MSG_ACTION = "com.cloudappdev.ben.virtualkitchen.notification.DISPLAY_MESSAGE";
 
-    public static final String INTERNAL_USERS_API = "http://virtualkitchen.azurewebsites.net/api/users";
-    public static final String INTERNAL_DEVICES_API = "http://virtualkitchen.azurewebsites.net/api/devices";
-    public static final String INTERNAL_RECIPES_API = "http://virtualkitchen.azurewebsites.net/api/recipes";
-    public static final String INTERNAL_INGREDIENT_API = "http://virtualkitchen.azurewebsites.net/api/ingredients";
+    public static final String INTERNAL_USERS_API = "https://virtualkitchen.herokuapp.com/api/consumers";
+    public static final String INTERNAL_DEVICES_API = "https://virtualkitchen.herokuapp.com/api/consumers_devices";
+    public static final String INTERNAL_RECIPES_API = "https://virtualkitchen.herokuapp.com/api/recipes";
+    public static final String INTERNAL_INGREDIENT_API = "https://virtualkitchen.herokuapp.com/api/ingredients";
     public static final String TESCO_API = "http://itrackerapp.gear.host/ncigo/";
     public static final String UPCDB = "http://api.upcdatabase.org/json/";//http://api.upcdatabase.org/json/APIKEY/CODE
     public static final String UPLOOKUP = "https://api.upcitemdb.com/prod/trial/lookup";//http://api.upcdatabase.org/json/APIKEY/CODE
