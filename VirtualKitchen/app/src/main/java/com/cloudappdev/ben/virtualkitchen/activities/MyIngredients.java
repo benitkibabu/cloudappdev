@@ -15,14 +15,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -41,13 +38,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.cloudappdev.ben.virtualkitchen.MainActivity;
+import com.cloudappdev.ben.virtualkitchen.main.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.adapter.CustomIngredientRecyclerAdapter;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
-import com.cloudappdev.ben.virtualkitchen.models.Recipe;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.google.zxing.Result;
 
@@ -198,8 +194,9 @@ public class MyIngredients extends AppCompatActivity  {
     }
 
     private static void getMyIngredient(){
-        showProgressDialog("Getting Ingredient");
-        final String TAG = "Get Ingredients";
+        final String TAG = "Getting Ingredients";
+        showProgressDialog(TAG);
+
         Uri url = Uri.parse(AppConfig.INTERNAL_INGREDIENT_API)
                 .buildUpon()
                 //.appendQueryParameter("userid", String.valueOf(user.getId()))
@@ -217,10 +214,10 @@ public class MyIngredients extends AppCompatActivity  {
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject j = response.getJSONObject(i);
-                                if(j.getInt("userid") == user.getId()) {
+                                if(j.getInt("consumer_id") == user.getId()) {
                                     Ingredient in = new Ingredient(j.getInt("id"),
                                             j.getString("text"), j.getDouble("quantity"),
-                                            j.getInt("userid"));
+                                            j.getInt("consumer_id"));
 
                                     myIngredients.add(in);
                                 }
@@ -262,7 +259,6 @@ public class MyIngredients extends AppCompatActivity  {
     }
 
     /*
-
     Reference: https://github.com/dm77/barcodescanner
     Created By: DM77
      */
@@ -331,8 +327,8 @@ public class MyIngredients extends AppCompatActivity  {
 
     }
     private static void getProductByUPC(String code,final FragmentManager fm){
-        showProgressDialog("Get Product Info");
         final String TAG = "GetProducName";
+        showProgressDialog("Getting Product Information");
         Uri url = Uri.parse( AppConfig.UPLOOKUP)
                 .buildUpon()
                 .appendQueryParameter("upc", code)
@@ -447,14 +443,14 @@ public class MyIngredients extends AppCompatActivity  {
     }
 
     static void addIngredient(final Ingredient ingred) throws JSONException {
-        showProgressDialog("Add Ingredient");
-        final String TAG = "Saving Recipe";
+        final String TAG = "Saving Ingredient";
+        showProgressDialog(TAG);
 
         JSONObject jobj = new JSONObject();
 
         jobj.put("text", ingred.getText());
         jobj.put("quantity", ingred.getQuantity());
-        jobj.put("userid", ingred.getUserid());
+        jobj.put("consumer_id", ingred.getUserid());
 
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST,
                 AppConfig.INTERNAL_INGREDIENT_API,
@@ -463,7 +459,7 @@ public class MyIngredients extends AppCompatActivity  {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG,response.toString());
-                        Snackbar.make(recyclerView,response.toString(), Snackbar.LENGTH_LONG)
+                        Snackbar.make(recyclerView,"Ingredient Added!", Snackbar.LENGTH_LONG)
                                 .show();
                         hideProgressDialog();
                         getMyIngredient();
@@ -489,15 +485,14 @@ public class MyIngredients extends AppCompatActivity  {
     }
 
     void removeIngredient(final Ingredient ingredient, final View view) {
-        showProgressDialog("");
-        final String TAG = "Removing Recipe";
+        final String TAG = "Removing Ingredient";
+        showProgressDialog(TAG);
 
-        StringRequest objectRequest = new StringRequest(Request.Method.DELETE,
-                AppConfig.INTERNAL_INGREDIENT_API,
+        StringRequest request = new StringRequest(Request.Method.DELETE,
+                AppConfig.INTERNAL_INGREDIENT_API + "/"+ingredient.getId(),
                 new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
-
                         Snackbar.make(view, "Ingredient removed", Snackbar.LENGTH_LONG)
                                 .show();
                         getMyIngredient();
@@ -511,7 +506,7 @@ public class MyIngredients extends AppCompatActivity  {
                         try {
                             String r = new String(error.networkResponse.data, "UTF-8");
                             JSONObject o = new JSONObject(r);
-                            Log.e("Rec Remove", o.toString());
+                            Log.e("RemoveError", o.toString());
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         } catch (JSONException e) {
@@ -531,6 +526,6 @@ public class MyIngredients extends AppCompatActivity  {
             }
         };
 
-        AppController.getInstance().addToRequestQueue(objectRequest, TAG);
+        AppController.getInstance().addToRequestQueue(request, TAG);
     }
 }

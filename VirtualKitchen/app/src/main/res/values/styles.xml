@@ -17,9 +17,9 @@
 
         <!--&lt;!&ndash; specify shared element transitions &ndash;&gt;-->
         <!--<item name="android:windowSharedElementEnterTransition">-->
-            <!--@transition/change_image_transform</item>-->
+        <!--@transition/change_image_transform</item>-->
         <!--<item name="android:windowSharedElementExitTransition">-->
-            <!--@transition/change_image_transform</item>-->
+        <!--@transition/change_image_transform</item>-->
     </style>
 
     <style name="KitchenTheme" parent="Theme.AppCompat.Light.NoActionBar">

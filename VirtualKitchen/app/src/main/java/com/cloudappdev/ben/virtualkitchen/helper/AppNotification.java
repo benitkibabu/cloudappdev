@@ -13,7 +13,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.cloudappdev.ben.virtualkitchen.MainActivity;
+import com.cloudappdev.ben.virtualkitchen.main.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 
 /**

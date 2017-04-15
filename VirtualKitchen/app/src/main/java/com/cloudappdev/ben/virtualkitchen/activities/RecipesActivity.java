@@ -2,15 +2,12 @@ package com.cloudappdev.ben.virtualkitchen.activities;
 
 import android.app.ActivityOptions;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +15,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.os.Bundle;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +34,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.cloudappdev.ben.virtualkitchen.MainActivity;
+import com.cloudappdev.ben.virtualkitchen.main.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.adapter.CustomRecycleViewAdapter;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
@@ -62,7 +58,7 @@ import java.util.Map;
 
 public class RecipesActivity extends AppCompatActivity {
 
-    User data;
+    User user;
     ProgressDialog mProgressDialog;
 
     private RecyclerView recyclerView;
@@ -140,8 +136,6 @@ public class RecipesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-
         //If we are viewing the Online Recipes, We should be able to search it.
         if (AppController.getInstance().getNavFragement().equals("R")) {
             getMenuInflater().inflate(R.menu.menu_recipes, menu);
@@ -154,6 +148,9 @@ public class RecipesActivity extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     AppController.getInstance().searchKey = query;
+                    if(query.equalsIgnoreCase("sick")){
+                        AppController.getInstance().searchKey = "for sickness";
+                    }
                     getRecipe(query);
                     return false;
                 }
@@ -172,7 +169,7 @@ public class RecipesActivity extends AppCompatActivity {
 
     void loadUser() {
         if (AppController.getInstance().getUser() != null) {
-            data = AppController.getInstance().getUser();
+            user = AppController.getInstance().getUser();
         } else {
             goBack();
         }
@@ -260,7 +257,7 @@ public class RecipesActivity extends AppCompatActivity {
                         for (int x = 0; x < ing.length(); x++) {
                             JSONObject val = ing.getJSONObject(x);
 //                            Ingredient ingr = new Ingredient(val.getString("text"),
-//                                    val.getDouble("weights"), data.getId());
+//                                    val.getDouble("weights"), user.getId());
 //                            ingredientsList.add(ingr);
                         }
 
@@ -334,7 +331,7 @@ public class RecipesActivity extends AppCompatActivity {
         String TAG = "Get MyFavourite";
         Uri url = Uri.parse(AppConfig.INTERNAL_RECIPES_API)
                 .buildUpon()
-                .appendQueryParameter("userid", String.valueOf(data.getId()))
+                //.appendQueryParameter("consumer_id", String.valueOf(user.getId()))
                 .build();
 
         Log.w("Url", url.toString());
@@ -349,17 +346,20 @@ public class RecipesActivity extends AppCompatActivity {
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject j = response.getJSONObject(i);
-                                Recipe r = new Recipe(
-                                        j.getInt("id"),
-                                        j.getString("uri"), j.getString("label"),
-                                        j.getString("imageurl"), j.getString("source"),
-                                        j.getString("url"), j.getString("shareas"),
-                                        j.getDouble("yield"), j.getString("dietlabel"),
-                                        j.getString("healthlabel"), j.getString("caution"),
-                                        j.getString("ingredientlines"), j.getDouble("calories"),
-                                        j.getDouble("totalweight"));
+                                if(j.getInt("consumer_id") == user.getId()) {
+                                    Recipe r = new Recipe(
+                                            j.getInt("id"),
+                                            j.getString("uri"), j.getString("label"),
+                                            j.getString("imageurl"), j.getString("source"),
+                                            j.getString("url"), j.getString("shareas"),
+                                            j.getDouble("yield"), j.getString("dietlabel"),
+                                            j.getString("healthlabel"), j.getString("caution"),
+                                            j.getString("ingredientlines"), j.getDouble("calories"),
+                                            j.getDouble("totalweight"),
+                                            j.getInt("consumer_id"));
 
-                                recipeList.add(r);
+                                    recipeList.add(r);
+                                }
                             }
 
                             adapter.addAll(recipeList);
@@ -429,8 +429,7 @@ public class RecipesActivity extends AppCompatActivity {
      */
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
-                .setName("Recipes Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
+                .setName("Recipes Page")
                 .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
                 .build();
         return new Action.Builder(Action.TYPE_VIEW)

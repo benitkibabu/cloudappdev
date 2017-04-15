@@ -9,11 +9,11 @@
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
-
     -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -33,7 +33,7 @@
         <!-- End -->
 
         <activity
-            android:name=".Login"
+            android:name=".main.Login"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -42,36 +42,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activities.RecipesActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/title_activity_recipes"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/KitchenTheme">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-
+                android:value=".main.MainActivity" />
         </activity>
-
         <activity
             android:name=".activities.RecipeDetails"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -112,16 +109,15 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.MyIngredients"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/KitchenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".main.MainActivity" />
         </activity>
         <activity
             android:name=".activities.SimpleScannerActivity"
@@ -139,11 +135,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.RecipeDetails" />
         </activity>
-        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-            App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+            App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".main.RegisterActivity" />
+        <activity
+            android:name=".main.AdditionalInfo"
+            android:label="@string/title_activity_additional_info"
+            android:theme="@style/KitchenTheme"></activity>
     </application>
 
 </manifest>

@@ -29,4 +29,16 @@
     <string name="add_ingredient">Add Ingredient</string>
     <string name="save_ingredient">Save Ingredient</string>
     <string name="remove">Remove</string>
+    <string name="register">Register</string>
+    <string name="password">password</string>
+    <string name="confirm_email_address">Confirm email address</string>
+    <string name="email_address">Email address</string>
+    <string name="full_name">Full Name</string>
+    <string name="already_have_an_account_sign_in">Already have an account? Sign in</string>
+    <string name="sign_in">Sign In</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account? register</string>
+    <string name="email_hint">123@gmail.com</string>
+    <string name="title_activity_additional_info">AdditionalInfo</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="additional_info">Please add a password to go with your New Account</string>
 </resources>

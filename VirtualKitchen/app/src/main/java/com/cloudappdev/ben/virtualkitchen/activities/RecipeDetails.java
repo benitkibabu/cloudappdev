@@ -11,7 +11,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +50,7 @@ import java.util.Map;
 
 public class RecipeDetails extends AppCompatActivity {
 
-    User data;
+    User user;
     Recipe r;
     Button instructionBtn, findBtn;
     private ProgressDialog mProgressDialog;
@@ -62,6 +61,8 @@ public class RecipeDetails extends AppCompatActivity {
     ImageView img, fav_icon;
     FloatingActionButton fab;
     static List<Ingredient> ingredientList;
+    List<Recipe> recipeList;
+    boolean recipeExist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class RecipeDetails extends AppCompatActivity {
         }
 
         if(getIntent().hasExtra("Recipe") && AppController.getInstance().getUser() != null){
-            data = AppController.getInstance().getUser();
+            user = AppController.getInstance().getUser();
             r = (Recipe) getIntent().getSerializableExtra("Recipe");
             setTitle(r.getLabel());
 
@@ -158,11 +159,7 @@ public class RecipeDetails extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    try {
-                        saveRecipe(r, view);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    getMyFavourite(view);
                 }
             });
         }else{
@@ -170,12 +167,12 @@ public class RecipeDetails extends AppCompatActivity {
         }
     }
 
-    private void getMyIngredient(List<String> ingredList){
-        showProgressDialog();
-        final String TAG = "Get Ingredients";
-        Uri url = Uri.parse(AppConfig.INTERNAL_INGREDIENT_API)
+    private void getMyFavourite(final View v) {
+        String TAG = "Get MyFavourite";
+        showProgressDialog(TAG);
+        Uri url = Uri.parse(AppConfig.INTERNAL_RECIPES_API)
                 .buildUpon()
-                .appendQueryParameter("userid", String.valueOf(data.getId()))
+                //.appendQueryParameter("consumer_id", String.valueOf(user.getId()))
                 .build();
 
         Log.w("Url", url.toString());
@@ -184,24 +181,31 @@ public class RecipeDetails extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        hideProgressDialog();
-                        Log.w(TAG, response.toString());
-                        ingredientList = new ArrayList<>();
+                        Log.w("MyF", response.toString());
+                        setTitle("My Favourites");
+                        recipeList = new ArrayList<>();
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject j = response.getJSONObject(i);
-                               if(j.getInt("userid") == data.getId()) {
-                                    Ingredient in = new Ingredient(j.getInt("id"),
-                                            j.getString("text"), j.getDouble("quantity"),
-                                            j.getInt("userid"));
-
-                                    ingredientList.add(in);
+                                if(j.getInt("consumer_id") == user.getId() &&
+                                        j.getString("label").equalsIgnoreCase(r.getLabel())) {
+                                   recipeExist = true;
                                 }
                             }
-                            //adapter.addAll(myIngredients);
-                        }catch(JSONException e){
+
+                            if(recipeExist == false){
+                                saveRecipe(r, v);
+                            }else{
+                                Snackbar.make(v, "Recipe already in your favourite ", Snackbar.LENGTH_LONG)
+                                        .setAction("Action", null).show();
+                                recipeExist = false;
+                            }
+
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        hideProgressDialog();
                     }
                 },
                 new Response.ErrorListener() {
@@ -223,10 +227,9 @@ public class RecipeDetails extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(request, TAG);
     }
 
-
     void saveRecipe(final Recipe recipe, final View view) throws JSONException {
-        showProgressDialog();
         final String TAG = "Saving Recipe";
+        showProgressDialog(TAG);
 
         JSONObject jobj = new JSONObject();
 
@@ -243,7 +246,7 @@ public class RecipeDetails extends AppCompatActivity {
         jobj.put("yield", recipe.getYield());
         jobj.put("calories", recipe.getCalories());
         jobj.put("totalweight", recipe.getTotalWeight());
-        jobj.put("userid", data.getId());
+        jobj.put("consumer_id", user.getId());
 
         Log.i("Param", jobj.toString());
 
@@ -253,7 +256,7 @@ public class RecipeDetails extends AppCompatActivity {
                 new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                        Snackbar.make(view, "Recipe added to favourite ", Snackbar.LENGTH_LONG)
+                        Snackbar.make(view, "Recipe added to favourite", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         hideProgressDialog();
                     }
@@ -278,8 +281,9 @@ public class RecipeDetails extends AppCompatActivity {
     }
 
     void removeRecipe(final Recipe recipe, final View view) throws JSONException {
-        showProgressDialog();
+
         final String TAG = "Removing Recipe";
+        showProgressDialog(TAG);
 
         JSONObject jobj = new JSONObject();
 
@@ -288,13 +292,13 @@ public class RecipeDetails extends AppCompatActivity {
         Log.i("Param", jobj.toString());
 
         StringRequest objectRequest = new StringRequest(Request.Method.DELETE,
-                AppConfig.INTERNAL_RECIPES_API,
+                AppConfig.INTERNAL_RECIPES_API + "/"+recipe.getId() ,
                 new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
                         Log.w("RRMV", response);
-                        Snackbar.make(view, "Recipe removed from favourite ", Snackbar.LENGTH_LONG)
-                                .show();
+                        Snackbar.make(view, "Recipe added to favourite", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                         hideProgressDialog();
                     }
                 },
@@ -305,7 +309,7 @@ public class RecipeDetails extends AppCompatActivity {
                         try {
                             String r = new String(error.networkResponse.data, "UTF-8");
                             JSONObject o = new JSONObject(r);
-                            Log.e("Rec Remove", o.toString());
+                            Log.e("RecRemove", o.toString());
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         } catch (JSONException e) {
@@ -319,8 +323,6 @@ public class RecipeDetails extends AppCompatActivity {
                 Map<String,String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
-                headers.put("app_key", AppController.getInstance().appKey());
-                headers.put("id", ""+recipe.getId());
                 return headers;
             }
         };
@@ -328,14 +330,14 @@ public class RecipeDetails extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(objectRequest, TAG);
     }
 
-    private void showProgressDialog() {
+    private void showProgressDialog(String tag) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.saving_recipe));
+            mProgressDialog.setMessage(tag);
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();
         }else{
-            mProgressDialog.setMessage(getString(R.string.saving_recipe));
+            mProgressDialog.setMessage(tag);
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();
         }

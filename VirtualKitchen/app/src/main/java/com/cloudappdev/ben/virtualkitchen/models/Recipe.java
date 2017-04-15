@@ -23,8 +23,31 @@ public class Recipe implements Serializable{
     String ingredientLines;
     double calories;
     double totalWeight;
+    int consumer_id;
 
     List<Ingredient> ingredients;
+
+    public Recipe(int id, String uri, String label, String imageUrl, String source, String url,
+                  String shareAs, double yield, String dietLabels, String healthLabels,
+                  String cautions, String ingredientLines, double calories, double totalWeight,
+                  int consumer_id) {
+        this.id = id;
+        this.uri = uri;
+        this.label = label;
+        this.imageUrl = imageUrl;
+        this.source = source;
+        this.url = url;
+        this.shareAs = shareAs;
+        this.yield = yield;
+        this.dietLabels = dietLabels;
+        this.healthLabels = healthLabels;
+        this.cautions = cautions;
+        this.ingredientLines = ingredientLines;
+        this.calories = calories;
+        this.totalWeight = totalWeight;
+        this.consumer_id = consumer_id;
+        this.ingredients = new ArrayList<>();
+    }
 
     public Recipe(String uri, String label, String imageUrl, String source, String url,
                   String shareAs, double yield, String dietLabels, String healthLabels,
@@ -62,6 +85,10 @@ public class Recipe implements Serializable{
         this.calories = calories;
         this.totalWeight = totalWeight;
         this.ingredients = new ArrayList<>();
+    }
+
+    public int getConsumer_id() {
+        return consumer_id;
     }
 
     public String getUri() {
