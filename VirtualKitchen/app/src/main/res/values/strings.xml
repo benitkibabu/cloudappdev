@@ -8,7 +8,7 @@
     <string name="loading">Signing In..</string>
 
     <string name="facebook_app_id">1733782833613796</string>
-    <string name="vk_api_app_id">5177f31f-a0ba-4552-bd3f-cc44f95a4df2</string>
+    <string name="vk_app_key">AkxyCr2apUfGu5FnzLsHTAtt</string>
     <string name="sing_out">Sign Out</string>
     <string name="profile_pick">Profile Pick</string>
 
@@ -41,4 +41,5 @@
     <string name="title_activity_additional_info">AdditionalInfo</string>
     <string name="confirm_password">Confirm password</string>
     <string name="additional_info">Please add a password to go with your New Account</string>
+    <string name="username">Username</string>
 </resources>

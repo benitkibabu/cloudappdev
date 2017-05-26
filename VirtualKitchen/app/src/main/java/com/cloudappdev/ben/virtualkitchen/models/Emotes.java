@@ -1,12 +1,12 @@
 package com.cloudappdev.ben.virtualkitchen.models;
 
-import android.graphics.drawable.Drawable;
+import java.io.Serializable;
 
 /**
  * Created by ben on 30/11/16.
  */
 
-public class Emotes {
+public class Emotes implements Serializable {
     String label;
     int imageUrl;
 

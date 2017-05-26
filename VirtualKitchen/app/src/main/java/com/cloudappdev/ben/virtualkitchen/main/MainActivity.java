@@ -121,9 +121,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
     void loadProfile(){
         if(AppController.getInstance().getUser() != null) {
-
             data = AppController.getInstance().getUser();
-            imgurl = "https://graph.facebook.com/"+data.getUserid()+"/picture?type=large";
+            imgurl = "https://graph.facebook.com/"+data.getLogin_id()+"/picture?type=large";
             nameTv.setText(data.getName());
 
             Picasso.with(getApplicationContext())
@@ -216,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         }
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            //LayoutInflater inflater = getActivity().getLayoutInflater();
 
             final View view  = inflater.inflate(R.layout.my_mood_layout, null);
             final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);

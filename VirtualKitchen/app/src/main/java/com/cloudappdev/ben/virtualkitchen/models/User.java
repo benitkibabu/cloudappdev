@@ -1,5 +1,7 @@
 package com.cloudappdev.ben.virtualkitchen.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,105 +9,84 @@ import java.io.Serializable;
  */
 
 public class User implements Serializable{
+    @SerializedName("id")
     int id;
-    String loginType;
-    String userid;
+    @SerializedName("name")
     String name;
+    @SerializedName("username")
+    String username;
+    @SerializedName("email")
     String email;
-    String imageUrl;
-    String password;
-
-    public User(){}
-
-    public User(int id, String loginType, String userid, String name, String email, String imageUrl) {
-        this.id = id;
-        this.loginType = loginType;
-        this.userid = userid;
-        this.name = name;
-        this.email = email;
-        this.imageUrl = imageUrl;
-    }
-
-    public User(String loginType, String userid, String name, String email, String imageUrl) {
-        this.loginType = loginType;
-        this.userid = userid;
-        this.name = name;
-        this.email = email;
-        this.imageUrl = imageUrl;
-    }
-
-    public User(String loginType, String userid, String name, String email, String imageUrl, String password) {
-        this.loginType = loginType;
-        this.userid = userid;
-        this.name = name;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        this.password = password;
-    }
-
-    public User(int id, String loginType, String userid, String name, String email, String imageUrl, String password) {
-        this.id = id;
-        this.loginType = loginType;
-        this.userid = userid;
-        this.name = name;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        this.password = password;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
+    @SerializedName("encrypted_password")
+    String encrypted_password;
+    @SerializedName("login_type")
+    String login_type;
+    @SerializedName("login_id")
+    String login_id;
+    @SerializedName("image_url")
+    String image_url;
 
     public int getId() {
         return id;
-    }
-
-    public String getLoginType() {
-        return loginType;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setLoginType(String loginType) {
-        this.loginType = loginType;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public String getEncrypted_password() {
+        return encrypted_password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEncrypted_password(String encrypted_password) {
+        this.encrypted_password = encrypted_password;
+    }
+
+    public String getLogin_type() {
+        return login_type;
+    }
+
+    public void setLogin_type(String login_type) {
+        this.login_type = login_type;
+    }
+
+    public String getLogin_id() {
+        return login_id;
+    }
+
+    public void setLogin_id(String login_id) {
+        this.login_id = login_id;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }

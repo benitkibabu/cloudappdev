@@ -3,29 +3,22 @@ package com.cloudappdev.ben.virtualkitchen.main;
 import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
+import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
+import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.User;
@@ -52,9 +45,13 @@ import com.google.android.gms.common.api.ResultCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -67,8 +64,16 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     CallbackManager callbackManager;
     GoogleApiClient mGoogleApiClient;
 
-    EditText fullname, email, confirmEmail, password;
+    EditText fullname, email, username, password;
     Button registerBtn, signBtn;
+
+    APIService service;
+
+    List<User> users;
+    boolean usernameValid = true;
+
+    AppPreference pref;
+    SQLiteHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +84,24 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
 
         setContentView(R.layout.activity_register);
+        pref = new AppPreference(this);
+        db = new SQLiteHandler(this);
+
+        if(pref.getBooleanVal(pref.isLoggedIn)){
+            User u = db.getUser();
+            if(u != null) {
+                AppController.getInstance().setUser(u);
+                launchMainActivity();
+            }else{
+                pref.setBoolean(pref.isLoggedIn, false);
+            }
+        }
+
+        service = AppConfig.getAPIService();
 
         fullname = (EditText) findViewById(R.id.fullname);
         email = (EditText) findViewById(R.id.email);
-        confirmEmail = (EditText) findViewById(R.id.confirm_email);
+        username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -103,6 +122,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         });
 
         mProgressDialog = new ProgressDialog(this);
+
+        getAllUser();
 
         fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
         fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile", "user_photos"));
@@ -149,83 +170,79 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(confirmEmail.getText().toString().equals(email.getText().toString())){
-                    User u = new User("internal","", fullname.getText().toString(),
-                            email.getText().toString(), password.getText().toString());
+                if(!email.getText().toString().isEmpty()&&!username.getText().toString().isEmpty()&&
+                        !password.getText().toString().isEmpty()){
 
-                    try {
-                        postUser(u);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    for(User u : users){
+                        if(u.getUsername().toString().equals(username.getText().toString())){
+                            usernameValid = false;
+                            break;
+                        }
                     }
+
+                    if(usernameValid) {
+                        User u = new User();
+                        u.setLogin_type("Internal");
+                        u.setEmail(email.getText().toString());
+                        u.setName(fullname.getText().toString());
+                        u.setEncrypted_password(password.getText().toString());
+                        u.setUsername(username.getText().toString());
+                        postUser(u);
+                    }else{
+                        Snackbar.make(v, "Username is taken, Try another name!",
+                                Snackbar.LENGTH_LONG).show();
+                    }
+                }else{
+                    Snackbar.make(v, "Please fill all fields",
+                            Snackbar.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    void postUser(final User user) throws JSONException {
-        showProgressDialog();
-        final String TAG = "Log User";
-
-        JSONObject params = new JSONObject();
-        // params.put("app_key", AppController.getInstance().appKey());
-        params.put("logintype", "");
-        params.put("userid", "");
-        params.put("name", user.getName());
-        params.put("email", user.getEmail());
-        params.put("password", user.getPassword());
-        params.put("imageurl", "");
-
-        Log.d(TAG, params.toString());
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                AppConfig.INTERNAL_USERS_API,
-                params,
-                new Response.Listener<JSONObject>() {
+    void getAllUser(){
+        users = new ArrayList<>();
+        service.getAllUser(AppController.getInstance().appKey())
+                .enqueue(new Callback<List<User>>() {
                     @Override
-                    public void onResponse(JSONObject job) {
-                        Log.d("Response", job.toString());
-                        //getUser(user);
+                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                        if(response.isSuccessful()){
+                            users = response.body();
+                        }
                     }
-                }, new Response.ErrorListener() {
 
+                    @Override
+                    public void onFailure(Call<List<User>> call, Throwable t) {
+                        Log.e("AllUsers", t.toString());
+                    }
+                });
+    }
+
+    void postUser(final User u) {
+        showProgressDialog("Registering!....");
+        service.registerUser(getString(R.string.vk_app_key), u).enqueue(new Callback<User>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onResponse(Call<User> call, retrofit2.Response<User> response) {
                 hideProgressDialog();
-                NetworkResponse networkResponse = error.networkResponse;
-
-                //getUser(user);
-
-                if (networkResponse != null) {
-                    Log.e("Volley", "Error. HTTP Status Code:"+networkResponse.statusCode);
-                }
-
-                if (error instanceof TimeoutError) {
-                    Log.e("Volley", "TimeoutError");
-                }else if(error instanceof NoConnectionError){
-                    Log.e("Volley", "NoConnectionError");
-                } else if (error instanceof AuthFailureError) {
-                    Log.e("Volley", "AuthFailureError");
-                } else if (error instanceof ServerError) {
-                    Log.e("Volley", "ServerError");
-                } else if (error instanceof NetworkError) {
-                    Log.e("Volley", "NetworkError");
-                } else if (error instanceof ParseError) {
-                    Log.e("Volley", "ParseError");
+                if(response.isSuccessful()){
+                    User user = response.body();
+                    db.creatUser(user);
+                    pref.setBoolean(pref.isLoggedIn, true);
+                    AppController.getInstance().setUser(user);
+                    launchMainActivity();
+                }else{
+                    Log.d("Response", response.toString());
+                    Toast.makeText(RegisterActivity.this, "Failed to register",
+                            Toast.LENGTH_LONG).show();
                 }
             }
-        }){
+
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                headers.put("app_key", AppController.getInstance().appKey());
-                return headers;
+            public void onFailure(Call<User> call, Throwable t) {
+                hideProgressDialog();
+                Log.e("REPFAILURE", t.toString());
             }
-        };
-
-        AppController.getInstance().addToRequestQueue(request, TAG);
+        });
     }
 
     private void signIn() {
@@ -245,12 +262,11 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     public void onStart() {
         super.onStart();
-        showProgressDialog();
         if(AppConfig.isNetworkAvailable(this)){
             AccessToken accessToken = AccessToken.getCurrentAccessToken();
             if (accessToken != null) {
                 Log.d(TAG, ">>>" + "Signed In");
-                handleFacebookSignInResult(accessToken);
+               // handleFacebookSignInResult(accessToken);
             }
             else{
                 OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
@@ -259,17 +275,17 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                     // and the GoogleSignInResult will be available instantly.
                     Log.d(TAG, "Got cached sign-in");
                     GoogleSignInResult result = opr.get();
-                    handleSignInResult(result);
+                   // handleSignInResult(result);
                 } else {
                     // If the user has not previously signed in on this device or the sign-in has expired,
                     // this asynchronous branch will attempt to sign in the user silently.  Cross-device
                     // single sign-on will occur in this branch.
-                    showProgressDialog();
+
                     opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                         @Override
                         public void onResult(GoogleSignInResult googleSignInResult) {
                             hideProgressDialog();
-                            handleSignInResult(googleSignInResult);
+                            //handleSignInResult(googleSignInResult);
                         }
                     });
                 }
@@ -298,8 +314,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
+        showProgressDialog("Google Signin...");
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
+            hideProgressDialog();
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
 
@@ -309,19 +327,22 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
             String picUrl = acct.getPhotoUrl().toString();
             Log.w("GImg", picUrl);
-            User user = new User("Facebook", id, name, email, picUrl);
+            User user = new User();
+            user.setLogin_type("Google");
+            user.setLogin_id(id);
+            user.setName(name);
+            user.setEmail(email);
+            user.setImage_url(picUrl);
 
-           // getUser(user);
-
-            hideProgressDialog();
-
+            AppController.getInstance().setUser(user);
+            launchMoreInfoPage(user);
         } else {
             // Signed out, show unauthenticated UI.
         }
     }
 
     private void handleFacebookSignInResult(AccessToken accessToken){
-        showProgressDialog();
+        showProgressDialog("Facebook Signin!...");
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken,
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -330,20 +351,24 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                             JSONObject object,
                             GraphResponse response) {
                         Log.d("FBLogin Response ", response.toString());
+                        hideProgressDialog();
                         try {
                             String name = object.getString("name");
                             String email = object.getString("email");
                             String id = object.getString("id");
 
                             JSONObject picObj = object.getJSONObject("picture");
-                            JSONObject picData = picObj.getJSONObject("data");
-                            // String picUrl = picData.getString("url");
                             String picUrl = "https://graph.facebook.com/"+id+"/picture?type=large";
 
-                            User user = new User("Facebook", id, name, email, picUrl);
-                            //getUser(user);
+                            User user = new User();
+                            user.setLogin_type("Facebook");
+                            user.setLogin_id(id);
+                            user.setName(name);
+                            user.setEmail(email);
+                            user.setImage_url(picUrl);
 
-                            hideProgressDialog();
+                            AppController.getInstance().setUser(user);
+                            launchMoreInfoPage(user);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -357,14 +382,14 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         request.executeAsync();
     }
 
-    private void showProgressDialog() {
+    private void showProgressDialog(String t) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setMessage(t);
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();
         }else{
-            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setMessage(t);
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.show();
         }
@@ -382,10 +407,14 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         startActivity(i, ActivityOptions.makeSceneTransitionAnimation(RegisterActivity.this).toBundle());
         finish();
     }
+    public void launchMainActivity(){
+        Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+        startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        finish();
+    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Snackbar.make(fbLoginBtn, "Failed to Authenticate", Snackbar.LENGTH_LONG).show();
     }
-
 }

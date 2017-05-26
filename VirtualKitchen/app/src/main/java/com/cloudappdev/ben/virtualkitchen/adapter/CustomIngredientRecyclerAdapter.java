@@ -105,10 +105,10 @@ public class CustomIngredientRecyclerAdapter extends RecyclerView.Adapter<Custom
         holder.itemView.setLongClickable(true);
 
         String label = ingredientList.get(position).getText();
-        String quantity = "Quantity: x"+ingredientList.get(position).getQuantity();
+        String weight = "Weight: "+ingredientList.get(position).getWeight();
 
         holder.itemHolder.textView.setText(label);
-        holder.itemHolder.textView2.setText(quantity);
+        holder.itemHolder.textView2.setText(weight);
 
         Picasso.with(context).load(R.mipmap.cart_items).resize(128,128).centerCrop().into(holder.itemHolder.itemIcon);
     }

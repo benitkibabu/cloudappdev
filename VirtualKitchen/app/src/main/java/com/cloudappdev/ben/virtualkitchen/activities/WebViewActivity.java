@@ -12,7 +12,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Slide;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,13 +28,13 @@ import android.widget.Toast;
 
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
-import com.cloudappdev.ben.virtualkitchen.models.Recipe;
+import com.cloudappdev.ben.virtualkitchen.models.MyRecipes;
 
 public class WebViewActivity extends AppCompatActivity {
 
     private final String URL = "URL";
     WebView myWebView;
-    Recipe r;
+    MyRecipes r;
     ProgressBar pd;
 
     @Override
@@ -90,7 +89,7 @@ public class WebViewActivity extends AppCompatActivity {
         if(getIntent().hasExtra(URL) && getIntent().hasExtra("R")){
             if(AppConfig.isNetworkAvailable(this)){
                 myWebView.loadUrl(getIntent().getStringExtra(URL));
-                r = (Recipe) getIntent().getSerializableExtra("R");
+                r = (MyRecipes) getIntent().getSerializableExtra("R");
             }else{
                 Snackbar.make(myWebView, "No internet connection", Snackbar.LENGTH_INDEFINITE)
                         .setAction("Connect", new View.OnClickListener() {

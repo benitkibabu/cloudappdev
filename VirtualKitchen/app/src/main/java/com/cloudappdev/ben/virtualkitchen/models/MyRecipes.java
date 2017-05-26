@@ -3,13 +3,14 @@ package com.cloudappdev.ben.virtualkitchen.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
- * Created by Ben on 21/10/2016.
+ * Created by Benit Kibabu on 25/05/2017.
  */
 
-public class Recipe implements Serializable{
+public class MyRecipes implements Serializable {
+    @SerializedName("id")
+    int id;
     @SerializedName("uri")
     String uri;
     @SerializedName("label")
@@ -25,20 +26,37 @@ public class Recipe implements Serializable{
     @SerializedName("yield")
     double yield;
     @SerializedName("dietLabels")
-    List<String> dietLabels;
+    String dietLabels;
     @SerializedName("healthLabels")
-    List<String> healthLabels;
+    String healthLabels;
     @SerializedName("cautions")
-    List<String> cautions;
+    String cautions;
     @SerializedName("ingredientLines")
-    List<String> ingredientLines;
+    String ingredientLines;
     @SerializedName("calories")
     double calories;
     @SerializedName("totalWeight")
     double totalWeight;
-    @SerializedName("ingredients")
-    List<Ingredient> ingredients;
+    @SerializedName("app_user_id")
+    int user_id;
+    @SerializedName("ingredientCount")
+    int ingredientCount;
 
+    public int getIngredientCount() {
+        return ingredientCount;
+    }
+
+    public void setIngredientCount(int ingredientCount) {
+        this.ingredientCount = ingredientCount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUri() {
         return uri;
@@ -96,35 +114,35 @@ public class Recipe implements Serializable{
         this.yield = yield;
     }
 
-    public List<String> getDietLabels() {
+    public String getDietLabels() {
         return dietLabels;
     }
 
-    public void setDietLabels(List<String> dietLabels) {
+    public void setDietLabels(String dietLabels) {
         this.dietLabels = dietLabels;
     }
 
-    public List<String> getHealthLabels() {
+    public String getHealthLabels() {
         return healthLabels;
     }
 
-    public void setHealthLabels(List<String> healthLabels) {
+    public void setHealthLabels(String healthLabels) {
         this.healthLabels = healthLabels;
     }
 
-    public List<String> getCautions() {
+    public String getCautions() {
         return cautions;
     }
 
-    public void setCautions(List<String> cautions) {
+    public void setCautions(String cautions) {
         this.cautions = cautions;
     }
 
-    public List<String> getIngredientLines() {
+    public String getIngredientLines() {
         return ingredientLines;
     }
 
-    public void setIngredientLines(List<String> ingredientLines) {
+    public void setIngredientLines(String ingredientLines) {
         this.ingredientLines = ingredientLines;
     }
 
@@ -144,11 +162,11 @@ public class Recipe implements Serializable{
         this.totalWeight = totalWeight;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 }

@@ -2,7 +2,6 @@ package com.cloudappdev.ben.virtualkitchen.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -20,38 +19,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
-import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
-import com.cloudappdev.ben.virtualkitchen.models.Recipe;
+import com.cloudappdev.ben.virtualkitchen.models.MyRecipes;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecipeDetails extends AppCompatActivity {
 
-    User user;
-    Recipe r;
     Button instructionBtn, findBtn;
     private ProgressDialog mProgressDialog;
     TextView title ;
@@ -60,9 +43,14 @@ public class RecipeDetails extends AppCompatActivity {
     TextView summary;
     ImageView img, fav_icon;
     FloatingActionButton fab;
-    static List<Ingredient> ingredientList;
-    List<Recipe> recipeList;
-    boolean recipeExist = false;
+
+    List<MyRecipes> recipeList;
+    User user;
+    MyRecipes r;
+
+    APIService service;
+
+    boolean isMyFavorite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,19 +73,22 @@ public class RecipeDetails extends AppCompatActivity {
         img = (ImageView) findViewById(R.id.recipe_img);
         findBtn = (Button) findViewById(R.id.view_ingredient);
 
-        final String f= AppController.getInstance().getNavFragement();
-
-        if(f.equals("R")){
-            fav_icon.setVisibility(View.INVISIBLE);
-            fab.setVisibility(View.VISIBLE);
-        }else{
-            fab.setVisibility(View.INVISIBLE);
-            fav_icon.setVisibility(View.VISIBLE);
-        }
+        final String f = AppController.getInstance().getNavFragement();
 
         if(getIntent().hasExtra("Recipe") && AppController.getInstance().getUser() != null){
             user = AppController.getInstance().getUser();
-            r = (Recipe) getIntent().getSerializableExtra("Recipe");
+            r = (MyRecipes) getIntent().getSerializableExtra("Recipe");
+
+            getMyFavourite(title);
+
+            if(f.equals("R") && !isMyFavorite){
+                fav_icon.setVisibility(View.INVISIBLE);
+                fab.setVisibility(View.VISIBLE);
+            }else{
+                fab.setVisibility(View.INVISIBLE);
+                fav_icon.setVisibility(View.VISIBLE);
+            }
+
             setTitle(r.getLabel());
 
             instructionBtn.setOnClickListener(new View.OnClickListener() {
@@ -113,53 +104,38 @@ public class RecipeDetails extends AppCompatActivity {
             findBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "Comming Soon!", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "Coming Soon!", Snackbar.LENGTH_LONG).show();
                 }
             });
 
             title.setText(r.getLabel());
 
             String nut = "";
-            String il = "";
-            String hl = "";
             String sum = "";
-            int count = 0;
-            BufferedReader b = new BufferedReader(new StringReader(r.getIngredientLines()));
-            String thisLine;
-
-            try {
-                while ((thisLine = b.readLine()) != null) {
-                    count ++;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            if(r.getIngredients().size()> 0)
-                count = r.getIngredients().size();
-
-            //count = r.getIngredientLines().split(System.getProperty("\\r\\n")).length;s
-            //String[] lines = r.getIngredientLines().split(System.getProperty("\\r\\n"));
+            int count = r.getIngredientCount();
 
             String i = count+ " Ingredients: \n" + r.getIngredientLines();
-            nut += r.getHealthLabels();
-            nut += "\n\nCalories: " + Math.floor(r.getCalories()) + "/ Serving";
+            nut += "Diet Labels: \n" +r.getDietLabels();
+            nut += "\n\nHealth Labels: \n" +r.getHealthLabels();
+            nut += "\n\nCalories: \n" + Math.floor(r.getCalories()) + "/ Serving";
+            nut += "\n\nTotal Weight: " + Math.floor(r.getTotalWeight());
+            nut += "\n\nCautions: \n" +r.getCautions();
             sum += "Source: " + r.getSource();
 
             ingredients.setText(i);
             nutrition.setText(nut);
             summary.setText(sum);
 
-
             Picasso.with(getApplicationContext())
-                    .load(r.getImageUrl())
+                    .load(r.getImage())
                     .resize(512,512).centerCrop()
                     .into(img);
 
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    getMyFavourite(view);
+                    r.setUser_id(user.getId());
+                    saveRecipe(r, view);
                 }
             });
         }else{
@@ -168,166 +144,86 @@ public class RecipeDetails extends AppCompatActivity {
     }
 
     private void getMyFavourite(final View v) {
-        String TAG = "Get MyFavourite";
-        showProgressDialog(TAG);
-        Uri url = Uri.parse(AppConfig.INTERNAL_RECIPES_API)
-                .buildUpon()
-                //.appendQueryParameter("consumer_id", String.valueOf(user.getId()))
-                .build();
-
-        Log.w("Url", url.toString());
-
-        JsonArrayRequest request = new JsonArrayRequest(url.toString(),
-                new Response.Listener<JSONArray>() {
+        showProgressDialog("Fetching Favorites...");
+        service = AppConfig.getAPIService();
+        service.fetchMyRecipes(AppController.getInstance().appKey(), user.getId())
+                .enqueue(new Callback<List<MyRecipes>>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        Log.w("MyF", response.toString());
-                        setTitle("My Favourites");
-                        recipeList = new ArrayList<>();
-                        try {
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject j = response.getJSONObject(i);
-                                if(j.getInt("consumer_id") == user.getId() &&
-                                        j.getString("label").equalsIgnoreCase(r.getLabel())) {
-                                   recipeExist = true;
+                    public void onResponse(Call<List<MyRecipes>> call, Response<List<MyRecipes>> response) {
+                        hideProgressDialog();
+                        if(response.isSuccessful()){
+                            recipeList = response.body();
+                            for(MyRecipes rs : recipeList){
+                                if(rs.getLabel().equals(r.getLabel())){
+                                    isMyFavorite = true;
+                                    fab.setVisibility(View.INVISIBLE);
+                                    fav_icon.setVisibility(View.VISIBLE);
+                                    break;
                                 }
                             }
-
-                            if(recipeExist == false){
-                                saveRecipe(r, v);
-                            }else{
-                                Snackbar.make(v, "Recipe already in your favourite ", Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
-                                recipeExist = false;
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        hideProgressDialog();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        hideProgressDialog();
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                headers.put("app_key", AppController.getInstance().appKey());
-                return headers;
-            }
-        };
-
-        AppController.getInstance().addToRequestQueue(request, TAG);
-    }
-
-    void saveRecipe(final Recipe recipe, final View view) throws JSONException {
-        final String TAG = "Saving Recipe";
-        showProgressDialog(TAG);
-
-        JSONObject jobj = new JSONObject();
-
-        jobj.put("uri", recipe.getUri());
-        jobj.put("label",recipe.getLabel());
-        jobj.put("imageurl", recipe.getImageUrl());
-        jobj.put("source", recipe.getSource());
-        jobj.put("url", recipe.getUrl());
-        jobj.put("shareas", recipe.getShareAs());
-        jobj.put("dietlabel", recipe.getDietLabels());
-        jobj.put("healthlabel", recipe.getHealthLabels());
-        jobj.put("caution", recipe.getCautions());
-        jobj.put("ingredientlines", recipe.getIngredientLines());
-        jobj.put("yield", recipe.getYield());
-        jobj.put("calories", recipe.getCalories());
-        jobj.put("totalweight", recipe.getTotalWeight());
-        jobj.put("consumer_id", user.getId());
-
-        Log.i("Param", jobj.toString());
-
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST,
-                AppConfig.INTERNAL_RECIPES_API,
-                jobj,
-                new Response.Listener<JSONObject>(){
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Snackbar.make(view, "Recipe added to favourite", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                        hideProgressDialog();
-                    }
-                },
-        new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                hideProgressDialog();
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                headers.put("app_key", AppController.getInstance().appKey());
-                return headers;
-            }
-        };
-
-        AppController.getInstance().addToRequestQueue(objectRequest, TAG);
-    }
-
-    void removeRecipe(final Recipe recipe, final View view) throws JSONException {
-
-        final String TAG = "Removing Recipe";
-        showProgressDialog(TAG);
-
-        JSONObject jobj = new JSONObject();
-
-        jobj.put("id", recipe.getId());
-
-        Log.i("Param", jobj.toString());
-
-        StringRequest objectRequest = new StringRequest(Request.Method.DELETE,
-                AppConfig.INTERNAL_RECIPES_API + "/"+recipe.getId() ,
-                new Response.Listener<String>(){
-                    @Override
-                    public void onResponse(String response) {
-                        Log.w("RRMV", response);
-                        Snackbar.make(view, "Recipe added to favourite", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                        hideProgressDialog();
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        hideProgressDialog();
-                        try {
-                            String r = new String(error.networkResponse.data, "UTF-8");
-                            JSONObject o = new JSONObject(r);
-                            Log.e("RecRemove", o.toString());
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
                     }
-                }){
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                return headers;
-            }
-        };
+                    @Override
+                    public void onFailure(Call<List<MyRecipes>> call, Throwable t) {
+                        hideProgressDialog();
+                        Log.e ("GetFavRecipe", t.toString());
+                    }
+                });
+    }
 
-        AppController.getInstance().addToRequestQueue(objectRequest, TAG);
+    void saveRecipe(final MyRecipes recipe, final View view) {
+        showProgressDialog("Saving!...");
+        service = AppConfig.getAPIService();
+        service.addRecipeToFavorite(AppController.getInstance().appKey(), recipe)
+                .enqueue(new Callback<MyRecipes>() {
+                    @Override
+                    public void onResponse(Call<MyRecipes> call, Response<MyRecipes> response) {
+                        hideProgressDialog();
+                        if(response.isSuccessful()){
+                            Snackbar.make(title, "Recipe Added to Favorites!",
+                                    Snackbar.LENGTH_LONG).show();
+                            fab.setVisibility(View.INVISIBLE);
+                            fav_icon.setVisibility(View.VISIBLE);
+                        }else{
+                            Snackbar.make(title, "Failed to Add to Favorites!",
+                                    Snackbar.LENGTH_LONG).show();
+                            Log.e("SAVEFAIL", response.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MyRecipes> call, Throwable t) {
+                        hideProgressDialog();
+                        Log.e("SAVEFAILERR", t.toString());
+                    }
+                });
+    }
+
+    void removeRecipe(final MyRecipes recipe, final View view) {
+        showProgressDialog("Removing!...");
+        service = AppConfig.getAPIService();
+        service.removeRecipe(recipe.getId(), AppController.getInstance().appKey())
+                .enqueue(new Callback<MyRecipes>() {
+                    @Override
+                    public void onResponse(Call<MyRecipes> call, Response<MyRecipes> response) {
+                        if(response.isSuccessful()){
+                            isMyFavorite = false;
+                            fab.setVisibility(View.VISIBLE);
+                            fav_icon.setVisibility(View.INVISIBLE);
+                            Snackbar.make(view, "Item has been removed!",
+                                    Snackbar.LENGTH_LONG).show();
+                        }else{
+                            Snackbar.make(view, "Failed to Remove Item",
+                                    Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MyRecipes> call, Throwable t) {
+                        Log.e("RemoveRecipe", t.toString());
+                    }
+                });
     }
 
     private void showProgressDialog(String tag) {
@@ -352,9 +248,7 @@ public class RecipeDetails extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        if(AppConfig.isNetworkAvailable(this)){
-
-        }else{
+        if(!AppConfig.isNetworkAvailable(this)){
             Snackbar.make(title, "No internet connection", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Connect", new View.OnClickListener() {
                         @Override
@@ -369,7 +263,7 @@ public class RecipeDetails extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(!AppController.getInstance().getNavFragement().equals("R")) {
+        if(!AppController.getInstance().getNavFragement().equals("R") || isMyFavorite) {
             getMenuInflater().inflate(R.menu.menu_recipe_deails, menu);
         }
         return true;
@@ -392,11 +286,9 @@ public class RecipeDetails extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_remove) {
-            try {
-                removeRecipe(r, title);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            r.setUser_id(user.getId());
+
+            removeRecipe(r, title);
             return true;
         }
         else if(id == android.R.id.home){

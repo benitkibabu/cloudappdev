@@ -1,44 +1,50 @@
 package com.cloudappdev.ben.virtualkitchen.main;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
+import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
+import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.HashMap;
-import java.util.Map;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AdditionalInfo extends AppCompatActivity {
 
-    EditText password, confirmPassword;
+    EditText username, password, confirmPassword;
 
     private ProgressDialog mProgressDialog;
 
+    List<User> users;
+    boolean usernameValid = true;
+
     User temp;
+
+    APIService service;
+
+    AppPreference pref;
+    SQLiteHandler db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,101 +54,111 @@ public class AdditionalInfo extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
 
         setContentView(R.layout.activity_additional_info);
+        service = AppConfig.getAPIService();
+
+        pref = new AppPreference(this);
+        db = new SQLiteHandler(this);
+
+        if(pref.getBooleanVal(pref.isLoggedIn)){
+            if(pref.getBooleanVal(pref.isLoggedIn)){
+                User u = db.getUser();
+                if(u != null) {
+                    AppController.getInstance().setUser(u);
+                    launchMainActivity();
+                }else{
+                    pref.setBoolean(pref.isLoggedIn, false);
+                }
+            }
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mProgressDialog = new ProgressDialog(this);
+        username = (EditText) findViewById(R.id.username);
+        password = (EditText) findViewById(R.id.password);
+        confirmPassword = (EditText) findViewById(R.id.confirm_password);
+
+        getAllUser();
 
         temp = new User();
 
-        if(getIntent().hasExtra("user")){
-            temp = (User) getIntent().getSerializableExtra("user");
+        if(AppController.getInstance().getUser() != null) {
+            temp = AppController.getInstance().getUser();
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(password.getText().toString().equals(confirmPassword.getText().toString())) {
-                    temp.setPassword(password.getText().toString());
+                if(!username.getText().toString().isEmpty() &&
+                        password.getText().toString().equals(confirmPassword.getText().toString())) {
 
-                    try {
-                        postUser(temp);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    for(User u : users ){
+                        if(u.getUsername().equals(username.getText().toString())){
+                            Snackbar.make(view, "Username is already taken! Try another",
+                                    Snackbar.LENGTH_LONG).show();
+                            usernameValid = false;
+                            break;
+                        }
                     }
-//                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
+                    if(usernameValid) {
+                        temp.setUsername(username.getText().toString());
+                        temp.setEncrypted_password(password.getText().toString());
+                        postUser(temp);
+                    }
+                }else{
+                    Snackbar.make(view, "Make sure to fill out all fields!",
+                            Snackbar.LENGTH_LONG).show();
                 }
             }
         });
     }
 
     //Post Request
-    void postUser(final User user) throws JSONException {
+    void postUser(final User u) {
         showProgressDialog();
-        final String TAG = "Log User";
-
-        JSONObject params = new JSONObject();
-        // params.put("app_key", AppController.getInstance().appKey());
-        params.put("logintype", user.getLoginType());
-        params.put("userid", user.getUserid());
-        params.put("name", user.getName());
-        params.put("email", user.getEmail());
-        params.put("password", user.getPassword());
-        params.put("imageurl", user.getImageUrl());
-
-        Log.d(TAG, params.toString());
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,
-                AppConfig.INTERNAL_USERS_API,
-                params,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject job) {
-                        Log.d("Response", job.toString());
-                        //getUser(user);
-                    }
-                }, new Response.ErrorListener() {
-
+        service.registerUser(getString(R.string.vk_app_key), u).enqueue(new Callback<User>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onResponse(Call<User> call, retrofit2.Response<User> response) {
                 hideProgressDialog();
-                NetworkResponse networkResponse = error.networkResponse;
-
-                //getUser(user);
-
-                if (networkResponse != null) {
-                    Log.e("Volley", "Error. HTTP Status Code:"+networkResponse.statusCode);
-                }
-
-                if (error instanceof TimeoutError) {
-                    Log.e("Volley", "TimeoutError");
-                }else if(error instanceof NoConnectionError){
-                    Log.e("Volley", "NoConnectionError");
-                } else if (error instanceof AuthFailureError) {
-                    Log.e("Volley", "AuthFailureError");
-                } else if (error instanceof ServerError) {
-                    Log.e("Volley", "ServerError");
-                } else if (error instanceof NetworkError) {
-                    Log.e("Volley", "NetworkError");
-                } else if (error instanceof ParseError) {
-                    Log.e("Volley", "ParseError");
+                if(response.isSuccessful()){
+                    User user = response.body();
+                    db.creatUser(user);
+                    pref.setBoolean(pref.isLoggedIn, true);
+                    AppController.getInstance().setUser(user);
+                    launchMainActivity();
+                }else{
+                    Log.d("Response", response.toString());
+                    Toast.makeText(AdditionalInfo.this, "Failed to register",
+                            Toast.LENGTH_LONG).show();
                 }
             }
-        }){
+
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                headers.put("app_key", AppController.getInstance().appKey());
-                return headers;
+            public void onFailure(Call<User> call, Throwable t) {
+                hideProgressDialog();
+                Log.e("REPFAILURE", t.toString());
             }
-        };
+        });
+    }
 
-        AppController.getInstance().addToRequestQueue(request, TAG);
+    void getAllUser(){
+        users = new ArrayList<>();
+        service.getAllUser(AppController.getInstance().appKey())
+                .enqueue(new Callback<List<User>>() {
+                    @Override
+                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                        if(response.isSuccessful()){
+                            users = response.body();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<User>> call, Throwable t) {
+                        Log.e("AllUsers", t.toString());
+                    }
+                });
     }
 
     private void showProgressDialog() {
@@ -164,4 +180,9 @@ public class AdditionalInfo extends AppCompatActivity {
         }
     }
 
+    public void launchMainActivity(){
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        finish();
+    }
 }

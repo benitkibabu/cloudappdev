@@ -1,10 +1,12 @@
 package com.cloudappdev.ben.virtualkitchen.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Ben on 21/10/2016.
  */
 
-public class NutrientInfo {
+public class NutrientInfo implements Serializable {
     String uri;
     String label;
     float quantity;

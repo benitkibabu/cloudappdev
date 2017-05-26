@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -31,33 +30,25 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.cloudappdev.ben.virtualkitchen.main.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.adapter.CustomIngredientRecyclerAdapter;
+import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
+import com.cloudappdev.ben.virtualkitchen.main.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
+import com.cloudappdev.ben.virtualkitchen.models.UPCItem;
+import com.cloudappdev.ben.virtualkitchen.models.UPCResponse;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.google.zxing.Result;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyIngredients extends AppCompatActivity  {
 
@@ -68,6 +59,9 @@ public class MyIngredients extends AppCompatActivity  {
     static ProgressDialog progressBar;
 
     static List<Ingredient> myIngredients;
+    static List<UPCItem> upcItems;
+
+    static APIService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +70,8 @@ public class MyIngredients extends AppCompatActivity  {
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
 
         setContentView(R.layout.activity_my_ingredients);
+
+        service = AppConfig.getAPIService();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,7 +106,7 @@ public class MyIngredients extends AppCompatActivity  {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
-                        removeIngredient(mI, recyclerView);
+                        removeIngredient(mI);
                         dialog.dismiss();
                     }
                 });
@@ -194,57 +190,27 @@ public class MyIngredients extends AppCompatActivity  {
     }
 
     private static void getMyIngredient(){
-        final String TAG = "Getting Ingredients";
-        showProgressDialog(TAG);
-
-        Uri url = Uri.parse(AppConfig.INTERNAL_INGREDIENT_API)
-                .buildUpon()
-                //.appendQueryParameter("userid", String.valueOf(user.getId()))
-                .build();
-
-        Log.w("Url", url.toString());
-
-        JsonArrayRequest request = new JsonArrayRequest(url.toString(),
-                new Response.Listener<JSONArray>() {
+        showProgressDialog("Fetching Ingredient");
+        service = AppConfig.getAPIService();
+        service.fetchMyIngredient(AppController.getInstance().appKey(), user.getId())
+                .enqueue(new Callback<List<Ingredient>>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
                         hideProgressDialog();
-                        Log.w(TAG, response.toString());
-                        myIngredients = new ArrayList<>();
-                        try {
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject j = response.getJSONObject(i);
-                                if(j.getInt("consumer_id") == user.getId()) {
-                                    Ingredient in = new Ingredient(j.getInt("id"),
-                                            j.getString("text"), j.getDouble("quantity"),
-                                            j.getInt("consumer_id"));
-
-                                    myIngredients.add(in);
-                                }
-                            }
+                        if(response.isSuccessful()){
+                            myIngredients = response.body();
                             adapter.addAll(myIngredients);
-                        }catch(JSONException e){
-                            e.printStackTrace();
+                        }else{
+                            Snackbar.make(recyclerView, "Ingredient Not Found!", Snackbar.LENGTH_LONG).show();
                         }
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        hideProgressDialog();
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                headers.put("app_key", AppController.getInstance().appKey());
-                return headers;
-            }
-        };
 
-        AppController.getInstance().addToRequestQueue(request, TAG);
+                    @Override
+                    public void onFailure(Call<List<Ingredient>> call, Throwable t) {
+                        hideProgressDialog();
+                        Log.e("GetMyIngredients", t.toString());
+                    }
+                });
     }
 
     private static void showProgressDialog( String m) {
@@ -327,61 +293,30 @@ public class MyIngredients extends AppCompatActivity  {
 
     }
     private static void getProductByUPC(String code,final FragmentManager fm){
-        final String TAG = "GetProducName";
-        showProgressDialog("Getting Product Information");
-        Uri url = Uri.parse( AppConfig.UPLOOKUP)
-                .buildUpon()
-                .appendQueryParameter("upc", code)
-                .build();
-
-        Log.w("Url", url.toString());
-
-        StringRequest request = new StringRequest(Request.Method.GET, url.toString(),
-                new Response.Listener<String>() {
+        showProgressDialog("Fetch UPC Item");
+        service = AppConfig.getAPIService(AppConfig.UPLOOKUP);
+        service.fetchUPCItem(code)
+                .enqueue(new Callback<UPCResponse>() {
                     @Override
-                    public void onResponse(String response) {
-                        Log.w("RESPONSE", response);
+                    public void onResponse(Call<UPCResponse> call, Response<UPCResponse> response) {
                         hideProgressDialog();
-
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            JSONArray array = obj.getJSONArray("items");
-                            if(array.length()> 0) {
-                                JSONObject item = array.getJSONObject(0);
-                                String title = item.getString("title");
-
-                                Snackbar.make(recyclerView,
-                                        title, Snackbar.LENGTH_LONG).show();
-
-                                ShowInsertDialog.newInstance(title).show(fm, "InserDialog");
-                                //SimpleScannerFragment.this.getDialog().dismiss();
-                            }else{
-                                Snackbar.make(recyclerView,
-                                        "Items Not Found", Snackbar.LENGTH_LONG).show();
+                        if(response.isSuccessful()){
+                            upcItems = response.body().getItems();
+                            Snackbar.make(recyclerView, "Item found", Snackbar.LENGTH_LONG).show();
+                            if(upcItems != null && upcItems.size() > 0) {
+                                ShowInsertDialog.newInstance(upcItems.get(0).getTitle()).show(fm, "InserDialog");
                             }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        }else{
+                            Snackbar.make(recyclerView, "Item not found!", Snackbar.LENGTH_LONG).show();
                         }
                     }
-                }, new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Updates Error", "Error " + error.getMessage());
-                hideProgressDialog();
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                return headers;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(request, TAG);
+                    @Override
+                    public void onFailure(Call<UPCResponse> call, Throwable t) {
+                        hideProgressDialog();
+                        Log.e("UPC_ITEM", t.toString());
+                    }
+                });
     }
 
     public static class ShowInsertDialog extends AppCompatDialogFragment{
@@ -424,13 +359,13 @@ public class MyIngredients extends AppCompatActivity  {
                             String quantity = qField.getText().toString();
 
                             //Call Save Ingredient
-                            Ingredient ing = new Ingredient(text, Double.parseDouble(quantity),
-                                    user.getId());
-                            try {
-                                addIngredient(ing);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            Ingredient ing = new Ingredient();
+                            ing.setText(text);
+                            ing.setWeight(Double.parseDouble(quantity));
+                            ing.setUserid(user.getId());
+
+                            addIngredient(ing);
+
                         }
                     })
                     .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -442,90 +377,54 @@ public class MyIngredients extends AppCompatActivity  {
         }
     }
 
-    static void addIngredient(final Ingredient ingred) throws JSONException {
-        final String TAG = "Saving Ingredient";
-        showProgressDialog(TAG);
-
-        JSONObject jobj = new JSONObject();
-
-        jobj.put("text", ingred.getText());
-        jobj.put("quantity", ingred.getQuantity());
-        jobj.put("consumer_id", ingred.getUserid());
-
-        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.POST,
-                AppConfig.INTERNAL_INGREDIENT_API,
-                jobj,
-                new Response.Listener<JSONObject>(){
+    static void addIngredient(final Ingredient ingred) {
+        showProgressDialog("Adding Ingredient");
+        myIngredients = new ArrayList<>();
+        service = AppConfig.getAPIService();
+        service.addIngredient(AppController.getInstance().appKey(), ingred)
+                .enqueue(new Callback<Ingredient>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG,response.toString());
-                        Snackbar.make(recyclerView,"Ingredient Added!", Snackbar.LENGTH_LONG)
-                                .show();
+                    public void onResponse(Call<Ingredient> call, Response<Ingredient> response) {
                         hideProgressDialog();
-                        getMyIngredient();
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        hideProgressDialog();
-                    }
-                }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                headers.put("app_key", AppController.getInstance().appKey());
-                return headers;
-            }
-        };
-
-        AppController.getInstance().addToRequestQueue(objectRequest, TAG);
-    }
-
-    void removeIngredient(final Ingredient ingredient, final View view) {
-        final String TAG = "Removing Ingredient";
-        showProgressDialog(TAG);
-
-        StringRequest request = new StringRequest(Request.Method.DELETE,
-                AppConfig.INTERNAL_INGREDIENT_API + "/"+ingredient.getId(),
-                new Response.Listener<String>(){
-                    @Override
-                    public void onResponse(String response) {
-                        Snackbar.make(view, "Ingredient removed", Snackbar.LENGTH_LONG)
-                                .show();
-                        getMyIngredient();
-                        hideProgressDialog();
-                    }
-                },
-                new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        hideProgressDialog();
-                        try {
-                            String r = new String(error.networkResponse.data, "UTF-8");
-                            JSONObject o = new JSONObject(r);
-                            Log.e("RemoveError", o.toString());
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        if(response.isSuccessful()){
+                            getMyIngredient();
+                            Snackbar.make(recyclerView, "You have added your ingredient", Snackbar.LENGTH_LONG).show();
+                        }else{
+                            Snackbar.make(recyclerView, "Ingredient not added!", Snackbar.LENGTH_LONG).show();
                         }
                     }
-                }){
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("User-agent", System.getProperty("http.agent"));
-                headers.put("app_key", AppController.getInstance().appKey());
-                headers.put("id", ""+ingredient.getId());
-                return headers;
-            }
-        };
+                    @Override
+                    public void onFailure(Call<Ingredient> call, Throwable t) {
+                        hideProgressDialog();
+                        Log.e("NotSucceful", t.toString());
+                    }
+                });
+    }
 
-        AppController.getInstance().addToRequestQueue(request, TAG);
+    void removeIngredient(final Ingredient ingredient) {
+        showProgressDialog("Removing Ingredient");
+        myIngredients = new ArrayList<>();
+        service = AppConfig.getAPIService();
+        service.removeIngredient(ingredient.getId(), AppController.getInstance().appKey())
+                .enqueue(new Callback<Ingredient>() {
+                    @Override
+                    public void onResponse(Call<Ingredient> call, Response<Ingredient> response) {
+                        hideProgressDialog();
+                        if(response.isSuccessful()){
+                            getMyIngredient();
+                            Snackbar.make(recyclerView, "You have added your ingredient", Snackbar.LENGTH_LONG).show();
+                        }else{
+                            Snackbar.make(recyclerView, "Item Not Removed!", Snackbar.LENGTH_LONG).show();
+                            Log.i("NotSucceful", response.toString());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Ingredient> call, Throwable t) {
+                        hideProgressDialog();
+                        Log.e("NotSucceful", t.toString());
+                    }
+                });
     }
 }

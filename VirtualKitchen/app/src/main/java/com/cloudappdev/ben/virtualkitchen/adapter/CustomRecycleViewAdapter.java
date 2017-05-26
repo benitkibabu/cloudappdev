@@ -9,12 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cloudappdev.ben.virtualkitchen.R;
-import com.cloudappdev.ben.virtualkitchen.models.Recipe;
+import com.cloudappdev.ben.virtualkitchen.models.MyRecipes;
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,7 @@ import java.util.List;
 public class CustomRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<CustomRecycleViewAdapter.ViewHolder> {
     Context context;
     int layoutId;
-    List<Recipe> recipeList;
+    List<MyRecipes> recipeList;
     OnItemClickListener clickListener;
     OnItemLongCLickListener longCLickListener;
 
@@ -57,7 +54,7 @@ public class CustomRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Cu
         notifyDataSetChanged();
     }
 
-    public void addAll(List<Recipe> list){
+    public void addAll(List<MyRecipes> list){
         clear();
         this.recipeList.addAll(list);
         notifyDataSetChanged();
@@ -106,17 +103,15 @@ public class CustomRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Cu
         holder.itemView.setLongClickable(true);
 
         String label = recipeList.get(position).getLabel();
-        String imageUrl = recipeList.get(position).getImageUrl();
-        String list = recipeList.get(position).getIngredientLines();
+        String imageUrl = recipeList.get(position).getImage();
+        String inList ="";
+        inList += recipeList.get(position).getIngredientLines().length() > 50 ?
+                recipeList.get(position).getIngredientLines().substring(0, 50)+"....":
+                recipeList.get(position).getIngredientLines();
 
         holder.itemHolder.textView.setText(label);
 
-        BufferedReader b = new BufferedReader(new StringReader(list));
-        try {
-            holder.itemHolder.textView2.setText(b.readLine());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        holder.itemHolder.textView2.setText(inList);
         
         Picasso.with(context).load(imageUrl).resize(128,128).centerCrop().into(holder.itemHolder.imageView);
     }
