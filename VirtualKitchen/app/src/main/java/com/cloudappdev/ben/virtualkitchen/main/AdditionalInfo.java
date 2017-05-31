@@ -59,18 +59,6 @@ public class AdditionalInfo extends AppCompatActivity {
         pref = new AppPreference(this);
         db = new SQLiteHandler(this);
 
-        if(pref.getBooleanVal(pref.isLoggedIn)){
-            if(pref.getBooleanVal(pref.isLoggedIn)){
-                User u = db.getUser();
-                if(u != null) {
-                    AppController.getInstance().setUser(u);
-                    launchMainActivity();
-                }else{
-                    pref.setBoolean(pref.isLoggedIn, false);
-                }
-            }
-        }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -83,8 +71,13 @@ public class AdditionalInfo extends AppCompatActivity {
 
         temp = new User();
 
-        if(AppController.getInstance().getUser() != null) {
-            temp = AppController.getInstance().getUser();
+        if(getIntent().hasExtra("user")) {
+            temp = (User) getIntent().getSerializableExtra("user");
+        }
+        else{
+            Intent i = new Intent(this, RegisterActivity.class);
+            startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+            finish();
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -126,7 +119,6 @@ public class AdditionalInfo extends AppCompatActivity {
                     User user = response.body();
                     db.creatUser(user);
                     pref.setBoolean(pref.isLoggedIn, true);
-                    AppController.getInstance().setUser(user);
                     launchMainActivity();
                 }else{
                     Log.d("Response", response.toString());

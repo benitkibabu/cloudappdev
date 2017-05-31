@@ -21,6 +21,8 @@ import android.view.Window;
 
 import com.cloudappdev.ben.virtualkitchen.R;
 import com.cloudappdev.ben.virtualkitchen.adapter.CustomRecycleViewAdapter;
+import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
+import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
 import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
@@ -52,6 +54,8 @@ public class RecipesActivity extends AppCompatActivity {
     int itemPosition;
 
     APIService service;
+    AppPreference pref;
+    SQLiteHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,9 @@ public class RecipesActivity extends AppCompatActivity {
 
         APP_ID = getString(R.string.edamam_api_id);
         APP_KEY = getString(R.string.edamam_api_key);
+
+        db = new SQLiteHandler(this);
+        pref = new AppPreference(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -172,7 +179,7 @@ public class RecipesActivity extends AppCompatActivity {
 
     //Retrieve User favourite Recipe from internal API
     private void getMyFavourite() {
-        showProgressDialog("Fetching Favourite Recipe!...");
+        showProgressDialog(getString(R.string.fetching_favourite_recipe));
         recipeList = new ArrayList<>();
         service = AppConfig.getAPIService();
         service.fetchMyRecipes(AppController.getInstance().appKey(), user.getId())
@@ -184,7 +191,7 @@ public class RecipesActivity extends AppCompatActivity {
                             recipeList = response.body();
                             adapter.addAll(recipeList);
                         }else {
-                            Snackbar.make(recyclerView, "Failed to retreive Recipes",
+                            Snackbar.make(recyclerView, R.string.failed_retrieve_items,
                                     Snackbar.LENGTH_LONG).show();
                         }
                     }
@@ -193,7 +200,7 @@ public class RecipesActivity extends AppCompatActivity {
                     public void onFailure(Call<List<MyRecipes>> call, Throwable t) {
                         hideProgressDialog();
                         Log.e ("Err", t.toString());
-                        Snackbar.make(recyclerView, "There was an error connecting to API",
+                        Snackbar.make(recyclerView, R.string.error_connecting_api,
                                 Snackbar.LENGTH_LONG).show();
                     }
                 });
@@ -218,7 +225,6 @@ public class RecipesActivity extends AppCompatActivity {
 
         if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
-            //goBack();
             return true;
         }
 
@@ -246,14 +252,9 @@ public class RecipesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //If we are viewing the Online Recipes, We should be able to search it.
-        if (AppController.getInstance().getNavFragement().equals("R")) {
+        if (AppController.getInstance().getNavFragment().equals("R")) {
             getMenuInflater().inflate(R.menu.menu_recipes, menu);
-
-            // Associate searchable configuration with the SearchView
-            // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-            //searchView.setSearchableInfo( searchManager.getSearchableInfo(getComponentName()));
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -276,8 +277,8 @@ public class RecipesActivity extends AppCompatActivity {
     }
 
     void loadUser() {
-        if (AppController.getInstance().getUser() != null) {
-            user = AppController.getInstance().getUser();
+        if (db != null) {
+            user = db.getUser();
         } else {
             goBack();
         }
@@ -288,8 +289,8 @@ public class RecipesActivity extends AppCompatActivity {
         super.onResume();
         loadUser();
         if (AppConfig.isNetworkAvailable(this)) {
-            if (AppController.getInstance().getNavFragement() != null && !AppController.getInstance().getNavFragement().isEmpty()) {
-                String f = AppController.getInstance().getNavFragement();
+            if (AppController.getInstance().getNavFragment() != null && !AppController.getInstance().getNavFragment().isEmpty()) {
+                String f = AppController.getInstance().getNavFragment();
                 if (f.equals("R")) {
                     getRecipe(AppController.getInstance().searchKey);
                 } else {
@@ -303,7 +304,6 @@ public class RecipesActivity extends AppCompatActivity {
                     .setAction("Connect", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //Connect method goes here
                             startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                         }
                     }).show();

@@ -2,12 +2,12 @@ package com.cloudappdev.ben.virtualkitchen.main;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +24,8 @@ import com.cloudappdev.ben.virtualkitchen.activities.RecipesActivity;
 import com.cloudappdev.ben.virtualkitchen.adapter.CustomMoodAdapter;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
+import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
+import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
 import com.cloudappdev.ben.virtualkitchen.models.Emotes;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.facebook.AccessToken;
@@ -47,12 +49,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     TextView nameTv;
     CircleImageView profileImage;
 
-    private static final String TAG = "SignOutActivity";
-    public String imgurl;
-    boolean fbLogout = false, gLogout = false;
-    User data;
+    private final String TAG = this.getClass().getName();
+    public String imageUrl;
+    boolean fbLogout = false;
+    User user;
 
     GoogleApiClient mGoogleApiClient;
+
+    AppPreference pref;
+    SQLiteHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +68,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         setContentView(R.layout.activity_main);
 
+        db = new SQLiteHandler(this);
+        pref = new AppPreference(this);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        if(!pref.getBooleanVal(pref.isLoggedIn)){
+            logoutUser();
+        }
 
         profileImage = (CircleImageView) findViewById(R.id.profile_img);
         nameTv = (TextView) findViewById(R.id.name_tv);
@@ -78,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         signoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                facebookSignOut();
+                logoutUser();
             }
         });
 
@@ -86,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         recipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppController.getInstance().setNavFragement("R");
+                AppController.getInstance().setNavFragment("R");
                 Intent i = new Intent(MainActivity.this, RecipesActivity.class);
                 startActivity(i, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
@@ -96,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         favouriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppController.getInstance().setNavFragement("F");
+                AppController.getInstance().setNavFragment("F");
                 Intent i = new Intent(MainActivity.this, RecipesActivity.class);
                 startActivity(i, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
@@ -119,20 +132,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
     }
-    void loadProfile(){
-        if(AppController.getInstance().getUser() != null) {
-            data = AppController.getInstance().getUser();
-            imgurl = "https://graph.facebook.com/"+data.getLogin_id()+"/picture?type=large";
-            nameTv.setText(data.getName());
 
-            Picasso.with(getApplicationContext())
-                    .load(imgurl)
-                    .resize(256,256).centerCrop()
-                    .into(profileImage);
+    void logoutUser(){
+        if(pref != null && db != null){
+            pref.setBoolean(pref.isLoggedIn, false);
+            db.deleteUser();
+            facebookSignOut();
+        }
+    }
+
+    void loadProfile(){
+        if(db != null) {
+            user = db.getUser();
+            imageUrl = "https://graph.facebook.com/"+ user.getLogin_id()+"/picture?type=large";
+            nameTv.setText(user.getName());
+
+            if(user.getImage_url() == null || user.getImage_url().isEmpty()){
+                Picasso.with(getApplicationContext())
+                        .load(R.drawable.round_button)
+                        .placeholder(R.drawable.progress_animation)
+                        .resize(256,256).centerCrop()
+                        .into(profileImage);
+            }else {
+                Picasso.with(getApplicationContext())
+                        .load(imageUrl)
+                        .placeholder(R.drawable.progress_animation)
+                        .resize(256, 256).centerCrop()
+                        .into(profileImage);
+            }
 
         }else{
-            facebookSignOut();
-            //googleSignOut();
+           logoutUser();
         }
     }
 
@@ -155,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void facebookSignOut(){
         if (AccessToken.getCurrentAccessToken() == null) {
-
             fbLogout = true;
         }else{
             LoginManager.getInstance().logOut();
@@ -167,11 +196,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             new ResultCallback<Status>() {
                 @Override
                 public void onResult(Status status) {
-                    // [START_EXCLUDE]
-                    // [END_EXCLUDE]
+
                 }
             });
-            AppController.getInstance().setUser(null);
             Intent i = new Intent(MainActivity.this, Login.class);
             startActivity(i);
             finish();
@@ -205,12 +232,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         @Override
         public void onCreate(@Nullable final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                setStyle(STYLE_NO_TITLE, R.style.KitchenTheme);
-//            } else {
-//                setStyle(STYLE_NO_TITLE, android.R.style.Theme_DeviceDefault_Light_DarkActionBar);
-//            }
 
         }
         @Override
@@ -250,13 +271,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 public void onItemClick(View view, int position) {
                     Intent i = new Intent(getActivity(),RecipesActivity.class);
                     AppController.getInstance().searchKey = emotes.get(position).getLabel();
-                    AppController.getInstance().setNavFragement("R");
+                    AppController.getInstance().setNavFragment("R");
                     startActivity(i, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
                 }
             });
 
             return view;
         }
-
     }
 }

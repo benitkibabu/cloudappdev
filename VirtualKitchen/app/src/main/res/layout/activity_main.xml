@@ -1,108 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.cloudappdev.ben.virtualkitchen.main.MainActivity"
     android:background="@mipmap/kitchen_1">
 
-
-    <Button
-        android:text="@string/recipes"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerInside"
-        android:id="@+id/recipe_btn"
-        android:elevation="6dp"
-        android:layout_width="wrap_content"
-        android:textAlignment="center"
-        android:textColor="@android:color/background_light"
-        android:fontFamily="sans-serif-medium"
-        android:textSize="14sp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_alignTop="@+id/mood_btn"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/favourite_btn" />
+        android:padding="@dimen/appbar_padding_top"
+        android:background="@color/main_head_tab"
+        android:theme="@style/KitchenTheme.AppBarOverlay">
 
-    <Button
-        android:text="@string/my_ingredient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ingredient_btn"
-        android:elevation="6dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_alignTop="@+id/mood_btn"
-        android:layout_alignParentEnd="true" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <Button
-        android:text="@string/favourites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/favourite_btn"
-        android:textColor="@android:color/background_light"
-        android:elevation="6dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_img"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/profile_pick"
+                android:elevation="6dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/cart_items"
+                app:civ_border_color="@color/colorAccent"
+                app:civ_border_width="1dp"
+                app:srcCompat="@mipmap/cart_items" />
 
-    <Button
-        android:text="@string/sing_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sign_out_btn"
-        android:elevation="6dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/ingredient_btn" />
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:padding="5dp"
+                android:text="@string/full_name_dummy_text"
+                android:textAlignment="textStart"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="normal|bold"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/profile_img" />
+        </RelativeLayout>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        app:srcCompat="@mipmap/chef"
-        android:contentDescription="@string/profile_pick"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:scaleType="centerCrop"
-        android:id="@+id/profile_img"
-        android:background="@android:color/transparent"
-        android:elevation="6dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"/>
+    </android.support.design.widget.AppBarLayout>
 
-    <Button
-        android:text="@string/in_a_mood"
-        android:id="@+id/mood_btn"
-        android:background="@drawable/round_button"
-        android:elevation="6dp"
-        android:textAlignment="center"
-        android:textStyle="normal|bold"
-        android:textSize="24sp"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:textColor="@android:color/background_light"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_horizontal_margin">
+        <Button
+            android:text="@string/recipes"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/recipe_btn"
+            android:elevation="6dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_above="@+id/favourite_btn"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="22dp"
+            android:layout_alignEnd="@+id/favourite_btn" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:padding="5dp"
-        android:id="@+id/name_tv"
-        android:textAllCaps="true"
-        android:textAlignment="textStart"
-        android:textStyle="normal|bold"
-        android:textColor="@color/white"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/recipe_btn" />
+        <Button
+            android:text="@string/my_ingredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ingredient_btn"
+            android:elevation="6dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_alignBaseline="@+id/recipe_btn"
+            android:layout_alignBottom="@+id/recipe_btn"
+            android:layout_alignParentEnd="true" />
 
-</RelativeLayout>
+        <Button
+            android:text="@string/favourites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/favourite_btn"
+            android:textColor="@android:color/background_light"
+            android:elevation="6dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:text="@string/sing_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sign_out_btn"
+            android:elevation="6dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/ingredient_btn" />
+
+        <Button
+            android:text="@string/in_a_mood"
+            android:id="@+id/mood_btn"
+            android:background="@drawable/round_button"
+            android:elevation="6dp"
+            android:textStyle="normal|bold"
+            android:textSize="18sp"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:textColor="@android:color/background_light"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
+</LinearLayout>

@@ -15,15 +15,9 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_left</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_right</item>
 
-        <!--&lt;!&ndash; specify shared element transitions &ndash;&gt;-->
-        <!--<item name="android:windowSharedElementEnterTransition">-->
-        <!--@transition/change_image_transform</item>-->
-        <!--<item name="android:windowSharedElementExitTransition">-->
-        <!--@transition/change_image_transform</item>-->
     </style>
 
     <style name="KitchenTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
         <!-- enable window content transitions -->
         <item name="android:windowActivityTransitions">true</item>
 
@@ -35,10 +29,14 @@
         <item name="android:activityCloseEnterAnimation">@anim/slide_left</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_right</item>
 
-        <item name="colorPrimaryDark">@color/darkGreen</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowActionBarOverlay">true</item>
+
+    </style>
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splashscreen</item>
     </style>
 
     <style name="KitchenTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

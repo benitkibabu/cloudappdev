@@ -12,16 +12,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
 import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
-import com.cloudappdev.ben.virtualkitchen.rest.APIService;
-import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
-import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.User;
+import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class Login extends AppCompatActivity {
 
@@ -29,13 +29,10 @@ public class Login extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
 
     private ProgressDialog mProgressDialog;
-
     Button signinBtn, registerBtn;
-
     EditText username, password;
 
     APIService service;
-
     AppPreference pref;
     SQLiteHandler db;
 
@@ -53,18 +50,14 @@ public class Login extends AppCompatActivity {
 
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
-
         signinBtn = (Button) findViewById(R.id.signinBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
-
         mProgressDialog = new ProgressDialog(this);
 
         if(pref.getBooleanVal(pref.isLoggedIn)){
             User u = db.getUser();
             if(u != null) {
-                AppController.getInstance().setUser(u);
-                Intent i = new Intent(Login.this, MainActivity.class);
-                launchMainActivity(i);
+                launchMainActivity();
             }else{
                 pref.setBoolean(pref.isLoggedIn, false);
             }
@@ -73,7 +66,7 @@ public class Login extends AppCompatActivity {
         signinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn(username.getText().toString(), password.getText().toString());
+                signInOnClick(v);
             }
         });
 
@@ -85,7 +78,18 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
+    void signInOnClick(View v){
+        if(username.getText().toString().isEmpty()){
+            username.setError(getString(R.string.username_empty_erro));
+        }
+        else if(password.getText().toString().isEmpty()){
+            password.setError(getString(R.string.password_empty_error));
+        }
+        else{
+            signIn(username.getText().toString(), password.getText().toString());
+        }
     }
 
     @Override
@@ -111,9 +115,7 @@ public class Login extends AppCompatActivity {
                     User user = response.body();
                     db.creatUser(user);
                     pref.setBoolean(pref.isLoggedIn, true);
-                    AppController.getInstance().setUser(user);
-                    Intent i = new Intent(Login.this, MainActivity.class);
-                    launchMainActivity(i);
+                    launchMainActivity();
                 }else{
                     Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
@@ -145,8 +147,9 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    public void launchMainActivity(Intent i){
+    public void launchMainActivity(){
         hideProgressDialog();
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         finish();
     }

@@ -90,7 +90,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         if(pref.getBooleanVal(pref.isLoggedIn)){
             User u = db.getUser();
             if(u != null) {
-                AppController.getInstance().setUser(u);
                 launchMainActivity();
             }else{
                 pref.setBoolean(pref.isLoggedIn, false);
@@ -170,11 +169,11 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!email.getText().toString().isEmpty()&&!username.getText().toString().isEmpty()&&
-                        !password.getText().toString().isEmpty()){
+                if(validateField(email)&&validateField(username)&&
+                        validateField(password)){
 
                     for(User u : users){
-                        if(u.getUsername().toString().equals(username.getText().toString())){
+                        if(u.getUsername().equals(username.getText().toString())){
                             usernameValid = false;
                             break;
                         }
@@ -189,15 +188,24 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                         u.setUsername(username.getText().toString());
                         postUser(u);
                     }else{
-                        Snackbar.make(v, "Username is taken, Try another name!",
+                        Snackbar.make(v, R.string.username_taken_error,
                                 Snackbar.LENGTH_LONG).show();
                     }
                 }else{
-                    Snackbar.make(v, "Please fill all fields",
+                    Snackbar.make(v, getString(R.string.empty_field_error),
                             Snackbar.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    boolean validateField(EditText editText){
+        if(editText.getText().toString().isEmpty()){
+            editText.setError(getString(R.string.empty_field_error));
+            return false;
+        }
+        else
+            return true;
     }
 
     void getAllUser(){
@@ -228,7 +236,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                     User user = response.body();
                     db.creatUser(user);
                     pref.setBoolean(pref.isLoggedIn, true);
-                    AppController.getInstance().setUser(user);
                     launchMainActivity();
                 }else{
                     Log.d("Response", response.toString());
@@ -334,7 +341,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             user.setEmail(email);
             user.setImage_url(picUrl);
 
-            AppController.getInstance().setUser(user);
             launchMoreInfoPage(user);
         } else {
             // Signed out, show unauthenticated UI.
@@ -367,7 +373,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                             user.setEmail(email);
                             user.setImage_url(picUrl);
 
-                            AppController.getInstance().setUser(user);
                             launchMoreInfoPage(user);
 
                         } catch (JSONException e) {

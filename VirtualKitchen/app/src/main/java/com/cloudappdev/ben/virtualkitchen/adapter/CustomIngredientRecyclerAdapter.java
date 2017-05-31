@@ -77,7 +77,6 @@ public class CustomIngredientRecyclerAdapter extends RecyclerView.Adapter<Custom
 
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            //view.st
         }
 
         @Override
@@ -110,7 +109,11 @@ public class CustomIngredientRecyclerAdapter extends RecyclerView.Adapter<Custom
         holder.itemHolder.textView.setText(label);
         holder.itemHolder.textView2.setText(weight);
 
-        Picasso.with(context).load(R.mipmap.cart_items).resize(128,128).centerCrop().into(holder.itemHolder.itemIcon);
+        Picasso.with(context).load(R.mipmap.cart_items)
+                .placeholder(R.drawable.progress_animation)
+                .resize(128,128)
+                .centerCrop()
+                .into(holder.itemHolder.itemIcon);
     }
 
     @Override

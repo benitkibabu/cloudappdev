@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
+import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
 import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
@@ -49,6 +51,8 @@ public class RecipeDetails extends AppCompatActivity {
     MyRecipes r;
 
     APIService service;
+    AppPreference pref;
+    SQLiteHandler db;
 
     boolean isMyFavorite = false;
 
@@ -63,6 +67,9 @@ public class RecipeDetails extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        db = new SQLiteHandler(this);
+        pref = new AppPreference(this);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         title = (TextView) findViewById(R.id.title);
         ingredients = (TextView) findViewById(R.id.ingredient);
@@ -73,10 +80,10 @@ public class RecipeDetails extends AppCompatActivity {
         img = (ImageView) findViewById(R.id.recipe_img);
         findBtn = (Button) findViewById(R.id.view_ingredient);
 
-        final String f = AppController.getInstance().getNavFragement();
+        final String f = AppController.getInstance().getNavFragment();
 
-        if(getIntent().hasExtra("Recipe") && AppController.getInstance().getUser() != null){
-            user = AppController.getInstance().getUser();
+        if(getIntent().hasExtra("Recipe") && db != null){
+            user = db.getUser();
             r = (MyRecipes) getIntent().getSerializableExtra("Recipe");
 
             getMyFavourite(title);
@@ -128,6 +135,7 @@ public class RecipeDetails extends AppCompatActivity {
 
             Picasso.with(getApplicationContext())
                     .load(r.getImage())
+                    .placeholder(R.drawable.progress_animation)
                     .resize(512,512).centerCrop()
                     .into(img);
 
@@ -263,7 +271,7 @@ public class RecipeDetails extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if(!AppController.getInstance().getNavFragement().equals("R") || isMyFavorite) {
+        if(!AppController.getInstance().getNavFragment().equals("R") || isMyFavorite) {
             getMenuInflater().inflate(R.menu.menu_recipe_deails, menu);
         }
         return true;

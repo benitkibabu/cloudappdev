@@ -3,7 +3,6 @@ package com.cloudappdev.ben.virtualkitchen.app;
 import android.app.Application;
 
 import com.cloudappdev.ben.virtualkitchen.R;
-import com.cloudappdev.ben.virtualkitchen.models.User;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
@@ -15,8 +14,7 @@ public class AppController extends Application {
     public String searchKey = "chicken";
 
     private static AppController mInstance;
-    User user;
-    String navFragement;
+    String navFragment;
 
     @Override
     public void onCreate() {
@@ -30,20 +28,12 @@ public class AppController extends Application {
         return mInstance;
     }
 
-    public User getUser() {
-        return user;
+    public String getNavFragment() {
+        return navFragment;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getNavFragement() {
-        return navFragement;
-    }
-
-    public void setNavFragement(String navFragement) {
-        this.navFragement = navFragement;
+    public void setNavFragment(String navFragment) {
+        this.navFragment = navFragment;
     }
 
     public String appKey(){

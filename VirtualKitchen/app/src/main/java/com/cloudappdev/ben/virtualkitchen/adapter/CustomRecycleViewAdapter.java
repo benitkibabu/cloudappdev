@@ -113,7 +113,11 @@ public class CustomRecycleViewAdapter extends ContextMenuRecyclerView.Adapter<Cu
 
         holder.itemHolder.textView2.setText(inList);
         
-        Picasso.with(context).load(imageUrl).resize(128,128).centerCrop().into(holder.itemHolder.imageView);
+        Picasso.with(context).load(imageUrl)
+                .placeholder(R.drawable.progress_animation)
+                .resize(128,128)
+                .centerCrop()
+                .into(holder.itemHolder.imageView);
     }
 
     @Override

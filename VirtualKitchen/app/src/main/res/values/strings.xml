@@ -5,7 +5,7 @@
     <string name="my_ingredient">Ingredient</string>
     <string name="user_image">user image</string>
     <string name="in_a_mood">My Mood</string>
-    <string name="loading">Signing In..</string>
+    <string name="loading">Loading!...</string>
 
     <string name="facebook_app_id">1733782833613796</string>
     <string name="vk_app_key">AkxyCr2apUfGu5FnzLsHTAtt</string>
@@ -42,4 +42,14 @@
     <string name="confirm_password">Confirm password</string>
     <string name="additional_info">Please add a password to go with your New Account</string>
     <string name="username">Username</string>
+    <string name="username_empty_erro">Please fill out this field</string>
+    <string name="password_empty_error">Please enter password</string>
+    <string name="full_name_dummy_text">Full Name</string>
+    <string name="empty_field_error">Field can\'t be empty</string>
+    <string name="username_taken_error">Username is taken, Try another name!</string>
+    <string name="fetching_favourite_recipe">Fetching Favourite Recipe!...</string>
+    <string name="error_connecting_api">There was an error connecting to API</string>
+    <string name="failed_retrieve_items">Failed to retrieve Items</string>
+    <string name="on_dummy_text">1</string>
+    <string name="quantity">Quantity:</string>
 </resources>
