@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Virtual Kitchen</string>
+    <string name="recipes">Recipes</string>
+    <string name="favourites">Favourites</string>
+    <string name="my_ingredient">Ingredient</string>
+    <string name="user_image">user image</string>
+    <string name="in_a_mood">My Mood</string>
+    <string name="loading">Loading!...</string>
+
+    <string name="facebook_app_id">1733782833613796</string>
+    <string name="vk_app_key">AkxyCr2apUfGu5FnzLsHTAtt</string>
+    <string name="sing_out">Sign Out</string>
+    <string name="profile_pick">Profile Pick</string>
+
+    <string name="title_activity_recipes">Recipes</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_recipe_details">RecipeDetails</string>
+    <string name="instructions">Instructions</string>
+    <string name="nutrition">Nutrition</string>
+    <string name="summary">Summary</string>
+    <string name="preparation">Preparation</string>
+    <string name="view_ingredient_i_have">View Ingredient I have</string>
+    <string name="title">Title</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="saving_recipe">Saving Recipe</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="search_hint">Type what you want to search</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_ingredient">Add Ingredient</string>
+    <string name="save_ingredient">Save Ingredient</string>
+    <string name="remove">Remove</string>
+    <string name="register">Register</string>
+    <string name="password">password</string>
+    <string name="confirm_email_address">Confirm email address</string>
+    <string name="email_address">Email address</string>
+    <string name="full_name">Full Name</string>
+    <string name="already_have_an_account_sign_in">Already have an account? Sign in</string>
+    <string name="sign_in">Sign In</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account? register</string>
+    <string name="email_hint">123@gmail.com</string>
+    <string name="title_activity_additional_info">AdditionalInfo</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="additional_info">Please add a password to go with your New Account</string>
+    <string name="username">Username</string>
+    <string name="username_empty_erro">Please fill out this field</string>
+    <string name="password_empty_error">Please enter password</string>
+    <string name="full_name_dummy_text">Full Name</string>
+    <string name="empty_field_error">Field can\'t be empty</string>
+    <string name="username_taken_error">Username is taken, Try another name!</string>
+    <string name="fetching_favourite_recipe">Fetching Favourite Recipe!...</string>
+    <string name="error_connecting_api">There was an error connecting to API</string>
+    <string name="failed_retrieve_items">Failed to retrieve Items</string>
+    <string name="on_dummy_text">1</string>
+    <string name="quantity">Quantity:</string>
+</resources>

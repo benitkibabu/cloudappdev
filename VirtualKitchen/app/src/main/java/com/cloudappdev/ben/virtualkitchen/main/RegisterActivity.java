@@ -5,9 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,16 +22,6 @@ import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.User;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -55,13 +45,13 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    LoginButton fbLoginBtn;
+    Button fbLoginBtn;
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
     private ProgressDialog mProgressDialog;
-    CallbackManager callbackManager;
+//    CallbackManager callbackManager;
     GoogleApiClient mGoogleApiClient;
 
     EditText fullname, email, username, password;
@@ -79,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
+
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
 
@@ -124,36 +114,36 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         getAllUser();
 
-        fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
-        fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile", "user_photos"));
-
-        callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                if(AppConfig.isNetworkAvailable(RegisterActivity.this)){
-                    handleFacebookSignInResult(loginResult.getAccessToken());
-                }else{
-                    Snackbar.make(fbLoginBtn, "No internet connection", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Connect", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //Connect method goes here
-                                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                                }
-                            }).show();
-                }
-            }
-
-            @Override
-            public void onCancel() {
-                LoginManager.getInstance().logOut();
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-            }
-        });
+//        fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
+//        fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile", "user_photos"));
+//
+//        callbackManager = CallbackManager.Factory.create();
+//        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                if(AppConfig.isNetworkAvailable(RegisterActivity.this)){
+//                    handleFacebookSignInResult(loginResult.getAccessToken());
+//                }else{
+//                    Snackbar.make(fbLoginBtn, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+//                            .setAction("Connect", new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    //Connect method goes here
+//                                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+//                                }
+//                            }).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                LoginManager.getInstance().logOut();
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//            }
+//        });
 
         signBtn = (Button) findViewById(R.id.signinBtn);
         signBtn.setOnClickListener(new View.OnClickListener() {
@@ -270,12 +260,13 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     public void onStart() {
         super.onStart();
         if(AppConfig.isNetworkAvailable(this)){
-            AccessToken accessToken = AccessToken.getCurrentAccessToken();
-            if (accessToken != null) {
-                Log.d(TAG, ">>>" + "Signed In");
-               // handleFacebookSignInResult(accessToken);
-            }
-            else{
+
+//            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//            if (accessToken != null) {
+//                Log.d(TAG, ">>>" + "Signed In");
+//               // handleFacebookSignInResult(accessToken);
+//            }
+//            else{
                 OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
                 if (opr.isDone()) {
                     // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
@@ -296,7 +287,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                         }
                     });
                 }
-            }
+//            }
         }else{
             hideProgressDialog();
             Snackbar.make(fbLoginBtn, "No internet connection", Snackbar.LENGTH_INDEFINITE)
@@ -317,7 +308,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        //callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
@@ -345,46 +336,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         } else {
             // Signed out, show unauthenticated UI.
         }
-    }
-
-    private void handleFacebookSignInResult(AccessToken accessToken){
-        showProgressDialog("Facebook Signin!...");
-        GraphRequest request = GraphRequest.newMeRequest(
-                accessToken,
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(
-                            JSONObject object,
-                            GraphResponse response) {
-                        Log.d("FBLogin Response ", response.toString());
-                        hideProgressDialog();
-                        try {
-                            String name = object.getString("name");
-                            String email = object.getString("email");
-                            String id = object.getString("id");
-
-                            JSONObject picObj = object.getJSONObject("picture");
-                            String picUrl = "https://graph.facebook.com/"+id+"/picture?type=large";
-
-                            User user = new User();
-                            user.setLogin_type("Facebook");
-                            user.setLogin_id(id);
-                            user.setName(name);
-                            user.setEmail(email);
-                            user.setImage_url(picUrl);
-
-                            launchMoreInfoPage(user);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,email,gender,picture,link");
-        request.setParameters(parameters);
-        request.executeAsync();
     }
 
     private void showProgressDialog(String t) {

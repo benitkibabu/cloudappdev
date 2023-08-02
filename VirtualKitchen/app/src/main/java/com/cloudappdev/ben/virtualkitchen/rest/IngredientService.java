@@ -1,7 +1,7 @@
 package com.cloudappdev.ben.virtualkitchen.rest;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;

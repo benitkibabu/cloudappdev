@@ -4,13 +4,14 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialogFragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDialogFragment;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +29,7 @@ import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
 import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
 import com.cloudappdev.ben.virtualkitchen.models.Emotes;
 import com.cloudappdev.ben.virtualkitchen.models.User;
-import com.facebook.AccessToken;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
+
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
 
@@ -184,12 +183,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void facebookSignOut(){
-        if (AccessToken.getCurrentAccessToken() == null) {
-            fbLogout = true;
-        }else{
-            LoginManager.getInstance().logOut();
-            fbLogout = true;
-        }
+//        if (AccessToken.getCurrentAccessToken() == null) {
+//            fbLogout = true;
+//        }else{
+//            LoginManager.getInstance().logOut();
+//            fbLogout = true;
+//        }
 
         if(fbLogout){
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -203,15 +202,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             startActivity(i);
             finish();
         }
-// code for revoking access of facebook
-// new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
-//                .Callback() {
-//            @Override
-//            public void onCompleted(GraphResponse graphResponse) {
-//                LoginManager.getInstance().logOut();
-//                fbLogout = true;
-//            }
-//        }).executeAsync();
     }
 
     @Override

@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.telephony.TelephonyManager;
 
 import com.cloudappdev.ben.virtualkitchen.rest.APIService;
 import com.cloudappdev.ben.virtualkitchen.rest.RetrofitClient;
@@ -69,11 +68,6 @@ public class AppConfig {
 
     public static Date getDate(String date) throws ParseException {
         return dateTimeFormat.parse(date);
-    }
-
-    public static String getMobileIMEI(Context c){
-        TelephonyManager telephonyManager = (TelephonyManager)c.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
     }
 
     public static boolean isNetworkAvailable(Context context) {

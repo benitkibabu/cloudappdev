@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/activity_horizontal_margin"
-            android:background="@color/com_facebook_button_border_color_focused"
+            android:background="@color/teal_200"
             android:text="@string/title"
             android:textStyle="normal|bold" />
         <RelativeLayout
@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/activity_horizontal_margin"
-            android:background="@color/com_facebook_button_border_color_focused"
+            android:background="@color/teal_200"
             android:text="@string/nutrition"
             android:textStyle="normal|bold" />
         <TextView
@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/activity_horizontal_margin"
-            android:background="@color/com_facebook_button_border_color_focused"
+            android:background="@color/teal_200"
             android:text="@string/preparation"
             android:textStyle="normal|bold" />
         <LinearLayout
@@ -84,4 +84,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>
