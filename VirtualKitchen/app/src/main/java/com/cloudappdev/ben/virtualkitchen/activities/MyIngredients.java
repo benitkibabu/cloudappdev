@@ -38,6 +38,7 @@ import com.cloudappdev.ben.virtualkitchen.adapter.CustomIngredientRecyclerAdapte
 import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
+import com.cloudappdev.ben.virtualkitchen.helper.FavouriteSQLiteHandler;
 import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
 import com.cloudappdev.ben.virtualkitchen.main.MainActivity;
 import com.cloudappdev.ben.virtualkitchen.models.Ingredient;
@@ -67,6 +68,7 @@ public class MyIngredients extends AppCompatActivity {
 
     AppPreference pref;
     SQLiteHandler db;
+    FavouriteSQLiteHandler fdb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class MyIngredients extends AppCompatActivity {
 
         pref = new AppPreference(this);
         db = new SQLiteHandler(this);
+        fdb = new FavouriteSQLiteHandler(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

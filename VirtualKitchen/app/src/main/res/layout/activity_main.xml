@@ -9,7 +9,7 @@
     tools:context="com.cloudappdev.ben.virtualkitchen.main.MainActivity"
     android:background="@mipmap/kitchen_1">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                 android:layout_toEndOf="@+id/profile_img" />
         </RelativeLayout>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -111,8 +111,36 @@
             android:textColor="@android:color/background_light"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:visibility="gone"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
+
+        <FrameLayout
+            android:id="@+id/new_mood_btn"
+            android:elevation="6dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/pulseLottie"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                app:lottie_autoPlay="true"
+                android:layout_gravity="center"
+                app:lottie_loop="true"
+                app:lottie_url="https://lottie.host/24bd132e-f0a6-4c2e-bbf8-25e949a4335f/5wC7WByXdp.json" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/moodLottie"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_gravity="center"
+                app:lottie_url="https://lottie.host/f20d3fca-430e-49bc-bdd6-35344c7e8c6b/CI2pIZhuu4.json" />
+        </FrameLayout>
 
 
     </RelativeLayout>

@@ -5,43 +5,25 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cloudappdev.ben.virtualkitchen.R;
+import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
 import com.cloudappdev.ben.virtualkitchen.helper.AppPreference;
 import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
-import com.cloudappdev.ben.virtualkitchen.rest.APIService;
-import com.cloudappdev.ben.virtualkitchen.app.AppConfig;
-import com.cloudappdev.ben.virtualkitchen.app.AppController;
 import com.cloudappdev.ben.virtualkitchen.models.User;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -51,13 +33,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     private static final int RC_SIGN_IN = 9001;
 
     private ProgressDialog mProgressDialog;
-//    CallbackManager callbackManager;
-    GoogleApiClient mGoogleApiClient;
-
-    EditText fullname, email, username, password;
+    EditText fullname, username;
     Button registerBtn, signBtn;
-
-    APIService service;
 
     List<User> users;
     boolean usernameValid = true;
@@ -86,64 +63,12 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             }
         }
 
-        service = AppConfig.getAPIService();
-
         fullname = (EditText) findViewById(R.id.fullname);
-        email = (EditText) findViewById(R.id.email);
         username = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_WIDE);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
 
         mProgressDialog = new ProgressDialog(this);
 
         getAllUser();
-
-//        fbLoginBtn = (LoginButton) findViewById(R.id.facebook_login_button);
-//        fbLoginBtn.setReadPermissions(Arrays.asList("email", "public_profile", "user_photos"));
-//
-//        callbackManager = CallbackManager.Factory.create();
-//        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                if(AppConfig.isNetworkAvailable(RegisterActivity.this)){
-//                    handleFacebookSignInResult(loginResult.getAccessToken());
-//                }else{
-//                    Snackbar.make(fbLoginBtn, "No internet connection", Snackbar.LENGTH_INDEFINITE)
-//                            .setAction("Connect", new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    //Connect method goes here
-//                                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-//                                }
-//                            }).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                LoginManager.getInstance().logOut();
-//            }
-//
-//            @Override
-//            public void onError(FacebookException error) {
-//            }
-//        });
 
         signBtn = (Button) findViewById(R.id.signinBtn);
         signBtn.setOnClickListener(new View.OnClickListener() {
@@ -159,8 +84,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(validateField(email)&&validateField(username)&&
-                        validateField(password)){
+                if(validateField(username)){
 
                     for(User u : users){
                         if(u.getUsername().equals(username.getText().toString())){
@@ -171,10 +95,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
                     if(usernameValid) {
                         User u = new User();
-                        u.setLogin_type("Internal");
-                        u.setEmail(email.getText().toString());
                         u.setName(fullname.getText().toString());
-                        u.setEncrypted_password(password.getText().toString());
                         u.setUsername(username.getText().toString());
                         postUser(u);
                     }else{
@@ -200,51 +121,13 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
     void getAllUser(){
         users = new ArrayList<>();
-        service.getAllUser(AppController.getInstance().appKey())
-                .enqueue(new Callback<List<User>>() {
-                    @Override
-                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                        if(response.isSuccessful()){
-                            users = response.body();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<User>> call, Throwable t) {
-                        Log.e("AllUsers", t.toString());
-                    }
-                });
     }
 
     void postUser(final User u) {
         showProgressDialog("Registering!....");
-        service.registerUser(getString(R.string.vk_app_key), u).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, retrofit2.Response<User> response) {
-                hideProgressDialog();
-                if(response.isSuccessful()){
-                    User user = response.body();
-                    db.creatUser(user);
-                    pref.setBoolean(pref.isLoggedIn, true);
-                    launchMainActivity();
-                }else{
-                    Log.d("Response", response.toString());
-                    Toast.makeText(RegisterActivity.this, "Failed to register",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                hideProgressDialog();
-                Log.e("REPFAILURE", t.toString());
-            }
-        });
-    }
-
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        db.creatUser(u);
+        pref.setBoolean(pref.isLoggedIn, true);
+        launchMainActivity();
     }
 
     @Override
@@ -260,34 +143,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     public void onStart() {
         super.onStart();
         if(AppConfig.isNetworkAvailable(this)){
-
-//            AccessToken accessToken = AccessToken.getCurrentAccessToken();
-//            if (accessToken != null) {
-//                Log.d(TAG, ">>>" + "Signed In");
-//               // handleFacebookSignInResult(accessToken);
-//            }
-//            else{
-                OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-                if (opr.isDone()) {
-                    // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-                    // and the GoogleSignInResult will be available instantly.
-                    Log.d(TAG, "Got cached sign-in");
-                    GoogleSignInResult result = opr.get();
-                   // handleSignInResult(result);
-                } else {
-                    // If the user has not previously signed in on this device or the sign-in has expired,
-                    // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-                    // single sign-on will occur in this branch.
-
-                    opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                        @Override
-                        public void onResult(GoogleSignInResult googleSignInResult) {
-                            hideProgressDialog();
-                            //handleSignInResult(googleSignInResult);
-                        }
-                    });
-                }
-//            }
         }else{
             hideProgressDialog();
             Snackbar.make(fbLoginBtn, "No internet connection", Snackbar.LENGTH_INDEFINITE)
@@ -304,38 +159,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_SIGN_IN){
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-        //callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        showProgressDialog("Google Signin...");
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            hideProgressDialog();
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-
-            String name = acct.getDisplayName();
-            String email = acct.getEmail();
-            String id = acct.getId();
-
-            String picUrl = acct.getPhotoUrl().toString();
-            Log.w("GImg", picUrl);
-            User user = new User();
-            user.setLogin_type("Google");
-            user.setLogin_id(id);
-            user.setName(name);
-            user.setEmail(email);
-            user.setImage_url(picUrl);
-
-            launchMoreInfoPage(user);
-        } else {
-            // Signed out, show unauthenticated UI.
-        }
     }
 
     private void showProgressDialog(String t) {
@@ -355,13 +178,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-    }
-
-    void launchMoreInfoPage(User user){
-        Intent i = new Intent(RegisterActivity.this, AdditionalInfo.class);
-        i.putExtra("user", user);
-        startActivity(i, ActivityOptions.makeSceneTransitionAnimation(RegisterActivity.this).toBundle());
-        finish();
     }
     public void launchMainActivity(){
         Intent i = new Intent(RegisterActivity.this, MainActivity.class);

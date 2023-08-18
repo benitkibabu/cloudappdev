@@ -29,7 +29,7 @@
     <string name="add_ingredient">Add Ingredient</string>
     <string name="save_ingredient">Save Ingredient</string>
     <string name="remove">Remove</string>
-    <string name="register">Register</string>
+    <string name="register">Create</string>
     <string name="password">password</string>
     <string name="confirm_email_address">Confirm email address</string>
     <string name="email_address">Email address</string>

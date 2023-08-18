@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.cloudappdev.ben.virtualkitchen.R;
@@ -30,12 +31,8 @@ import com.cloudappdev.ben.virtualkitchen.helper.SQLiteHandler;
 import com.cloudappdev.ben.virtualkitchen.models.Emotes;
 import com.cloudappdev.ben.virtualkitchen.models.User;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -52,11 +49,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public String imageUrl;
     boolean fbLogout = false;
     User user;
-
-    GoogleApiClient mGoogleApiClient;
-
     AppPreference pref;
     SQLiteHandler db;
+
+    FrameLayout newMoodBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +66,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         db = new SQLiteHandler(this);
         pref = new AppPreference(this);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
         if(!pref.getBooleanVal(pref.isLoggedIn)){
             logoutUser();
         }
 
         profileImage = (CircleImageView) findViewById(R.id.profile_img);
+        newMoodBtn = (FrameLayout) findViewById(R.id.new_mood_btn);
         nameTv = (TextView) findViewById(R.id.name_tv);
 
         signoutBtn = (Button) findViewById(R.id.sign_out_btn);
@@ -130,25 +118,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 ShowMoodDialog.newInstance().show(getSupportFragmentManager(), "MoodDialog");
             }
         });
+
+        newMoodBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowMoodDialog.newInstance().show(getSupportFragmentManager(), "MoodDialog");
+            }
+        });
     }
 
     void logoutUser(){
         if(pref != null && db != null){
             pref.setBoolean(pref.isLoggedIn, false);
-            db.deleteUser();
-            facebookSignOut();
+            Intent i = new Intent(MainActivity.this, Login.class);
+            startActivity(i);
+            finish();
         }
     }
 
     void loadProfile(){
         if(db != null) {
             user = db.getUser();
-            imageUrl = "https://graph.facebook.com/"+ user.getLogin_id()+"/picture?type=large";
+            imageUrl ="chef";
             nameTv.setText(user.getName());
 
             if(user.getImage_url() == null || user.getImage_url().isEmpty()){
                 Picasso.with(getApplicationContext())
-                        .load(R.drawable.round_button)
+                        .load(R.mipmap.chef)
                         .placeholder(R.drawable.progress_animation)
                         .resize(256,256).centerCrop()
                         .into(profileImage);
@@ -178,29 +174,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                             startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                         }
                     }).show();
-        }
-
-    }
-
-    private void facebookSignOut(){
-//        if (AccessToken.getCurrentAccessToken() == null) {
-//            fbLogout = true;
-//        }else{
-//            LoginManager.getInstance().logOut();
-//            fbLogout = true;
-//        }
-
-        if(fbLogout){
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-            new ResultCallback<Status>() {
-                @Override
-                public void onResult(Status status) {
-
-                }
-            });
-            Intent i = new Intent(MainActivity.this, Login.class);
-            startActivity(i);
-            finish();
         }
     }
 

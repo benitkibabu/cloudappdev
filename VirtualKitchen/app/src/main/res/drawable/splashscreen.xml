@@ -4,7 +4,8 @@
         android:drawable="@color/colorPrimary" />
 
     <item>
-        <bitmap android:src="@mipmap/ic_launcher"
+        <bitmap android:src="@mipmap/chef"
+            android:tint="@color/white"
             android:gravity="center"/>
         </item>
 </layer-list>

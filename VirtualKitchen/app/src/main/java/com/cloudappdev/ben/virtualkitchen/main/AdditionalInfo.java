@@ -39,9 +39,6 @@ public class AdditionalInfo extends AppCompatActivity {
     boolean usernameValid = true;
 
     User temp;
-
-    APIService service;
-
     AppPreference pref;
     SQLiteHandler db;
 
@@ -54,7 +51,6 @@ public class AdditionalInfo extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
 
         setContentView(R.layout.activity_additional_info);
-        service = AppConfig.getAPIService();
 
         pref = new AppPreference(this);
         db = new SQLiteHandler(this);
@@ -111,46 +107,13 @@ public class AdditionalInfo extends AppCompatActivity {
     //Post Request
     void postUser(final User u) {
         showProgressDialog();
-        service.registerUser(getString(R.string.vk_app_key), u).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, retrofit2.Response<User> response) {
-                hideProgressDialog();
-                if(response.isSuccessful()){
-                    User user = response.body();
-                    db.creatUser(user);
-                    pref.setBoolean(pref.isLoggedIn, true);
-                    launchMainActivity();
-                }else{
-                    Log.d("Response", response.toString());
-                    Toast.makeText(AdditionalInfo.this, "Failed to register",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                hideProgressDialog();
-                Log.e("REPFAILURE", t.toString());
-            }
-        });
+        db.creatUser(u);
+        pref.setBoolean(pref.isLoggedIn, true);
+        launchMainActivity();
     }
 
     void getAllUser(){
         users = new ArrayList<>();
-        service.getAllUser(AppController.getInstance().appKey())
-                .enqueue(new Callback<List<User>>() {
-                    @Override
-                    public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                        if(response.isSuccessful()){
-                            users = response.body();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<User>> call, Throwable t) {
-                        Log.e("AllUsers", t.toString());
-                    }
-                });
     }
 
     private void showProgressDialog() {

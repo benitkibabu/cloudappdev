@@ -30,9 +30,6 @@ public class Login extends AppCompatActivity {
 
     private ProgressDialog mProgressDialog;
     Button signinBtn, registerBtn;
-    EditText username, password;
-
-    APIService service;
     AppPreference pref;
     SQLiteHandler db;
 
@@ -44,12 +41,9 @@ public class Login extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right, R.anim.slide_left);
 
         setContentView(R.layout.activity_login);
-        service = AppConfig.getAPIService();
         pref = new AppPreference(this);
         db = new SQLiteHandler(this);
 
-        username = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
         signinBtn = (Button) findViewById(R.id.signinBtn);
         registerBtn = (Button) findViewById(R.id.registerBtn);
         mProgressDialog = new ProgressDialog(this);
@@ -81,15 +75,7 @@ public class Login extends AppCompatActivity {
     }
 
     void signInOnClick(View v){
-        if(username.getText().toString().isEmpty()){
-            username.setError(getString(R.string.username_empty_erro));
-        }
-        else if(password.getText().toString().isEmpty()){
-            password.setError(getString(R.string.password_empty_error));
-        }
-        else{
-            signIn(username.getText().toString(), password.getText().toString());
-        }
+        signIn();
     }
 
     @Override
@@ -103,29 +89,16 @@ public class Login extends AppCompatActivity {
     }
 
 
-    public void signIn(String username, String password){
+    public void signIn(){
         showProgressDialog();
 
-        service.login(getString(R.string.vk_app_key), username, password).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                hideProgressDialog();
-
-                if(response.isSuccessful()){
-                    User user = response.body();
-                    db.creatUser(user);
-                    pref.setBoolean(pref.isLoggedIn, true);
-                    launchMainActivity();
-                }else{
-                    Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                hideProgressDialog();
-            }
-        });
+        if(db.getUser() != null) {
+            pref.setBoolean(pref.isLoggedIn, true);
+            launchMainActivity();
+        }else {
+            Toast.makeText(Login.this, "User not found", Toast.LENGTH_SHORT).show();
+        }
+        hideProgressDialog();
     }
 
     private void showProgressDialog() {

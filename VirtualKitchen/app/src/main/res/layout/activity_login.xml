@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/green"
+    android:background="@color/main_head_tab"
     android:orientation="vertical"
     tools:context="com.cloudappdev.ben.virtualkitchen.main.Login">
 
@@ -39,17 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white">
-
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/username"
-            android:inputType="text"
-            android:textColor="@color/white"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        android:textColorHint="@android:color/white"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/view2"
@@ -57,17 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:textColor="@android:color/white"
-        android:textColorHint="@android:color/white">
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:textColor="@color/white"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        android:textColorHint="@android:color/white"/>
 
     <Button
         android:id="@+id/signinBtn"

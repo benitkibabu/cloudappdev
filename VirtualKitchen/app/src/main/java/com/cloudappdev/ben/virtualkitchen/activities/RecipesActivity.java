@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+
+import com.cloudappdev.ben.virtualkitchen.helper.FavouriteSQLiteHandler;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.widget.SearchView;
@@ -57,6 +59,7 @@ public class RecipesActivity extends AppCompatActivity {
     APIService service;
     AppPreference pref;
     SQLiteHandler db;
+    FavouriteSQLiteHandler fdb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public class RecipesActivity extends AppCompatActivity {
         APP_KEY = getString(R.string.edamam_api_key);
 
         db = new SQLiteHandler(this);
+        fdb = new FavouriteSQLiteHandler(this);
         pref = new AppPreference(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -182,29 +186,15 @@ public class RecipesActivity extends AppCompatActivity {
     private void getMyFavourite() {
         showProgressDialog(getString(R.string.fetching_favourite_recipe));
         recipeList = new ArrayList<>();
-        service = AppConfig.getAPIService();
-        service.fetchMyRecipes(AppController.getInstance().appKey(), user.getId())
-                .enqueue(new Callback<List<MyRecipes>>() {
-                    @Override
-                    public void onResponse(Call<List<MyRecipes>> call, Response<List<MyRecipes>> response) {
-                        hideProgressDialog();
-                        if(response.isSuccessful()){
-                            recipeList = response.body();
-                            adapter.addAll(recipeList);
-                        }else {
-                            Snackbar.make(recyclerView, R.string.failed_retrieve_items,
-                                    Snackbar.LENGTH_LONG).show();
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<List<MyRecipes>> call, Throwable t) {
-                        hideProgressDialog();
-                        Log.e ("Err", t.toString());
-                        Snackbar.make(recyclerView, R.string.error_connecting_api,
-                                Snackbar.LENGTH_LONG).show();
-                    }
-                });
+        recipeList = fdb.getMyFavourites();
+        if(recipeList == null || recipeList.size() == 0){
+            hideProgressDialog();
+            return;
+        }
+
+        adapter.addAll(recipeList);
+        hideProgressDialog();
     }
 
     void goBack() {
@@ -256,22 +246,24 @@ public class RecipesActivity extends AppCompatActivity {
         if (AppController.getInstance().getNavFragment().equals("R")) {
             getMenuInflater().inflate(R.menu.menu_recipes, menu);
             SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    AppController.getInstance().searchKey = query;
-                    if(query.equalsIgnoreCase("sick")){
-                        AppController.getInstance().searchKey = "for sickness";
+            if (searchView != null) {
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        AppController.getInstance().searchKey = query;
+                        if(query.equalsIgnoreCase("sick")){
+                            AppController.getInstance().searchKey = "for sickness";
+                        }
+                        getRecipe(query);
+                        return false;
                     }
-                    getRecipe(query);
-                    return false;
-                }
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    return false;
-                }
-            });
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                });
+            }
         }
 
         return true;

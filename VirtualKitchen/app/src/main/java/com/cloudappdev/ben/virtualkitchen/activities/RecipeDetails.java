@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+
+import com.cloudappdev.ben.virtualkitchen.helper.FavouriteSQLiteHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -55,6 +57,7 @@ public class RecipeDetails extends AppCompatActivity {
     APIService service;
     AppPreference pref;
     SQLiteHandler db;
+    FavouriteSQLiteHandler fdb;
 
     boolean isMyFavorite = false;
 
@@ -70,6 +73,7 @@ public class RecipeDetails extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         db = new SQLiteHandler(this);
+        fdb = new FavouriteSQLiteHandler(this);
         pref = new AppPreference(this);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -155,85 +159,89 @@ public class RecipeDetails extends AppCompatActivity {
 
     private void getMyFavourite(final View v) {
         showProgressDialog("Fetching Favorites...");
-        service = AppConfig.getAPIService();
-        service.fetchMyRecipes(AppController.getInstance().appKey(), user.getId())
-                .enqueue(new Callback<List<MyRecipes>>() {
-                    @Override
-                    public void onResponse(Call<List<MyRecipes>> call, Response<List<MyRecipes>> response) {
-                        hideProgressDialog();
-                        if(response.isSuccessful()){
-                            recipeList = response.body();
-                            for(MyRecipes rs : recipeList){
-                                if(rs.getLabel().equals(r.getLabel())){
-                                    isMyFavorite = true;
-                                    fab.setVisibility(View.INVISIBLE);
-                                    fav_icon.setVisibility(View.VISIBLE);
-                                    break;
-                                }
-                            }
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<List<MyRecipes>> call, Throwable t) {
-                        hideProgressDialog();
-                        Log.e ("GetFavRecipe", t.toString());
-                    }
-                });
+        recipeList = fdb.getMyFavourites();
+        if(recipeList == null || recipeList.size() == 0){
+            hideProgressDialog();
+            return;
+        }
+
+        for(MyRecipes rs : recipeList){
+            if(rs.getLabel().equals(r.getLabel())){
+                isMyFavorite = true;
+                fab.setVisibility(View.INVISIBLE);
+                fav_icon.setVisibility(View.VISIBLE);
+                break;
+            }
+        }
+
+        hideProgressDialog();
     }
 
     void saveRecipe(final MyRecipes recipe, final View view) {
         showProgressDialog("Saving!...");
-        service = AppConfig.getAPIService();
-        service.addRecipeToFavorite(AppController.getInstance().appKey(), recipe)
-                .enqueue(new Callback<MyRecipes>() {
-                    @Override
-                    public void onResponse(Call<MyRecipes> call, Response<MyRecipes> response) {
-                        hideProgressDialog();
-                        if(response.isSuccessful()){
-                            Snackbar.make(title, "Recipe Added to Favorites!",
-                                    Snackbar.LENGTH_LONG).show();
-                            fab.setVisibility(View.INVISIBLE);
-                            fav_icon.setVisibility(View.VISIBLE);
-                        }else{
-                            Snackbar.make(title, "Failed to Add to Favorites!",
-                                    Snackbar.LENGTH_LONG).show();
-                            Log.e("SAVEFAIL", response.toString());
-                        }
-                    }
+        long id = fdb.addItem(recipe);
 
-                    @Override
-                    public void onFailure(Call<MyRecipes> call, Throwable t) {
-                        hideProgressDialog();
-                        Log.e("SAVEFAILERR", t.toString());
-                    }
-                });
+        if(id == -1){
+            Snackbar.make(title, "Failed to Add to Favorites!",
+                                    Snackbar.LENGTH_LONG).show();
+        }else{
+            Snackbar.make(title, "Recipe Added to Favorites!", Snackbar.LENGTH_LONG).show();
+            fab.setVisibility(View.INVISIBLE);
+            fav_icon.setVisibility(View.VISIBLE);
+        }
+
+        hideProgressDialog();
+//        service = AppConfig.getAPIService();
+//        service.addRecipeToFavorite(AppController.getInstance().appKey(), recipe)
+//                .enqueue(new Callback<MyRecipes>() {
+//                    @Override
+//                    public void onResponse(Call<MyRecipes> call, Response<MyRecipes> response) {
+//                        hideProgressDialog();
+//                        if(response.isSuccessful()){
+//                            Snackbar.make(title, "Recipe Added to Favorites!",
+//                                    Snackbar.LENGTH_LONG).show();
+//                            fab.setVisibility(View.INVISIBLE);
+//                            fav_icon.setVisibility(View.VISIBLE);
+//                        }else{
+//                            Snackbar.make(title, "Failed to Add to Favorites!",
+//                                    Snackbar.LENGTH_LONG).show();
+//                            Log.e("SAVEFAIL", response.toString());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<MyRecipes> call, Throwable t) {
+//                        hideProgressDialog();
+//                        Log.e("SAVEFAILERR", t.toString());
+//                    }
+//                });
     }
 
     void removeRecipe(final MyRecipes recipe, final View view) {
         showProgressDialog("Removing!...");
-        service = AppConfig.getAPIService();
-        service.removeRecipe(recipe.getId(), AppController.getInstance().appKey())
-                .enqueue(new Callback<MyRecipes>() {
-                    @Override
-                    public void onResponse(Call<MyRecipes> call, Response<MyRecipes> response) {
-                        if(response.isSuccessful()){
-                            isMyFavorite = false;
-                            fab.setVisibility(View.VISIBLE);
-                            fav_icon.setVisibility(View.INVISIBLE);
-                            Snackbar.make(view, "Item has been removed!",
-                                    Snackbar.LENGTH_LONG).show();
-                        }else{
-                            Snackbar.make(view, "Failed to Remove Item",
-                                    Snackbar.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<MyRecipes> call, Throwable t) {
-                        Log.e("RemoveRecipe", t.toString());
-                    }
-                });
+//        service = AppConfig.getAPIService();
+//        service.removeRecipe(recipe.getId(), AppController.getInstance().appKey())
+//                .enqueue(new Callback<MyRecipes>() {
+//                    @Override
+//                    public void onResponse(Call<MyRecipes> call, Response<MyRecipes> response) {
+//                        if(response.isSuccessful()){
+//                            isMyFavorite = false;
+//                            fab.setVisibility(View.VISIBLE);
+//                            fav_icon.setVisibility(View.INVISIBLE);
+//                            Snackbar.make(view, "Item has been removed!",
+//                                    Snackbar.LENGTH_LONG).show();
+//                        }else{
+//                            Snackbar.make(view, "Failed to Remove Item",
+//                                    Snackbar.LENGTH_LONG).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<MyRecipes> call, Throwable t) {
+//                        Log.e("RemoveRecipe", t.toString());
+//                    }
+//                });
     }
 
     private void showProgressDialog(String tag) {
