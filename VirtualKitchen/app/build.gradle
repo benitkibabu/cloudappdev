@@ -18,11 +18,10 @@ android {
 
     signingConfigs {
         config {
-            keyAlias 'ben'
-            keyPassword 'B3nitskibabu'
-            //storeFile file('C:/Users/Ben/AndroidStudioProjects/cloudappdev/benbuild.jks')
-            storePassword 'B3nitskibabu'
-            storeFile file('E:\\Documents\\AndroidStudioProjects\\benbuild.jks')
+            keyAlias 'virtualkitchen'
+            keyPassword ''
+            storeFile file('E:\\Documents\\AndroidStudioProjects\\deployment.jks')
+            storePassword ''
         }
         debug {
             keyAlias 'androiddebugkey'
